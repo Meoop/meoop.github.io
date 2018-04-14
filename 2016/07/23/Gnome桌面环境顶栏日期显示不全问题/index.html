@@ -142,13 +142,13 @@
 <meta property="og:site_name" content="Meoop&#39;s Blog">
 <meta property="og:description" content="2016.08.01日更新该问题不止在Fedora中出现，在ubuntu GNOME桌面版版也出现这个问题，是GNOME桌面环境的问题。修改方法与Fedora相同。  &amp;emsp;&amp;emsp;Fedora 23,Fedora 24，ububtu GNOME桌面版顶栏中文日期及星期显示不全的问题，Fedora 23时找到修改的办法，未做记录，Fedora 24时又遇到这个问题，于是又翻找资料解决问">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://blog.meoop.me/2016/07/23/Gnome桌面环境顶栏日期显示不全问题/1.png">
-<meta property="og:image" content="http://blog.meoop.me/2016/07/23/Gnome桌面环境顶栏日期显示不全问题/2.png">
-<meta property="og:updated_time" content="2018-03-23T14:26:32.000Z">
+<meta property="og:image" content="http://p75ksvkmq.bkt.clouddn.com/static/images/Gnome桌面环境顶栏日期显示不全问题/1.png">
+<meta property="og:image" content="http://p75ksvkmq.bkt.clouddn.com/static/images/Gnome桌面环境顶栏日期显示不全问题/2.png">
+<meta property="og:updated_time" content="2018-04-14T03:35:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gnome桌面环境顶栏日期显示不全问题">
 <meta name="twitter:description" content="2016.08.01日更新该问题不止在Fedora中出现，在ubuntu GNOME桌面版版也出现这个问题，是GNOME桌面环境的问题。修改方法与Fedora相同。  &amp;emsp;&amp;emsp;Fedora 23,Fedora 24，ububtu GNOME桌面版顶栏中文日期及星期显示不全的问题，Fedora 23时找到修改的办法，未做记录，Fedora 24时又遇到这个问题，于是又翻找资料解决问">
-<meta name="twitter:image" content="http://blog.meoop.me/2016/07/23/Gnome桌面环境顶栏日期显示不全问题/1.png">
+<meta name="twitter:image" content="http://p75ksvkmq.bkt.clouddn.com/static/images/Gnome桌面环境顶栏日期显示不全问题/1.png">
 
 
 
@@ -506,12 +506,12 @@
 </blockquote>
 <p>&emsp;&emsp;Fedora 23,Fedora 24，ububtu GNOME桌面版顶栏中文日期及星期显示不全的问题，Fedora 23时找到修改的办法，未做记录，Fedora 24时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。</p>
 <a id="more"></a>
-<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>顶栏中文日期显示“XX月XX”，后面“日”字不显示，以及星期几没有“星期”。<br><img src="1.png" alt="问题描述"></p>
+<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>顶栏中文日期显示“XX月XX”，后面“日”字不显示，以及星期几没有“星期”。<br><img title="问题描述" alt="问题描述" src="http://p75ksvkmq.bkt.clouddn.com/static/images/Gnome桌面环境顶栏日期显示不全问题/1.png"></p>
 <h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>1、在 /usr/share/locale/zh_CN/LC_MESSAGES文件夹有gnome-desktop-3.0.mo文件，先将gnome-desktop-3.0.mo进行备份，然后用命令 msgunfmt将其还原成.po文件。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo msgunfmt gnome-desktop-3.0.mo -o gnome-desktop-3.0.po</span><br></pre></td></tr></table></figure>
 <p>2、编辑gnome-desktop-3.0.po文件，在文件中msgstr部分的%e后面加个“日”就可以显示出正常的日期（XX月XX日）。<br>3、把%a改成%A就可以将星期正常显示。<br>4、将改好的.po文件用msgfmt变成.mo文件，覆盖gnome-desktop-3.0.mo文件。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo msgunfmt gnome-desktop-3.0.po -o gnome-desktop-3.0.mo</span><br></pre></td></tr></table></figure>
-<p>5、输入alt+f2，键入命令 r 并回车，重启gnome即可。<br><img src="2.png" alt="显示正常"></p>
+<p>5、输入alt+f2，键入命令 r 并回车，重启gnome即可。<br><img title="显示正常" alt="显示正常" src="http://p75ksvkmq.bkt.clouddn.com/static/images/Gnome桌面环境顶栏日期显示不全问题/2.png"></p>
 <h3 id="修改后的文件部分内容"><a href="#修改后的文件部分内容" class="headerlink" title="修改后的文件部分内容"></a>修改后的文件部分内容</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">msgid &quot;%R:%S&quot;</span><br><span class="line">msgstr &quot;%R:%S&quot;</span><br><span class="line"></span><br><span class="line">msgid &quot;%a %R&quot;</span><br><span class="line">msgstr &quot;%A %R&quot;</span><br><span class="line"></span><br><span class="line">msgid &quot;%a %R:%S&quot;</span><br><span class="line">msgstr &quot;%A %R:%S&quot;</span><br><span class="line"></span><br><span class="line">msgid &quot;%a %b %e, %R&quot;</span><br><span class="line">msgstr &quot;%b %e日 %A, %R&quot;</span><br><span class="line"></span><br><span class="line">msgid &quot;%a %b %e, %R:%S&quot;</span><br><span class="line">msgstr &quot;%b %e日 %A, %R:%S&quot;</span><br><span class="line"></span><br><span class="line">msgid &quot;%a %b %e, %l:%M %p&quot;</span><br><span class="line">msgstr &quot;%b %e日 %A, %p %l:%M&quot;</span><br><span class="line"></span><br><span class="line">msgid &quot;%a %b %e, %l:%M:%S %p&quot;</span><br><span class="line">msgstr &quot;%b %e日 %A, %p %l:%M:%S&quot;</span><br><span class="line"></span><br><span class="line">msgid &quot;%a %l:%M %p&quot;</span><br><span class="line">msgstr &quot;%A %p %l:%M&quot;</span><br><span class="line"></span><br><span class="line">msgid &quot;%a %l:%M:%S %p&quot;</span><br><span class="line">msgstr &quot;%A %p %l:%M:%S&quot;</span><br><span class="line"></span><br><span class="line">msgid &quot;%l:%M %p&quot;</span><br><span class="line">msgstr &quot;%p %l:%M&quot;</span><br><span class="line"></span><br><span class="line">msgid &quot;%l:%M:%S %p&quot;</span><br><span class="line">msgstr &quot;%p %l:%M:%S&quot;</span><br></pre></td></tr></table></figure>
 
       
@@ -572,8 +572,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/08/24/一起学Markdown/" rel="prev" title="一起学Markdown">
-                一起学Markdown <i class="fa fa-chevron-right"></i>
+              <a href="/2016/08/08/ntp服务器的搭建/" rel="prev" title="ntp服务器的搭建">
+                ntp服务器的搭建 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -662,7 +662,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -734,7 +734,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

@@ -503,8 +503,8 @@
           
             <p>在Linux下选中东西后，按住鼠标的滚轮中键进行粘贴，是Linux下非常好用的功能。但是不巧，鼠标的滚轮中键太灵敏，在滚动滚轮时候非常容易按下中键，这时候编辑好的文档突然就插入了不知道从哪复制来的东西。</p>
 <p>xmodmap是用于修改X中键盘映射和指针按钮映射的实用程序，可以用xmodmap修改鼠标中键的映射，进而关掉鼠标中键的复制功能，解决误触鼠标中键问题。</p>
-<p><strong>方法一：</strong>在终端下执行xmodmap命令进行修改<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xmodmap -e "pointer = 1 25 3 4 5 6 7 8 9 10"</span><br></pre></td></tr></table></figure></p>
-<p><strong>方法二：</strong>编辑~/.Xmodmap文件进行修改<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo "pointer = 1 25 3 4 5 6 7 8 9 10" &gt; ~/.Xmodmap</span><br></pre></td></tr></table></figure></p>
+<p><strong>方法一：</strong>在终端下执行xmodmap命令进行修改<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xmodmap -e <span class="string">"pointer = 1 25 3 4 5 6 7 8 9 10"</span></span></span><br></pre></td></tr></table></figure></p>
+<p><strong>方法二：</strong>编辑~/.Xmodmap文件进行修改<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"pointer = 1 25 3 4 5 6 7 8 9 10"</span> &gt; ~/.Xmodmap</span></span><br></pre></td></tr></table></figure></p>
 <p>参考文章：<br>[1]. <a href="https://www.x.org/archive/X11R6.8.1/doc/xmodmap.1.html" target="_blank" rel="noopener">xmodmap - utility for modifying keymaps and pointer button mappings in X</a><br>[2]. <a href="https://askubuntu.com/questions/4507/how-do-i-disable-middle-mouse-button-click-paste" target="_blank" rel="noopener">How do I disable middle mouse button click paste?</a></p>
 
           
@@ -1399,6 +1399,174 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.meoop.me/2016/08/08/ntp服务器的搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Meoop">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Meoop's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/08/08/ntp服务器的搭建/" itemprop="url">ntp服务器的搭建</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-08T22:20:37+08:00">2016-08-08</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/08/08/ntp服务器的搭建/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/08/08/ntp服务器的搭建/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2016/08/08/ntp服务器的搭建/" class="leancloud_visitors" data-flag-title="ntp服务器的搭建">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>由于制造工艺多种多样，所有的(非原子)时钟并不按照完全一致的速度行走。有一些时钟走的比较快而有一些走的比较慢。因此经过很长一段时间以后，一个时钟的时间慢慢的和其它的发生偏移，这就是常说的 “时钟漂移” 或 “时间漂移”。时钟的一致对一些应用有着至关重要的作用，为了将时钟漂移的影响降低到最小，需要将时钟进行同步，这就需要ntp服务。<br>网络时间协议(NTP)用来同步网络上不同主机的系统时间。你管理的所有主机都可以和一个指定的被称为ntp服务器的时间服务器同步它们的时间。而另一方面，一个ntp服务器会将它的时间和任意公共ntp服务器，或者你选定的服务器同步。由ntp管理的所有系统时钟都会同步精确到毫秒级。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/08/08/ntp服务器的搭建/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.meoop.me/2016/07/23/Gnome桌面环境顶栏日期显示不全问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1853,181 +2021,10 @@
           <blockquote>
 <p>一次Hadoop集群启动成功但live node为0的问题解决过程<br>原文在<a href="https://blog.csdn.net/Meoop/article/details/50806724" target="_blank" rel="noopener">CSDN</a>，现在迁移到hexo。</p>
 </blockquote>
-<h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>这两天用虚拟机搭建了hadoop集群环境，创建了三台虚拟机hadoop01，hadoop02，hadoop03，hadoop01代表Master，hadoop02以及hadoop03作为 Slave 节点。三台虚拟机都是centos7最小化安装。hadoop版本用的最新的版本2.7.2。<br>开始一切都很顺利，启动hadoop集群也成功启动，运行jps，三个节点对应的进程都成功启动，但是检查集群状态时发现live node 为0（如图）。<br><img src="20160304233347273.png" alt="集群状态"></p>
+<h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>这两天用虚拟机搭建了hadoop集群环境，创建了三台虚拟机hadoop01，hadoop02，hadoop03，hadoop01代表Master，hadoop02以及hadoop03作为 Slave 节点。三台虚拟机都是centos7最小化安装。hadoop版本用的最新的版本2.7.2。<br>开始一切都很顺利，启动hadoop集群也成功启动，运行jps，三个节点对应的进程都成功启动，但是检查集群状态时发现live node 为0（如图）。<br><img title="集群状态" alt="集群状态" src="http://p75ksvkmq.bkt.clouddn.com/static/images/hadoop集群启动成功但live-node为0/20160304233347273.png"></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016/03/05/hadoop集群启动成功但live-node为0/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.meoop.me/2016/03/04/Linux修改主机名/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Meoop">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Meoop's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/03/04/Linux修改主机名/" itemprop="url">Linux修改主机名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-04T00:01:10+08:00">2016-03-04</time>
-            
-
-            
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/03/04/Linux修改主机名/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2016/03/04/Linux修改主机名/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2016/03/04/Linux修改主机名/" class="leancloud_visitors" data-flag-title="Linux修改主机名">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>原文在<a href="https://blog.csdn.net/Meoop/article/details/50804308" target="_blank" rel="noopener">CSDN</a>，作部分更新整理后迁移到hexo。</p>
-</blockquote>
-<p>在CentOS或RHEL中，有三种定义的主机名:<br>&emsp;&emsp;a. 静态的（static），“<strong>静态</strong>”主机名也称为内核主机名，是系统在启动时从/etc/hostname自动初始化的主机名。<br>&emsp;&emsp;b. 瞬态的（transient），“<strong>瞬态</strong>“主机名是在系统运行时临时分配的主机名，例如，通过DHCP或mDNS服务器分配。静态主机名和瞬态主机名都遵从作为互联网域名同样的字符限制规则。<br>&emsp;&emsp;c. 灵活的（pretty），“<strong>灵活</strong>”主机名是允许使用自由形式（包括特殊/空白字符）的主机名，展示给终端用户的主机名。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/03/04/Linux修改主机名/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2119,7 +2116,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2191,7 +2188,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

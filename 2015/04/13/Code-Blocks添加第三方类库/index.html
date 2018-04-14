@@ -142,14 +142,14 @@
 <meta property="og:site_name" content="Meoop&#39;s Blog">
 <meta property="og:description" content="第一步：编译第三方库，得到头文件和库，例如路径关系：在include中放头文件，在lib中放置库文件。  D:\MyLib\include  D:\MyLib\lib">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://img.blog.csdn.net/20150413230733748">
-<meta property="og:image" content="http://img.blog.csdn.net/20150413225928478">
-<meta property="og:image" content="http://img.blog.csdn.net/20150413233612827">
-<meta property="og:updated_time" content="2018-03-24T14:15:58.000Z">
+<meta property="og:image" content="http://p75ksvkmq.bkt.clouddn.com/static/images/Code-Blocks添加第三方类库/20150413230733748.png">
+<meta property="og:image" content="http://p75ksvkmq.bkt.clouddn.com/static/images/Code-Blocks添加第三方类库/20150413225928478.png">
+<meta property="og:image" content="http://p75ksvkmq.bkt.clouddn.com/static/images/Code-Blocks添加第三方类库/20150413233612827.png">
+<meta property="og:updated_time" content="2018-04-14T04:04:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Code::Blocks添加第三方类库">
 <meta name="twitter:description" content="第一步：编译第三方库，得到头文件和库，例如路径关系：在include中放头文件，在lib中放置库文件。  D:\MyLib\include  D:\MyLib\lib">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20150413230733748">
+<meta name="twitter:image" content="http://p75ksvkmq.bkt.clouddn.com/static/images/Code-Blocks添加第三方类库/20150413230733748.png">
 
 
 
@@ -507,20 +507,22 @@
 <p>D:\MyLib\include </p>
 <p>D:\MyLib\lib</p>
 </blockquote>
-<p><img src="http://img.blog.csdn.net/20150413230733748" alt="编译后的第三方库"><br><a id="more"></a><br>第二步：创建全局变量，菜单：Settings &gt; Global variables, New一个新的，选名字，例如MYLIB</p>
+<img title="编译后的第三方库" src="http://p75ksvkmq.bkt.clouddn.com/static/images/Code-Blocks添加第三方类库/20150413230733748.png">
+<a id="more"></a>
+<p>第二步：创建全局变量，菜单：Settings &gt; Global variables, New一个新的，选名字，例如MYLIB</p>
 <blockquote>
 <p>base: D:\MyLib</p>
 <p>lib: $(base)\lib</p>
 <p>include: $(base)\include</p>
 </blockquote>
-<p><img src="http://img.blog.csdn.net/20150413225928478" alt="全局变量"></p>
+<img title="全局变量" src="http://p75ksvkmq.bkt.clouddn.com/static/images/Code-Blocks添加第三方类库/20150413225928478.png">
 <p>第三步：设置工程搜索路径，菜单：Project &gt; build options &gt; Search directories</p>
 <blockquote>
 <p> Compiler: $(#MYLIB.include)</p>
 <p> Linker: $(#MYLIB.lib)</p>
 </blockquote>
 <p>这样第三方库即可使用。</p>
-<p>如果不想添加全局变量，则可以直接进行第三步，使用绝对路径，来分别设置头文件和库文件的查找路径（我的配置完后使用时还出现个问题，编译报错显示undefined reference to `dgesv_’，解决办法是在Project &gt; build options &gt;Linker settings中添加库文件，比较懒就全扔进去了~_~）。<br><img src="http://img.blog.csdn.net/20150413233612827" alt="这里写图片描述"></p>
+<p>如果不想添加全局变量，则可以直接进行第三步，使用绝对路径，来分别设置头文件和库文件的查找路径（我的配置完后使用时还出现个问题，编译报错显示undefined reference to `dgesv_’，解决办法是在Project &gt; build options &gt;Linker settings中添加库文件，比较懒就全扔进去了~_~）。<br><img src="http://p75ksvkmq.bkt.clouddn.com/static/images/Code-Blocks添加第三方类库/20150413233612827.png"></p>
 
       
     </div>
@@ -655,7 +657,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -727,7 +729,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

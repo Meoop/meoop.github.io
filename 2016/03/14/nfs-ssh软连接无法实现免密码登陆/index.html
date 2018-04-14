@@ -142,7 +142,7 @@
 <meta property="og:site_name" content="Meoop&#39;s Blog">
 <meta property="og:description" content="一次Hadoop集群安装过程中nfs+ssh软连接无法实现免密码登陆的问题解决过程原文在CSDN，现在迁移到hexo。  nfs+ssh软连接无法实现免密码登陆1、开始以为自己文件名写错，仔细检查未发现文件名有错。2、检查文件的权限，发现authorized_keys文件的权限是600，修改成644后，问题依旧，无法实现免密码登陆。3、以为是nfs_share目录的权限问题。因为当时建立时使用的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-24T13:25:40.772Z">
+<meta property="og:updated_time" content="2018-03-25T14:37:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nfs+ssh软连接无法实现免密码登陆">
 <meta name="twitter:description" content="一次Hadoop集群安装过程中nfs+ssh软连接无法实现免密码登陆的问题解决过程原文在CSDN，现在迁移到hexo。  nfs+ssh软连接无法实现免密码登陆1、开始以为自己文件名写错，仔细检查未发现文件名有错。2、检查文件的权限，发现authorized_keys文件的权限是600，修改成644后，问题依旧，无法实现免密码登陆。3、以为是nfs_share目录的权限问题。因为当时建立时使用的">
@@ -505,9 +505,9 @@
 <p>各种谷歌百度，最后找到原因：自己没有关闭SELinux。<br>在配置hadoop集群时应当提前关闭<strong>防火墙</strong>和<strong>SELinux</strong>（水平比较渣，大神可以配置防火墙及SELinux）。</p>
 <h4 id="关闭方法："><a href="#关闭方法：" class="headerlink" title="关闭方法："></a>关闭方法：</h4><p>1、关闭SELinux<br>1）、永久有效：修改 /etc/selinux/config 文件中的 SELINUX=”” 为 disabled ，然后重启。<br>2）、即时生效：setenforce 0</p>
 <p>2、关闭防火墙<br>在 CentOS 6.x 中，可以通过如下命令关闭防火墙：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo service iptables stop   # 关闭防火墙服务</span><br><span class="line">sudo chkconfig iptables off  # 禁止防火墙开机自启，就不用手动关闭了</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo service iptables stop   <span class="comment"># 关闭防火墙服务</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo chkconfig iptables off  <span class="comment"># 禁止防火墙开机自启，就不用手动关闭了</span></span></span><br></pre></td></tr></table></figure>
 <p>若用是 CentOS 7，需通过如下命令关闭（防火墙服务改成了 firewall）：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl stop firewalld.service    # 关闭firewall</span><br><span class="line">sudo systemctl disable firewalld.service # 禁止firewall开机启动</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl stop firewalld.service    <span class="comment"># 关闭firewall</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl <span class="built_in">disable</span> firewalld.service <span class="comment"># 禁止firewall开机启动</span></span></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -661,7 +661,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -733,7 +733,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

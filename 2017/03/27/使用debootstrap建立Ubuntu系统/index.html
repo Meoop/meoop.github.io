@@ -142,7 +142,7 @@
 <meta property="og:site_name" content="Meoop&#39;s Blog">
 <meta property="og:description" content="摘要：debootstrap能够快速建立一套Debian或Ubuntu的rootfs，并且支持多种CPU架构。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-08-29T17:49:23.000Z">
+<meta property="og:updated_time" content="2018-03-25T14:36:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用debootstrap建立Ubuntu系统">
 <meta name="twitter:description" content="摘要：debootstrap能够快速建立一套Debian或Ubuntu的rootfs，并且支持多种CPU架构。">
@@ -503,10 +503,10 @@
 <p>debootstarp实际上是一系列的脚本，它的依赖非常少，只是强制依赖了wget。debootstrap的工作原理实际上是将包解压到指定目录，然后可以chroot进入这个系统，进行相应的定制。另外debootstarp也可以构建其他架构的系统，例如在AMD64上构建ARM64的基本系统。debootstrap有个大抵相当的工具cdebootstrap，使用c语言写的，比debootstarp体积更加小。</p>
 <h3 id="安装debootstarp"><a href="#安装debootstarp" class="headerlink" title="安装debootstarp"></a>安装debootstarp</h3><p>debootstrap在任何Debian系统及其衍生版本的Linux中都可以直接安装得到，但要注意如果要新版本的系统，需要下载比较新的debootstrap包。</p>
 <ul>
-<li>Debian / Ubuntu  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install debootstrap</span><br></pre></td></tr></table></figure>
+<li>Debian / Ubuntu  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install debootstrap</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h3 id="debootstarp命令的使用"><a href="#debootstarp命令的使用" class="headerlink" title="debootstarp命令的使用"></a>debootstarp命令的使用</h3><p>一般使用debootstrap命令的格式如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo debootstrap --arch=&lt;ARCH&gt; --include=&lt;PACKAGES&gt; &lt;VERSION&gt; &lt;DIRECTORY&gt; &lt;MIRROR&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="debootstarp命令的使用"><a href="#debootstarp命令的使用" class="headerlink" title="debootstarp命令的使用"></a>debootstarp命令的使用</h3><p>一般使用debootstrap命令的格式如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo debootstrap --arch=&lt;ARCH&gt; --include=&lt;PACKAGES&gt; &lt;VERSION&gt; &lt;DIRECTORY&gt; &lt;MIRROR&gt;</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li>ARCH<br>  设置目标系统的CPU架构，常用的有i386、amd64、armhf、arm64等。</li>
 <li>PACKAGES<br>  需要额外安装的包包名，如果多个包名需要用逗号隔开。</li>
@@ -514,7 +514,7 @@
 <li>DIRECTORY<br>  安装到的目录，根据自己的需求设定即可。</li>
 <li>MIRROR<br>  软件源，例如Ubuntu源：<a href="http://archive.ubuntu.com/ubuntu" target="_blank" rel="noopener">http://archive.ubuntu.com/ubuntu</a>。</li>
 </ul>
-<p>例如，利用debootstrap制作一个Ubuntu16.04的arm64基础系统，并且包含vim包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo debootstrap --arch=arm64 --include=vim xenial ./xenial-arm-rootfs http://ports.ubuntu.com/ubuntu-ports</span><br></pre></td></tr></table></figure></p>
+<p>例如，利用debootstrap制作一个Ubuntu16.04的arm64基础系统，并且包含vim包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo debootstrap --arch=arm64 --include=vim xenial ./xenial-arm-rootfs http://ports.ubuntu.com/ubuntu-ports</span><br></pre></td></tr></table></figure></p>
 <p>更多使用方式参考<a href="http://manpages.ubuntu.com/manpages/xenial/man8/debootstrap.8.html#contenttoc2" target="_blank" rel="noopener">debootstrap man page</a>。</p>
 <p><em>注意：debootstrap仅能从一个软件仓库获取软件包，假如你需要从多个软件仓库安装或合并软件包用以建立rootfs，或者你希望自动定制 rootfs，那么可以使用multistrap。</em></p>
 <h3 id="Additional-Information"><a href="#Additional-Information" class="headerlink" title="Additional Information"></a>Additional Information</h3><p>使用debootstrap构建基本系统一般是我们工作的第一步，后面我们可以chroot到这个基本系统中，安装一些包，进行一些系统配置。<br>使用debootstrap安装一个完整的系统可以参考<a href="https://help.ubuntu.com/community/Installation/FromLinux" target="_blank" rel="noopener">这篇文章</a>。<br>使用debootstrap制作docker镜像可以参考<a href="https://docs.docker.com/engine/userguide/eng-image/baseimages/#create-a-full-image-using-tar" target="_blank" rel="noopener">docker文档</a>。</p>
@@ -670,7 +670,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -742,7 +742,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
