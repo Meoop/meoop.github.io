@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>一起学 Markdown - 享受编程 - Coding Your Ambition.</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Meoop" /><meta name="description" content="Markdown 是一种轻量级的「标记语言」，他的目标是实现「易读易写」。它的优点很多，目前也被越来越多的写作爱好者，撰稿者广泛使用。不要被「标记」、「语言」所迷惑，Markdown 的语法十分简单。常用的标记符号也不超过十个，这种相对于更为复杂的 HTML 标记语言来说，Markdown 可谓是十分轻量的，学习成本也不需要太多，且一旦熟悉这种语法规则，会有一劳永逸的效果。
+" /><meta name="keywords" content="Markdown" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.55.6 with theme even" />
+
+
+<link rel="canonical" href="http://blog.meoop.me/post/%E4%B8%80%E8%B5%B7%E5%AD%A6markdown/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="一起学 Markdown" />
+<meta property="og:description" content="Markdown 是一种轻量级的「标记语言」，他的目标是实现「易读易写」。它的优点很多，目前也被越来越多的写作爱好者，撰稿者广泛使用。不要被「标记」、「语言」所迷惑，Markdown  的语法十分简单。常用的标记符号也不超过十个，这种相对于更为复杂的 HTML 标记语言来说，Markdown 可谓是十分轻量的，学习成本也不需要太多，且一旦熟悉这种语法规则，会有一劳永逸的效果。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://blog.meoop.me/post/%E4%B8%80%E8%B5%B7%E5%AD%A6markdown/" />
+<meta property="article:published_time" content="2016-08-24T22:34:42&#43;08:00"/>
+<meta property="article:modified_time" content="2016-08-24T22:34:42&#43;08:00"/>
+
+<meta itemprop="name" content="一起学 Markdown">
+<meta itemprop="description" content="Markdown 是一种轻量级的「标记语言」，他的目标是实现「易读易写」。它的优点很多，目前也被越来越多的写作爱好者，撰稿者广泛使用。不要被「标记」、「语言」所迷惑，Markdown  的语法十分简单。常用的标记符号也不超过十个，这种相对于更为复杂的 HTML 标记语言来说，Markdown 可谓是十分轻量的，学习成本也不需要太多，且一旦熟悉这种语法规则，会有一劳永逸的效果。">
+
+
+<meta itemprop="datePublished" content="2016-08-24T22:34:42&#43;08:00" />
+<meta itemprop="dateModified" content="2016-08-24T22:34:42&#43;08:00" />
+<meta itemprop="wordCount" content="5816">
+
+
+
+<meta itemprop="keywords" content="Markdown," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="一起学 Markdown"/>
+<meta name="twitter:description" content="Markdown 是一种轻量级的「标记语言」，他的目标是实现「易读易写」。它的优点很多，目前也被越来越多的写作爱好者，撰稿者广泛使用。不要被「标记」、「语言」所迷惑，Markdown  的语法十分简单。常用的标记符号也不超过十个，这种相对于更为复杂的 HTML 标记语言来说，Markdown 可谓是十分轻量的，学习成本也不需要太多，且一旦熟悉这种语法规则，会有一劳永逸的效果。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Ambition</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Ambition</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">一起学 Markdown</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-08-24 </span>
+        <div class="post-category">
+            <a href="/categories/markdown/"> Markdown </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#句段">句段</a></li>
+<li><a href="#标题">标题</a></li>
+<li><a href="#区块引用">区块引用</a></li>
+</ul></li>
+<li><a href="#header">header</a>
+<ul>
+<li><a href="#列表">列表</a>
+<ul>
+<li><a href="#无序列表">无序列表</a></li>
+<li><a href="#有序列表">有序列表</a></li>
+<li><a href="#列表小技巧">列表小技巧</a></li>
+</ul></li>
+<li><a href="#代码区块">代码区块</a>
+<ul>
+<li><a href="#行内代码">行内代码</a></li>
+<li><a href="#代码块">代码块</a></li>
+<li><a href="#注意">注意</a></li>
+</ul></li>
+<li><a href="#分隔线">分隔线</a></li>
+<li><a href="#符号">符号</a>
+<ul>
+<li><a href="#转义符号">转义符号</a></li>
+<li><a href="#字符实体">字符实体</a></li>
+</ul></li>
+<li><a href="#文本格式">文本格式</a>
+<ul>
+<li><a href="#强调-斜体">强调（斜体）</a></li>
+<li><a href="#加粗">加粗</a></li>
+</ul></li>
+<li><a href="#链接">链接</a>
+<ul>
+<li><a href="#自动链接">自动链接</a></li>
+<li><a href="#文字">文字</a>
+<ul>
+<li><a href="#行内式">行内式</a></li>
+<li><a href="#参考式">参考式</a></li>
+</ul></li>
+<li><a href="#图片">图片</a></li>
+<li><a href="#锚点">锚点</a></li>
+</ul></li>
+<li><a href="#目录">目录</a></li>
+<li><a href="#表格">表格</a></li>
+<li><a href="#参考文章">参考文章：</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>Markdown 是一种轻量级的「标记语言」，他的目标是实现「易读易写」。它的优点很多，目前也被越来越多的写作爱好者，撰稿者广泛使用。不要被「标记」、「语言」所迷惑，Markdown  的语法十分简单。常用的标记符号也不超过十个，这种相对于更为复杂的 HTML 标记语言来说，Markdown 可谓是十分轻量的，学习成本也不需要太多，且一旦熟悉这种语法规则，会有一劳永逸的效果。</p>
+
+<h3 id="句段">句段</h3>
+
+<p>一个 Markdown 段落是由一个或者多个连续的文本行组成，他的前后要有一个以上的空行（空行的定义是显示上看起来像是空的，便会被视为空行。比方说，若某一行只包含空格和制表符，则该行也会被视为空行）。普通句段之间若要强制换行（Manual Line Break），可以在自然换行行尾追加两个（或以上）空格来实现。</p>
+
+<h3 id="标题">标题</h3>
+
+<p>在 Markdown 中，标题有两种形式，类 Setext 和类 atx 形式。</p>
+
+<p>1）类 Setext 的形式是利用底线的形式，利用<code>=</code>表示最高级标题，<code>-</code>表示第二级标题。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">这是一级标题
+==========
+这是二级标题
+----------</code></pre></td></tr></table>
+</div>
+</div>
+<p>2）类 atx 形式，若一段文字被定义为标题，只需要在前面添加<code>#</code>即可。需要注意<code>#</code>后面需要添加一个空格。atx 形式标题一共有六种，分别是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="gh"># 这是一级标题
+</span><span class="gh"></span><span class="gu">## 这是二级标题
+</span><span class="gu">### 这是三级标题
+</span><span class="gu">#### 这是四级标题
+</span><span class="gu">##### 这是五级标题
+</span><span class="gu"></span>###### 这是六级标题</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="区块引用">区块引用</h3>
+
+<p>在我们写作中会经常引用别人的文字，这时候引用就显得十分重要，Markdown 的引用非常简单，只需要在文字前面加上<code>&gt;</code>即可。例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="k">&gt; </span><span class="ge">这是引用
+</span><span class="ge"></span><span class="k">&gt; </span><span class="ge">这是引用
+</span><span class="ge"></span>&gt; 这是引用</code></pre></td></tr></table>
+</div>
+</div>
+<p>效果如下：</p>
+
+<blockquote>
+<p>这是引用<br />
+这是引用<br />
+这是引用</p>
+</blockquote>
+
+<p>也可以偷懒，只在段落的开始添加一个<code>&gt;</code>即可。例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="k">&gt; </span><span class="ge">这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用
+</span><span class="ge"></span><span class="k">&gt; </span><span class="ge"> 
+</span><span class="ge"></span>&gt; 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用</code></pre></td></tr></table>
+</div>
+</div>
+<p>效果如下：</p>
+
+<blockquote>
+<p>这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用</p>
+
+<p>这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用 这是引用</p>
+</blockquote>
+
+<p>引用也支持嵌套引用，只要根据层次前面加上相应的<code>&gt;</code>即可。例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">&gt;&gt;&gt; 嵌套引用<span class="k">
+</span><span class="k">&gt;
+</span><span class="k"></span><span class="ge">&gt;&gt; 嵌套引用
+</span><span class="ge"></span>&gt;
+&gt; 嵌套引用  </code></pre></td></tr></table>
+</div>
+</div>
+<p>效果如下：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p>嵌套引用</p>
+</blockquote>
+
+<p>嵌套引用</p>
+</blockquote>
+
+<p>嵌套引用</p>
+</blockquote>
+
+<p>引用的区块内可以包含其他的 Markdown 元素。例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="k">&gt; </span><span class="ge">1. 第一个列表
+</span><span class="ge"></span><span class="k">&gt; </span><span class="ge">2. 第二个列表
+</span><span class="ge"></span>&gt;
+&gt; ## header</code></pre></td></tr></table>
+</div>
+</div>
+<p>显示效果如下：</p>
+
+<blockquote>
+<ol>
+<li>第一个列表</li>
+<li>第二个列表</li>
+</ol>
+
+<h2 id="header">header</h2>
+</blockquote>
+
+<h3 id="列表">列表</h3>
+
+<p>Markdown 支持有序列表和无序列表。</p>
+
+<h4 id="无序列表">无序列表</h4>
+
+<p>无序列表使用<code>*</code>,<code>-</code>,<code>+</code>作为列表标记。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="k">*</span> 列表
+<span class="k">*</span> 列表
+* 列表</code></pre></td></tr></table>
+</div>
+</div>
+<p>等同于：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="k">-</span> 列表
+<span class="k">-</span> 列表
+- 列表</code></pre></td></tr></table>
+</div>
+</div>
+<p>等同于：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">+ 列表
++ 列表
++ 列表</code></pre></td></tr></table>
+</div>
+</div>
+<p>显示效果都是：</p>
+
+<ul>
+<li>列表</li>
+<li>列表</li>
+<li>列表</li>
+</ul>
+
+<h4 id="有序列表">有序列表</h4>
+
+<p>有序列表使用数字加一个英文句点。例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="k">1.</span> 有序列表
+<span class="k">2.</span> 有序列表
+3. 有序列表</code></pre></td></tr></table>
+</div>
+</div>
+<p>在有序列表中很重要的一点是列表标记中使用的数字并不影响最后的输出结果（但是建议从1开始）。例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="k">1.</span> 有序列表
+<span class="k">1.</span> 有序列表
+1. 有序列表</code></pre></td></tr></table>
+</div>
+</div>
+<p>或者：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="k">3.</span> 有序列表
+<span class="k">2.</span> 有序列表
+1. 有序列表</code></pre></td></tr></table>
+</div>
+</div>
+<p>输出结果都是：</p>
+
+<ol>
+<li>有序列表</li>
+<li>有序列表</li>
+<li>有序列表</li>
+</ol>
+
+<h4 id="列表小技巧">列表小技巧</h4>
+
+<p>1）列表项目标记通常是放在最左边，但是其实也可以缩进，最多 3 个空格，项目标记后面则一定要接着至少一个空格或制表符。</p>
+
+<p>要让列表看起来更漂亮，你可以把内容用固定的缩进整理好：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="k">*</span>   轻轻的我走了， 正如我轻轻的来； 我轻轻的招手， 作别西天的云彩。
+    那河畔的金柳， 是夕阳中的新娘； 波光里的艳影， 在我的心头荡漾。
+    软泥上的青荇， 油油的在水底招摇； 在康河的柔波里， 我甘心做一条水草！
+<span class="k">*</span>   那榆荫下的一潭， 不是清泉， 是天上虹； 揉碎在浮藻间， 沉淀着彩虹似的梦。
+    寻梦？撑一支长篙， 向青草更青处漫溯； 满载一船星辉， 在星辉斑斓里放歌。
+    但我不能放歌， 悄悄是别离的笙箫； 夏虫也为我沉默， 沉默是今晚的康桥！
+    悄悄的我走了， 正如我悄悄的来； 我挥一挥衣袖， 不带走一片云彩。</code></pre></td></tr></table>
+</div>
+</div>
+<p>也可以偷懒写成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="k">*</span>   轻轻的我走了， 正如我轻轻的来； 我轻轻的招手， 作别西天的云彩。   
+那河畔的金柳， 是夕阳中的新娘； 波光里的艳影， 在我的心头荡漾。   
+软泥上的青荇， 油油的在水底招摇； 在康河的柔波里， 我甘心做一条水草！  
+<span class="k">*</span>   那榆荫下的一潭， 不是清泉， 是天上虹； 揉碎在浮藻间， 沉淀着彩虹似的梦。  
+寻梦？撑一支长篙， 向青草更青处漫溯； 满载一船星辉， 在星辉斑斓里放歌。   
+但我不能放歌， 悄悄是别离的笙箫； 夏虫也为我沉默， 沉默是今晚的康桥！   
+悄悄的我走了， 正如我悄悄的来； 我挥一挥衣袖， 不带走一片云彩。  </code></pre></td></tr></table>
+</div>
+</div>
+<p>显示效果都是：</p>
+
+<ul>
+<li>轻轻的我走了， 正如我轻轻的来； 我轻轻的招手， 作别西天的云彩。<br />
+那河畔的金柳， 是夕阳中的新娘； 波光里的艳影， 在我的心头荡漾。<br />
+软泥上的青荇， 油油的在水底招摇； 在康河的柔波里， 我甘心做一条水草！<br /></li>
+<li>那榆荫下的一潭， 不是清泉， 是天上虹； 揉碎在浮藻间， 沉淀着彩虹似的梦。<br />
+寻梦？撑一支长篙， 向青草更青处漫溯； 满载一船星辉， 在星辉斑斓里放歌。<br />
+但我不能放歌， 悄悄是别离的笙箫； 夏虫也为我沉默， 沉默是今晚的康桥！<br />
+悄悄的我走了， 正如我悄悄的来； 我挥一挥衣袖， 不带走一片云彩。<br /></li>
+</ul>
+
+<p>2）列表项目可以包含多个段落，每个项目下的段落都必须缩进 4 个空格或是 1 个制表符。例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="k">-</span>   轻轻的我走了， 正如我轻轻的来； 我轻轻的招手， 作别西天的云彩。
+    那河畔的金柳， 是夕阳中的新娘； 波光里的艳影， 在我的心头荡漾。
+    软泥上的青荇， 油油的在水底招摇； 在康河的柔波里， 我甘心做一条水草！
+
+    那榆荫下的一潭， 不是清泉， 是天上虹； 揉碎在浮藻间， 沉淀着彩虹似的梦。
+    寻梦？撑一支长篙， 向青草更青处漫溯； 满载一船星辉， 在星辉斑斓里放歌。
+    但我不能放歌， 悄悄是别离的笙箫； 夏虫也为我沉默， 沉默是今晚的康桥！
+-   悄悄的我走了， 正如我悄悄的来； 我挥一挥衣袖， 不带走一片云彩。</code></pre></td></tr></table>
+</div>
+</div>
+<p>也可以比较懒惰，写成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="k">-</span>   轻轻的我走了， 正如我轻轻的来； 我轻轻的招手， 作别西天的云彩。
+那河畔的金柳， 是夕阳中的新娘； 波光里的艳影， 在我的心头荡漾。
+软泥上的青荇， 油油的在水底招摇； 在康河的柔波里， 我甘心做一条水草！
+
+    那榆荫下的一潭， 不是清泉， 是天上虹； 揉碎在浮藻间， 沉淀着彩虹似的梦。
+寻梦？撑一支长篙， 向青草更青处漫溯； 满载一船星辉， 在星辉斑斓里放歌。
+但我不能放歌， 悄悄是别离的笙箫； 夏虫也为我沉默， 沉默是今晚的康桥！
+-   悄悄的我走了， 正如我悄悄的来； 我挥一挥衣袖， 不带走一片云彩。</code></pre></td></tr></table>
+</div>
+</div>
+<p>显示效果都是：</p>
+
+<ul>
+<li><p>轻轻的我走了， 正如我轻轻的来； 我轻轻的招手， 作别西天的云彩。
+那河畔的金柳， 是夕阳中的新娘； 波光里的艳影， 在我的心头荡漾。
+软泥上的青荇， 油油的在水底招摇； 在康河的柔波里， 我甘心做一条水草！</p>
+
+<p>那榆荫下的一潭， 不是清泉， 是天上虹； 揉碎在浮藻间， 沉淀着彩虹似的梦。
+寻梦？撑一支长篙， 向青草更青处漫溯； 满载一船星辉， 在星辉斑斓里放歌。
+但我不能放歌， 悄悄是别离的笙箫； 夏虫也为我沉默， 沉默是今晚的康桥！</p></li>
+
+<li><p>悄悄的我走了， 正如我悄悄的来； 我挥一挥衣袖， 不带走一片云彩。</p></li>
+</ul>
+
+<p>3）项目代码中也可能出现异常，例如下面这种情况：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">1.    What a great season.</code></pre></td></tr></table>
+</div>
+</div>
+<p>显示效果却是：</p>
+
+<ol>
+<li>What a great season.</li>
+</ol>
+
+<p>这与我们想要的结果不同，也就是在行首出现数字-句点-空白，要避免这样的状况，可以在句点前面加上反斜杠来解决。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">1973\. What a great season.</code></pre></td></tr></table>
+</div>
+</div>
+<p>1973. What a great season.</p>
+
+<h3 id="代码区块">代码区块</h3>
+
+<p>插入代码对程序员来说是一个必不可少的功能，插入代码的方式有两种，一种通过缩进的形式添加代码块，另一种是通过 “`” 包裹代码。</p>
+
+<h4 id="行内代码">行内代码</h4>
+
+<p>行内代码可以 `code`（封闭的反引号）实现，例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">c 语言中的`printf()`函数</code></pre></td></tr></table>
+</div>
+</div>
+<p>显示效果：</p>
+
+<p>c 语言中的<code>printf()</code>函数</p>
+
+<h4 id="代码块">代码块</h4>
+
+<ul>
+<li>在句段的行首插入 1 个 tab 或 4 个空格，则表示代码块。</li>
+<li>在句段行首和行末用三个反引号换行闭包（若支持语法高亮可在行首三个反引号后添加 YAML 语言标识）。</li>
+<li>如果要在代码区段内插入反引号，你可以用多个反引号来开启和结束代码区段。</li>
+</ul>
+
+<p>例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">    print(‘Hello world!’);
+    print(‘Hello world!’);
+    print(‘Hello world!’);</code></pre></td></tr></table>
+</div>
+</div>
+<p>或者</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="s">```c
+</span><span class="s"></span><span class="n">print</span><span class="p">(</span><span class="err">‘</span><span class="n">Hello</span> <span class="n">world</span><span class="o">!</span><span class="err">’</span><span class="p">);</span>
+<span class="n">print</span><span class="p">(</span><span class="err">‘</span><span class="n">Hello</span> <span class="n">world</span><span class="o">!</span><span class="err">’</span><span class="p">);</span>
+<span class="n">print</span><span class="p">(</span><span class="err">‘</span><span class="n">Hello</span> <span class="n">world</span><span class="o">!</span><span class="err">’</span><span class="p">);</span>
+<span class="s">```</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>显示效果:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="n">print</span><span class="p">(</span><span class="s">&#34;Hello world!&#34;</span><span class="p">);</span>
+<span class="n">print</span><span class="p">(</span><span class="s">&#34;Hello world!&#34;</span><span class="p">);</span>
+<span class="n">print</span><span class="p">(</span><span class="s">&#34;Hello world!&#34;</span><span class="p">);</span></code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="注意">注意</h4>
+
+<p>在代码区段内，&amp; 和尖括号都会被自动地转成 HTML 实体，这使得插入 HTML 原始码变得很容易。例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">Please don&#39;t use any <span class="sb">`&lt;blink&gt;`</span> tags.</code></pre></td></tr></table>
+</div>
+</div>
+<p>显示效果如下：</p>
+
+<p>Please don&rsquo;t use any <code>&lt;blink&gt;</code> tags.</p>
+
+<h3 id="分隔线">分隔线</h3>
+
+<p>可以使用三个以上的星号<code>*</code>，减号<code>-</code>或者底线<code>_</code>来建立一个分隔线，行内不能有其他东西，也可以在星号或者减号中加插入空格，下面的方法都可以创建分割线：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="k">*</span> * *
+***
+<span class="gs">****</span>*************
+<span class="k">-</span> - -
+
+---
+
+-----------------
+<span class="ge">_ _</span> _
+___
+________________</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>采用减号<code>-</code>分割时，最好空格隔开或上面空一行，不然三个以上连续的减号会误将上一行文字升级为二级标题！</li>
+</ul>
+
+<h3 id="符号">符号</h3>
+
+<h4 id="转义符号">转义符号</h4>
+
+<p>转义符号：使用反斜杠（\）转义输入 Markdown 标记符号的愿意字符，例如<code>*</code>,<code>-</code>,<code>&gt;</code>等。Markdown 支持以下这些符号前面加上反斜杠来帮助插入普通的符号：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">\   反斜线
+`   反引号
+<span class="k">*</span>   星号
+_   底线
+{}  花括号
+[]  方括号
+()  括弧
+<span class="gh">#   井字号
+</span><span class="gh"></span>+   加号
+<span class="k">-</span>   减号
+.   英文句点
+!   惊叹号</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="字符实体">字符实体</h4>
+
+<p>字符实体：普通段落一般都是顶格开始，无法使用空格或 tab 来缩进，如果硬要输入空格显示占位缩进效果，可以嵌入空格对应的 HTML Entity 实体码。HTML 转义字符串（Escape Sequence），即字符实体（Character Entity）。字符实体由三部分构成：</p>
+
+<ul>
+<li>1、第一部分是一个<code>&amp;</code>（ampersand）符号；</li>
+<li>2、第二部分是实体（Entity）名字，或者是<code>#</code>加上实体编号（Entity Code）；</li>
+<li>3、第三部分是一个分号<code>;</code>（semicolon）。</li>
+</ul>
+
+<p>例如：</p>
+
+<p>普通自然行行首敲 2 个空格无占位缩进效果。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;该行行首添加了 4 个不断行的空白格：no-break space(<code>&amp;nbsp;</code>或<code>&amp;#160;</code>）<br />
+&ensp;&ensp;&ensp;&ensp;该行行首添加了 4 个半方大的空白：en space（<code>&amp;ensp;</code>或<code>&amp;#8194;</code>）<br />
+&emsp;&emsp;&emsp;&emsp;该行行首添加了 4 个全方大的空白：em space（<code>&amp;emsp;</code>或<code>&amp;#8195;</code>）</p>
+
+<h3 id="文本格式">文本格式</h3>
+
+<p>文本格式包括强调、加粗、突出、下划线、删除线、脚标等增强修饰和丰富表现。</p>
+
+<h4 id="强调-斜体">强调（斜体）</h4>
+
+<p>强调（斜体）：星号（*）或下划线（_）包围的文字将会显示斜体，例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">Some of these words <span class="ge">*are emphasized*</span>.    
+Some of these words <span class="ge">_are emphasized_</span>.   </code></pre></td></tr></table>
+</div>
+</div>
+<p>显示效果为：</p>
+
+<p>Some of these words <em>are emphasized</em>.<br />
+Some of these words <em>are emphasized</em>.</p>
+
+<h4 id="加粗">加粗</h4>
+
+<p>加粗：两个星号（**）或者两个下划线（__）包围的需要特别强调的文字将会加粗显示，例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">Use two asterisks for <span class="gs">**strong emphasis**</span>.  
+Use two asterisks for <span class="gs">__strong emphasis__</span>.  </code></pre></td></tr></table>
+</div>
+</div>
+<p>显示效果为：</p>
+
+<p>Use two asterisks for <strong>strong emphasis</strong>.<br />
+Use two asterisks for <strong>strong emphasis</strong>.</p>
+
+<p><strong>如果你的 * 和 _ 两边都有空白的话，它们就只会被当成普通的符号。</strong></p>
+
+<h3 id="链接">链接</h3>
+
+<h4 id="自动链接">自动链接</h4>
+
+<p>自动链接：Markdown 支持以比较简短的自动链接形式来处理网址和电子邮件信箱，只要是用尖括号包起来，Markdown 就会自动把它转成链接。一般网址的链接文字就和链接地址一样。对于 HTTP(s) 协议开头的超链接地址，甚至无需添加尖括号明示，也会生成自动链接。例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">&lt;http://example.com/&gt;  
+http://example.com/  </code></pre></td></tr></table>
+</div>
+</div>
+<p><a href="http://example.com/">http://example.com/</a><br />
+<a href="http://example.com/">http://example.com/</a></p>
+
+<h4 id="文字">文字</h4>
+
+<p>Markdown支持两种形式的超文本链接语法格式：行内式和参考式两种形式。不管是哪一种，链接文字都是用方括号<code>[]</code>来标记。</p>
+
+<h5 id="行内式">行内式</h5>
+
+<p><strong>行内式：</strong> 只要在方块括号后面紧接着圆括号并插入链接网址即可在一行内构建链接，其语法格式为 [text](url)。如果你还想要加上链接的 title（鼠标放在上边会显示标题），只要在网址后面用双引号把 title 文字包起来即可。例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">[<span class="nt">Google</span>](<span class="na">www.google.com</span>)
+
+[<span class="nt">Google</span>](<span class="na">www.google.com &#34;Google&#34;</span>)</code></pre></td></tr></table>
+</div>
+</div>
+<p>显示结果为：</p>
+
+<p><a href="www.google.com">Google</a></p>
+
+<p><a href="www.google.com" title="Google">Google</a></p>
+
+<h5 id="参考式">参考式</h5>
+
+<p><strong>参考式：</strong> 参考式的链接是在链接文字的括号后面再接上另一个方括号，在第二个方括号里面填入用以辨识链接的标记 id，然后在其他地方给出该标记 id 真正的链接地址。</p>
+
+<ul>
+<li>先定义参考 refid：[text][refid]</li>
+<li>再定义 refid 所指：[refid]:URL</li>
+</ul>
+
+<p>例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">[Google][1]  
+[1]: www.google.com &#34;Google(Optional)&#34;</code></pre></td></tr></table>
+</div>
+</div>
+<p>显示效果为：</p>
+
+<p><a href="www.google.com" title="Google(Optional)">Google</a></p>
+
+<p>注意：</p>
+
+<ul>
+<li>参考式的链接可以选择性地在两个方括号中间加上一个空格，如 [text] [refid]</li>
+<li>链接辨别标签可以有字母、数字、空白和标点符号，但是并不区分大小写 [text][a] 等同于 [text][A]</li>
+<li>隐式链接标记功能让你可以省略指定链接标记，这种情形下，链接标记会视为等同于链接文字，要用隐式链接标记只要在链接文字后面加上一个空的方括号，例如 [Google][]</li>
+</ul>
+
+<h4 id="图片">图片</h4>
+
+<p>Markdown 使用一种和链接很相似的语法来标记图片，同样也允许两种样式： 行内式和参考式。<br />
+不同的是，需要在链接文字方括号之前添加一个感叹号<code>!</code>，其语法格式为 ![alt_text](url)，HTML 等效源码为 <code>&lt;img src=&quot;url&quot; alt=&quot;text&quot; /&gt;</code>，其中 alt_text 可以置空。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">行内式：
+
+![<span class="nt">Alt text</span>](<span class="na">/path/to/img.jpg</span>)
+
+![<span class="nt">Alt text</span>](<span class="na">/path/to/img.jpg &#34;Optional title&#34;</span>)
+
+参考式：
+
+![Alt text][id]  
+[id]: url/to/image  &#34;Optional title attribute&#34;</code></pre></td></tr></table>
+</div>
+</div>
+<p>在 Markdown 图片标记<code>![]()</code>外面再嵌套一层<code>[]()</code>即可建立图片超链接，点击图片即可跳转到链接地址，大概为<code>[![](img_url)](ref_url)</code>。</p>
+
+<h4 id="锚点">锚点</h4>
+
+<p>网页中，锚点其实就是页内超链接，也就是链接本文档内部的某些元素，实现当前页面中的跳转。比如我这里写下一个锚点，点击回到目录，就能跳转到目录。 在目录中点击这一节，就能跳过来。还有下一节的注脚。这些根本上都是用锚点来实现的。</p>
+
+<p>显示效果为：
+跳转到<a href="#标题">标题</a></p>
+
+<h3 id="目录">目录</h3>
+
+<p>关于目录生成，只要文章是按照 Markdown 语法写作的，在需要生成目录的地方写[TOC]即可生成目录，但并非所有的 Markdown 解析器都支持该功能。</p>
+
+<h3 id="表格">表格</h3>
+
+<p>表格语法说明：</p>
+
+<ul>
+<li><code>|</code>、<code>-</code>、<code>:</code>之间的多余空格会被忽略，不影响布局。</li>
+<li>默认标题栏居中对齐，内容居左对齐。</li>
+<li><code>-:</code>表示内容和标题栏居右对齐，<code>:-</code>表示内容和标题栏居左对齐，<code>:-:</code>表示内容和标题栏居中对齐。</li>
+<li>内容和<code>|</code>之间的多余空格会被忽略，每行第一个<code>|</code>和最后一个<code>|</code>可以省略，<code>-</code>的数量至少有一个。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">| 一个普通标题 | 一个普通标题 | 一个普通标题 |
+| ------| ------ | ------ |
+| 短文本 | 中等文本 | 稍微长一点的文本 |
+| 稍微长一点的文本 | 短文本 | 中等文本 |</code></pre></td></tr></table>
+</div>
+</div>
+<table>
+<thead>
+<tr>
+<th>一个普通标题</th>
+<th>一个普通标题</th>
+<th>一个普通标题</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>短文本</td>
+<td>中等文本</td>
+<td>稍微长一点的文本</td>
+</tr>
+
+<tr>
+<td>稍微长一点的文本</td>
+<td>短文本</td>
+<td>中等文本</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown">| 左对齐标题 | 右对齐标题 | 居中对齐标题 |
+| :------| ------: | :------: |
+| 短文本 | 中等文本 | 稍微长一点的文本 |
+| 稍微长一点的文本 | 短文本 | 中等文本 |</code></pre></td></tr></table>
+</div>
+</div>
+<table>
+<thead>
+<tr>
+<th align="left">左对齐标题</th>
+<th align="right">右对齐标题</th>
+<th align="center">居中对齐标题</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">短文本</td>
+<td align="right">中等文本</td>
+<td align="center">稍微长一点的文本</td>
+</tr>
+
+<tr>
+<td align="left">稍微长一点的文本</td>
+<td align="right">短文本</td>
+<td align="center">中等文本</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="参考文章">参考文章：</h3>
+
+<ul>
+<li><a href="http://wowubuntu.com/markdown/">http://wowubuntu.com/markdown/</a></li>
+<li><a href="http://www.jianshu.com/p/q81RER">http://www.jianshu.com/p/q81RER</a></li>
+<li><a href="https://github.com/xitu/gold-miner/blob/master/TODO/choosing-right-markdown-parser.md">https://github.com/xitu/gold-miner/blob/master/TODO/choosing-right-markdown-parser.md</a></li>
+<li><a href="http://glgjing.github.io/blog/2015/04/03/markdown-biao-ge-yu-fa/">http://glgjing.github.io/blog/2015/04/03/markdown-biao-ge-yu-fa/</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Meoop</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2016-08-24
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/markdown/">Markdown</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E5%87%A0%E7%A7%8D%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95%E6%AF%94%E8%BE%83/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">几种无损压缩算法实现比较</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%90%AD%E5%BB%BA/">
+            <span class="next-text nav-default">NTP 服务器的搭建</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'meoop';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="yilei108@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.stackoverflow.com/users/12249756/" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.facebook.com/lei.yi.908" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://www.linkedin.com/in/yilei/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/Meoop" class="iconfont icon-github" title="github"></a>
+      <a href="http://weibo.com/18722081826" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://www.zhihu.com/people/lei.yi" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="http://blog.meoop.me/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2015 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Meoop</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-101122173-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

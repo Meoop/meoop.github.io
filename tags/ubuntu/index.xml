@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ubuntu on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/tags/ubuntu/</link>
+    <description>Recent content in Ubuntu on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 27 Mar 2017 10:15:58 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/tags/ubuntu/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>使用 debootstrap 建立 Ubuntu 系统</title>
+      <link>http://blog.meoop.me/post/%E4%BD%BF%E7%94%A8debootstrap%E5%BB%BA%E7%AB%8Bubuntu%E7%B3%BB%E7%BB%9F/</link>
+      <pubDate>Mon, 27 Mar 2017 10:15:58 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/%E4%BD%BF%E7%94%A8debootstrap%E5%BB%BA%E7%AB%8Bubuntu%E7%B3%BB%E7%BB%9F/</guid>
+      <description>&lt;p&gt;摘要：debootstrap 能够快速建立一套 Debian 或 Ubuntu 的 rootfs，并且支持多种 CPU 架构。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

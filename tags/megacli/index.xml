@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MegaCli on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/tags/megacli/</link>
+    <description>Recent content in MegaCli on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 09 May 2017 10:17:21 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/tags/megacli/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>MegaCli 常用命令汇总</title>
+      <link>http://blog.meoop.me/post/megacli%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/</link>
+      <pubDate>Tue, 09 May 2017 10:17:21 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/megacli%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/</guid>
+      <description>&lt;p&gt;MegaCli 是 LSI 公司提供的工具, 可以实现对 RAID 卡进行配置和状态监控。下面是一些比较常用的 MegaCli 命令：&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

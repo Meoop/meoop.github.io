@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>使用 xmodmap 取消 Linux 下鼠标中键粘贴功能 - 享受编程 - Coding Your Ambition.</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Meoop" /><meta name="description" content="在 Linux 下选中东西后，按住鼠标的滚轮中键进行粘贴，是 Linux 下非常好用的功能。但是不巧，鼠标的滚轮中键太灵敏，在滚动滚轮时候非常容易按下中键，这时候编辑好的文档突然就插入了不知道从哪复制来的东西。
+xmodmap 是用于修改X中键盘映射和指针按钮映射的实用程序，我们可以用 xmodmap 修改鼠标中键的映射，进而关掉鼠标中键的复制功能，解决误触鼠标中键问题。
+" /><meta name="keywords" content="Linux, xmodmap" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.55.6 with theme even" />
+
+
+<link rel="canonical" href="http://blog.meoop.me/post/%E4%BD%BF%E7%94%A8xmodmap%E5%8F%96%E6%B6%88linux%E4%B8%8B%E9%BC%A0%E6%A0%87%E4%B8%AD%E9%94%AE%E7%B2%98%E8%B4%B4%E5%8A%9F%E8%83%BD/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="使用 xmodmap 取消 Linux 下鼠标中键粘贴功能" />
+<meta property="og:description" content="在 Linux 下选中东西后，按住鼠标的滚轮中键进行粘贴，是 Linux 下非常好用的功能。但是不巧，鼠标的滚轮中键太灵敏，在滚动滚轮时候非常容易按下中键，这时候编辑好的文档突然就插入了不知道从哪复制来的东西。
+
+xmodmap 是用于修改X中键盘映射和指针按钮映射的实用程序，我们可以用 xmodmap 修改鼠标中键的映射，进而关掉鼠标中键的复制功能，解决误触鼠标中键问题。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://blog.meoop.me/post/%E4%BD%BF%E7%94%A8xmodmap%E5%8F%96%E6%B6%88linux%E4%B8%8B%E9%BC%A0%E6%A0%87%E4%B8%AD%E9%94%AE%E7%B2%98%E8%B4%B4%E5%8A%9F%E8%83%BD/" />
+<meta property="article:published_time" content="2018-03-07T10:16:23&#43;08:00"/>
+<meta property="article:modified_time" content="2018-03-07T10:16:23&#43;08:00"/>
+
+<meta itemprop="name" content="使用 xmodmap 取消 Linux 下鼠标中键粘贴功能">
+<meta itemprop="description" content="在 Linux 下选中东西后，按住鼠标的滚轮中键进行粘贴，是 Linux 下非常好用的功能。但是不巧，鼠标的滚轮中键太灵敏，在滚动滚轮时候非常容易按下中键，这时候编辑好的文档突然就插入了不知道从哪复制来的东西。
+
+xmodmap 是用于修改X中键盘映射和指针按钮映射的实用程序，我们可以用 xmodmap 修改鼠标中键的映射，进而关掉鼠标中键的复制功能，解决误触鼠标中键问题。">
+
+
+<meta itemprop="datePublished" content="2018-03-07T10:16:23&#43;08:00" />
+<meta itemprop="dateModified" content="2018-03-07T10:16:23&#43;08:00" />
+<meta itemprop="wordCount" content="259">
+
+
+
+<meta itemprop="keywords" content="Linux,xmodmap," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="使用 xmodmap 取消 Linux 下鼠标中键粘贴功能"/>
+<meta name="twitter:description" content="在 Linux 下选中东西后，按住鼠标的滚轮中键进行粘贴，是 Linux 下非常好用的功能。但是不巧，鼠标的滚轮中键太灵敏，在滚动滚轮时候非常容易按下中键，这时候编辑好的文档突然就插入了不知道从哪复制来的东西。
+
+xmodmap 是用于修改X中键盘映射和指针按钮映射的实用程序，我们可以用 xmodmap 修改鼠标中键的映射，进而关掉鼠标中键的复制功能，解决误触鼠标中键问题。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Ambition</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Ambition</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">使用 xmodmap 取消 Linux 下鼠标中键粘贴功能</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-03-07 </span>
+        <div class="post-category">
+            <a href="/categories/linux/"> Linux </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      <p>在 Linux 下选中东西后，按住鼠标的滚轮中键进行粘贴，是 Linux 下非常好用的功能。但是不巧，鼠标的滚轮中键太灵敏，在滚动滚轮时候非常容易按下中键，这时候编辑好的文档突然就插入了不知道从哪复制来的东西。</p>
+
+<p>xmodmap 是用于修改X中键盘映射和指针按钮映射的实用程序，我们可以用 xmodmap 修改鼠标中键的映射，进而关掉鼠标中键的复制功能，解决误触鼠标中键问题。</p>
+
+<p><strong>方法一：</strong>在终端下执行 xmodmap 命令进行修改</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ xmodmap -e <span class="s2">&#34;pointer = 1 25 3 4 5 6 7 8 9 10&#34;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><strong>方法二：</strong>编辑~/.Xmodmap文件进行修改</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ <span class="nb">echo</span> <span class="s2">&#34;pointer = 1 25 3 4 5 6 7 8 9 10&#34;</span> &gt; ~/.Xmodmap</code></pre></td></tr></table>
+</div>
+</div>
+<p><strong>参考文章：</strong><br />
+[1]. <a href="https://www.x.org/archive/X11R6.8.1/doc/xmodmap.1.html">xmodmap - utility for modifying keymaps and pointer button mappings in X</a><br />
+[2]. <a href="https://askubuntu.com/questions/4507/how-do-i-disable-middle-mouse-button-click-paste">How do I disable middle mouse button click paste?</a></p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Meoop</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2018-03-07
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/linux/">Linux</a>
+          <a href="/tags/xmodmap/">xmodmap</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/megacli%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/">
+            <span class="next-text nav-default">MegaCli 常用命令汇总</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'meoop';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="yilei108@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.stackoverflow.com/users/12249756/" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.facebook.com/lei.yi.908" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://www.linkedin.com/in/yilei/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/Meoop" class="iconfont icon-github" title="github"></a>
+      <a href="http://weibo.com/18722081826" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://www.zhihu.com/people/lei.yi" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="http://blog.meoop.me/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2015 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Meoop</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-101122173-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ssh on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/tags/ssh/</link>
+    <description>Recent content in ssh on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 14 Mar 2016 10:17:26 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/tags/ssh/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>nfs&#43;ssh 软连接无法实现免密码登陆</title>
+      <link>http://blog.meoop.me/post/nfs-ssh%E8%BD%AF%E8%BF%9E%E6%8E%A5%E6%97%A0%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E9%99%86/</link>
+      <pubDate>Mon, 14 Mar 2016 10:17:26 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/nfs-ssh%E8%BD%AF%E8%BF%9E%E6%8E%A5%E6%97%A0%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E9%99%86/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一次 Hadoop 集群安装过程中 nfs+ssh 软连接无法实现免密码登陆的问题解决过程&lt;/p&gt;
+
+&lt;p&gt;原文在 &lt;a href=&#34;https://blog.csdn.net/Meoop/article/details/50886535&#34;&gt;CSDN&lt;/a&gt;，现在迁移到这里。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;nfs-ssh-软连接无法实现免密码登陆&#34;&gt;nfs+ssh 软连接无法实现免密码登陆&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;开始以为自己文件名写错，仔细检查未发现文件名有错。&lt;/li&gt;
+&lt;li&gt;检查文件的权限，发现 authorized_keys 文件的权限是 600，修改成 644 后，问题依旧，无法实现免密码登陆。&lt;/li&gt;
+&lt;li&gt;以为是 nfs_share 目录的权限问题。因为当时建立时使用的是 root 用户，查看后发现 nfs_share 目录权限无问题。&lt;/li&gt;
+&lt;li&gt;查看建立的软连接，软连接建立之后所生成的文件权限为 777，尝试各种修改后，完全没有什么用处，依旧无法免密码连接。&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

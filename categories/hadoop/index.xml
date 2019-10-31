@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hadoop on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/categories/hadoop/</link>
+    <description>Recent content in Hadoop on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 14 Mar 2016 10:17:26 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/categories/hadoop/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>nfs&#43;ssh 软连接无法实现免密码登陆</title>
+      <link>http://blog.meoop.me/post/nfs-ssh%E8%BD%AF%E8%BF%9E%E6%8E%A5%E6%97%A0%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E9%99%86/</link>
+      <pubDate>Mon, 14 Mar 2016 10:17:26 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/nfs-ssh%E8%BD%AF%E8%BF%9E%E6%8E%A5%E6%97%A0%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E9%99%86/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一次 Hadoop 集群安装过程中 nfs+ssh 软连接无法实现免密码登陆的问题解决过程&lt;/p&gt;
+
+&lt;p&gt;原文在 &lt;a href=&#34;https://blog.csdn.net/Meoop/article/details/50886535&#34;&gt;CSDN&lt;/a&gt;，现在迁移到这里。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;nfs-ssh-软连接无法实现免密码登陆&#34;&gt;nfs+ssh 软连接无法实现免密码登陆&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;开始以为自己文件名写错，仔细检查未发现文件名有错。&lt;/li&gt;
+&lt;li&gt;检查文件的权限，发现 authorized_keys 文件的权限是 600，修改成 644 后，问题依旧，无法实现免密码登陆。&lt;/li&gt;
+&lt;li&gt;以为是 nfs_share 目录的权限问题。因为当时建立时使用的是 root 用户，查看后发现 nfs_share 目录权限无问题。&lt;/li&gt;
+&lt;li&gt;查看建立的软连接，软连接建立之后所生成的文件权限为 777，尝试各种修改后，完全没有什么用处，依旧无法免密码连接。&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>Hadoop 集群启动成功但 live Node 为 0</title>
+      <link>http://blog.meoop.me/post/hadoop%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%E4%BD%86live-node%E4%B8%BA0/</link>
+      <pubDate>Sat, 05 Mar 2016 10:17:04 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/hadoop%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%E4%BD%86live-node%E4%B8%BA0/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一次 Hadoop 集群启动成功但 live node 为 0 的问题解决过程。&lt;/p&gt;
+
+&lt;p&gt;原文在 &lt;a href=&#34;https://blog.csdn.net/Meoop/article/details/50806724&#34;&gt;CSDN&lt;/a&gt;，现在迁移到这里。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+
+&lt;p&gt;这两天用虚拟机搭建了 hadoop 集群环境，创建了三台虚拟机 hadoop01，hadoop02，hadoop03，hadoop01 代表 Master，hadoop02 以及 hadoop03 作为 Slave 节点。三台虚拟机都是 centos7 最小化安装。hadoop 版本用的最新的版本 2.7.2。
+开始一切都很顺利，启动 hadoop 集群也成功启动，运行 jps，三个节点对应的进程都成功启动，但是检查集群状态时发现 live node 为 0（如图）。&lt;/p&gt;
+
+&lt;figure class=&#34;center&#34;&gt;
+    &lt;img src=&#34;http://blog.meoop.me/images/post/hadoop%e9%9b%86%e7%be%a4%e5%90%af%e5%8a%a8%e6%88%90%e5%8a%9f%e4%bd%86live-node%e4%b8%ba0/20160304233347273.png&#34;
+         alt=&#34;集群状态&#34;/&gt; &lt;figcaption&gt;
+            &lt;h4&gt;集群状态&lt;/h4&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

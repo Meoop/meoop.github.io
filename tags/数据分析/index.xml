@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>数据分析 on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/</link>
+    <description>Recent content in 数据分析 on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 16 Jun 2015 10:17:10 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>K-Means 聚类算法</title>
+      <link>http://blog.meoop.me/post/k-means%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Tue, 16 Jun 2015 10:17:10 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/k-means%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;聚类&lt;/strong&gt;是在给定的数据集合中寻找同类的数据子集合，每一个子集合形成一个类簇，同类簇中的数据具有更大的相似性。聚类算法大体上可分为&lt;strong&gt;基于划分&lt;/strong&gt;的方法、&lt;strong&gt;基于层次&lt;/strong&gt;的方法、&lt;strong&gt;基于密度&lt;/strong&gt;的方法、&lt;strong&gt;基于网格&lt;/strong&gt;的方法以及&lt;strong&gt;基于模型&lt;/strong&gt;的方法。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;基本概念&#34;&gt;基本概念&lt;/h2&gt;
+
+&lt;p&gt;术语 &lt;strong&gt;k-means&lt;/strong&gt; 最早是由 James MacQueen 在 1967 年提出的，这一观点可以追溯到 1957 年 Hugo Steinhaus 所提出的想法。1957 年，斯图亚特·劳埃德最先提出这一标准算法，当初是作为一门应用于脉码调制的技术,直到 1982 年，这一算法才在贝尔实验室被正式提出。1965 年，E.W.Forgy 发表了一个本质上是相同的方法，1975 年和 1979 年，Hartigan 和 Wong 分别提出了一个更高效的版本。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/categories/linux/</link>
+    <description>Recent content in Linux on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 07 Mar 2018 10:16:23 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/categories/linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>使用 xmodmap 取消 Linux 下鼠标中键粘贴功能</title>
+      <link>http://blog.meoop.me/post/%E4%BD%BF%E7%94%A8xmodmap%E5%8F%96%E6%B6%88linux%E4%B8%8B%E9%BC%A0%E6%A0%87%E4%B8%AD%E9%94%AE%E7%B2%98%E8%B4%B4%E5%8A%9F%E8%83%BD/</link>
+      <pubDate>Wed, 07 Mar 2018 10:16:23 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/%E4%BD%BF%E7%94%A8xmodmap%E5%8F%96%E6%B6%88linux%E4%B8%8B%E9%BC%A0%E6%A0%87%E4%B8%AD%E9%94%AE%E7%B2%98%E8%B4%B4%E5%8A%9F%E8%83%BD/</guid>
+      <description>&lt;p&gt;在 Linux 下选中东西后，按住鼠标的滚轮中键进行粘贴，是 Linux 下非常好用的功能。但是不巧，鼠标的滚轮中键太灵敏，在滚动滚轮时候非常容易按下中键，这时候编辑好的文档突然就插入了不知道从哪复制来的东西。&lt;/p&gt;
+
+&lt;p&gt;xmodmap 是用于修改X中键盘映射和指针按钮映射的实用程序，我们可以用 xmodmap 修改鼠标中键的映射，进而关掉鼠标中键的复制功能，解决误触鼠标中键问题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>MegaCli 常用命令汇总</title>
+      <link>http://blog.meoop.me/post/megacli%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/</link>
+      <pubDate>Tue, 09 May 2017 10:17:21 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/megacli%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/</guid>
+      <description>&lt;p&gt;MegaCli 是 LSI 公司提供的工具, 可以实现对 RAID 卡进行配置和状态监控。下面是一些比较常用的 MegaCli 命令：&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>GRUB2 Password Protection</title>
+      <link>http://blog.meoop.me/post/grub2-password-protection/</link>
+      <pubDate>Thu, 30 Mar 2017 10:16:56 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/grub2-password-protection/</guid>
+      <description>&lt;p&gt;GRUB2 为其菜单和终端提供了基本的密码保护。用户可以设置密码用来保护整个菜单，或者某个菜单项。可以设置多个用户，并且为每个用户提供不同的密码，密码可以以加密或非加密格式存储。本文对为什么要使用 GRUB2 的密码保护功能以及如何设置 GRUB2 进行简单介绍。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>使用 debootstrap 建立 Ubuntu 系统</title>
+      <link>http://blog.meoop.me/post/%E4%BD%BF%E7%94%A8debootstrap%E5%BB%BA%E7%AB%8Bubuntu%E7%B3%BB%E7%BB%9F/</link>
+      <pubDate>Mon, 27 Mar 2017 10:15:58 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/%E4%BD%BF%E7%94%A8debootstrap%E5%BB%BA%E7%AB%8Bubuntu%E7%B3%BB%E7%BB%9F/</guid>
+      <description>&lt;p&gt;摘要：debootstrap 能够快速建立一套 Debian 或 Ubuntu 的 rootfs，并且支持多种 CPU 架构。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>NTP 服务器的搭建</title>
+      <link>http://blog.meoop.me/post/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%90%AD%E5%BB%BA/</link>
+      <pubDate>Mon, 08 Aug 2016 10:17:32 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%90%AD%E5%BB%BA/</guid>
+      <description>&lt;p&gt;由于制造工艺多种多样，所有的(非原子)时钟并不按照完全一致的速度行走。有一些时钟走的比较快而有一些走的比较慢。因此经过很长一段时间以后，一个时钟的时间慢慢的和其它的发生偏移，这就是常说的 “时钟漂移” 或 “时间漂移”。时钟的一致对一些应用有着至关重要的作用，为了将时钟漂移的影响降低到最小，需要将时钟进行同步，这就需要 ntp 服务。
+网络时间协议 (NTP) 用来同步网络上不同主机的系统时间。你管理的所有主机都可以和一个指定的被称为 ntp 服务器的时间服务器同步它们的时间。而另一方面，一个 ntp 服务器会将它的时间和任意公共 ntp 服务器，或者你选定的服务器同步。由 ntp 管理的所有系统时钟都会同步精确到毫秒级。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Gnome 桌面环境顶栏日期显示不全问题</title>
+      <link>http://blog.meoop.me/post/gnome%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%A1%B6%E6%A0%8F%E6%97%A5%E6%9C%9F%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%85%A8%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Sat, 23 Jul 2016 10:16:50 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/gnome%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%A1%B6%E6%A0%8F%E6%97%A5%E6%9C%9F%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%85%A8%E9%97%AE%E9%A2%98/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;2016.08.01 日更新
+该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Linux 修改主机名</title>
+      <link>http://blog.meoop.me/post/linux%E4%BF%AE%E6%94%B9%E4%B8%BB%E6%9C%BA%E5%90%8D/</link>
+      <pubDate>Fri, 04 Mar 2016 10:17:15 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/linux%E4%BF%AE%E6%94%B9%E4%B8%BB%E6%9C%BA%E5%90%8D/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;原文在 &lt;a href=&#34;https://blog.csdn.net/Meoop/article/details/50804308&#34;&gt;CSDN&lt;/a&gt;，作部分更新整理后迁移到这里。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;在 CentOS 或 RHEL 中，有三种定义的主机名:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;静态的（static），&lt;strong&gt;静态&lt;/strong&gt;主机名也称为内核主机名，是系统在启动时从&lt;code&gt;/etc/hostname&lt;/code&gt;自动初始化的主机名。&lt;/li&gt;
+&lt;li&gt;瞬态的（transient），&lt;strong&gt;瞬态&lt;/strong&gt;主机名是在系统运行时临时分配的主机名，例如，通过 DHCP 或 mDNS 服务器分配。静态主机名和瞬态主机名都遵从作为互联网域名同样的字符限制规则。&lt;/li&gt;
+&lt;li&gt;灵活的（pretty），&lt;strong&gt;灵活&lt;/strong&gt;主机名是允许使用自由形式（包括特殊/空白字符）的主机名，展示给终端用户的主机名。&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>fedora23 GRUB2 更换主题</title>
+      <link>http://blog.meoop.me/post/fedora23-grub2%E6%9B%B4%E6%8D%A2%E4%B8%BB%E9%A2%98/</link>
+      <pubDate>Tue, 12 Jan 2016 10:16:42 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/fedora23-grub2%E6%9B%B4%E6%8D%A2%E4%B8%BB%E9%A2%98/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;原文在&lt;a href=&#34;https://blog.csdn.net/Meoop/article/details/50505609&#34;&gt;CSDN&lt;/a&gt;，现在迁移到这里。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;刚刚装了 win10 和 fedora23 双系统，启动时黑框只占屏幕左上角的 1/4，感觉十分的难看，于是就寻思这怎么让其好看点，于是翻了翻资料，看见很多地方都可以换 GRUB2 的主题，就试着动了下手，美化了下。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;效果图&lt;/strong&gt;（主题作者给的效果图），下载地址：&lt;a href=&#34;https://pan.baidu.com/s/1c2mgBCG&#34;&gt;https://pan.baidu.com/s/1c2mgBCG&lt;/a&gt;
+&lt;figure class=&#34;center&#34;&gt;
+    &lt;img src=&#34;http://blog.meoop.me/images/post/fedora23-GRUB2%e6%9b%b4%e6%8d%a2%e4%b8%bb%e9%a2%98/20160112180610905.png&#34;/&gt; &lt;figcaption&gt;
+            &lt;h4&gt;主题样式&lt;/h4&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

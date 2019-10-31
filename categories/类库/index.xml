@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>类库 on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/categories/%E7%B1%BB%E5%BA%93/</link>
+    <description>Recent content in 类库 on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 13 Apr 2015 10:24:24 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/categories/%E7%B1%BB%E5%BA%93/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Code Blocks 添加第三方类库</title>
+      <link>http://blog.meoop.me/post/code-blocks%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B1%BB%E5%BA%93/</link>
+      <pubDate>Mon, 13 Apr 2015 10:24:24 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/code-blocks%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B1%BB%E5%BA%93/</guid>
+      <description>&lt;p&gt;第一步：编译第三方库，得到头文件和库，例如路径关系：
+在 include 中放头文件，在 lib 中放置库文件。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;D:\MyLib\include&lt;/p&gt;
+
+&lt;p&gt;D:\MyLib\lib&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://blog.meoop.me/images/post/Code-Blocks添加第三方类库/20150413230733748.png&#34; alt=&#34;编译后的第三方库&#34; /&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

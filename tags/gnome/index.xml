@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>GNOME on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/tags/gnome/</link>
+    <description>Recent content in GNOME on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 23 Jul 2016 10:16:50 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/tags/gnome/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Gnome 桌面环境顶栏日期显示不全问题</title>
+      <link>http://blog.meoop.me/post/gnome%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%A1%B6%E6%A0%8F%E6%97%A5%E6%9C%9F%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%85%A8%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Sat, 23 Jul 2016 10:16:50 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/gnome%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%A1%B6%E6%A0%8F%E6%97%A5%E6%9C%9F%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%85%A8%E9%97%AE%E9%A2%98/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;2016.08.01 日更新
+该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

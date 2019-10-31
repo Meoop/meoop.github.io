@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/tags/</link>
+    <description>Recent content in Tags on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 07 Mar 2018 10:16:23 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Linux</title>
+      <link>http://blog.meoop.me/tags/linux/</link>
+      <pubDate>Wed, 07 Mar 2018 10:16:23 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>xmodmap</title>
+      <link>http://blog.meoop.me/tags/xmodmap/</link>
+      <pubDate>Wed, 07 Mar 2018 10:16:23 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/xmodmap/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MegaCli</title>
+      <link>http://blog.meoop.me/tags/megacli/</link>
+      <pubDate>Tue, 09 May 2017 10:17:21 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/megacli/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>GRUB2</title>
+      <link>http://blog.meoop.me/tags/grub2/</link>
+      <pubDate>Thu, 30 Mar 2017 10:16:56 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/grub2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Debian</title>
+      <link>http://blog.meoop.me/tags/debian/</link>
+      <pubDate>Mon, 27 Mar 2017 10:15:58 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/debian/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ubuntu</title>
+      <link>http://blog.meoop.me/tags/ubuntu/</link>
+      <pubDate>Mon, 27 Mar 2017 10:15:58 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/ubuntu/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>数据压缩</title>
+      <link>http://blog.meoop.me/tags/%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9/</link>
+      <pubDate>Mon, 10 Oct 2016 20:15:48 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Markdown</title>
+      <link>http://blog.meoop.me/tags/markdown/</link>
+      <pubDate>Wed, 24 Aug 2016 22:34:42 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/markdown/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ntp</title>
+      <link>http://blog.meoop.me/tags/ntp/</link>
+      <pubDate>Mon, 08 Aug 2016 10:17:32 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/ntp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>GNOME</title>
+      <link>http://blog.meoop.me/tags/gnome/</link>
+      <pubDate>Sat, 23 Jul 2016 10:16:50 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/gnome/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hadoop</title>
+      <link>http://blog.meoop.me/tags/hadoop/</link>
+      <pubDate>Mon, 14 Mar 2016 10:17:26 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/hadoop/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nfs</title>
+      <link>http://blog.meoop.me/tags/nfs/</link>
+      <pubDate>Mon, 14 Mar 2016 10:17:26 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/nfs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ssh</title>
+      <link>http://blog.meoop.me/tags/ssh/</link>
+      <pubDate>Mon, 14 Mar 2016 10:17:26 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/ssh/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hostname</title>
+      <link>http://blog.meoop.me/tags/hostname/</link>
+      <pubDate>Fri, 04 Mar 2016 10:17:15 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/hostname/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>fedora</title>
+      <link>http://blog.meoop.me/tags/fedora/</link>
+      <pubDate>Tue, 12 Jan 2016 10:16:42 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/fedora/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>K-means</title>
+      <link>http://blog.meoop.me/tags/k-means/</link>
+      <pubDate>Tue, 16 Jun 2015 10:17:10 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/k-means/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>数据分析</title>
+      <link>http://blog.meoop.me/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/</link>
+      <pubDate>Tue, 16 Jun 2015 10:17:10 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>聚类</title>
+      <link>http://blog.meoop.me/tags/%E8%81%9A%E7%B1%BB/</link>
+      <pubDate>Tue, 16 Jun 2015 10:17:10 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/%E8%81%9A%E7%B1%BB/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Code::Blocks</title>
+      <link>http://blog.meoop.me/tags/codeblocks/</link>
+      <pubDate>Mon, 13 Apr 2015 10:24:24 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/tags/codeblocks/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

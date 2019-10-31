@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hostname on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/tags/hostname/</link>
+    <description>Recent content in hostname on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 04 Mar 2016 10:17:15 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/tags/hostname/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Linux 修改主机名</title>
+      <link>http://blog.meoop.me/post/linux%E4%BF%AE%E6%94%B9%E4%B8%BB%E6%9C%BA%E5%90%8D/</link>
+      <pubDate>Fri, 04 Mar 2016 10:17:15 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/linux%E4%BF%AE%E6%94%B9%E4%B8%BB%E6%9C%BA%E5%90%8D/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;原文在 &lt;a href=&#34;https://blog.csdn.net/Meoop/article/details/50804308&#34;&gt;CSDN&lt;/a&gt;，作部分更新整理后迁移到这里。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;在 CentOS 或 RHEL 中，有三种定义的主机名:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;静态的（static），&lt;strong&gt;静态&lt;/strong&gt;主机名也称为内核主机名，是系统在启动时从&lt;code&gt;/etc/hostname&lt;/code&gt;自动初始化的主机名。&lt;/li&gt;
+&lt;li&gt;瞬态的（transient），&lt;strong&gt;瞬态&lt;/strong&gt;主机名是在系统运行时临时分配的主机名，例如，通过 DHCP 或 mDNS 服务器分配。静态主机名和瞬态主机名都遵从作为互联网域名同样的字符限制规则。&lt;/li&gt;
+&lt;li&gt;灵活的（pretty），&lt;strong&gt;灵活&lt;/strong&gt;主机名是允许使用自由形式（包括特殊/空白字符）的主机名，展示给终端用户的主机名。&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

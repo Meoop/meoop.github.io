@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/</link>
+    <description>Recent content on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 07 Mar 2018 10:16:23 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>使用 xmodmap 取消 Linux 下鼠标中键粘贴功能</title>
+      <link>http://blog.meoop.me/post/%E4%BD%BF%E7%94%A8xmodmap%E5%8F%96%E6%B6%88linux%E4%B8%8B%E9%BC%A0%E6%A0%87%E4%B8%AD%E9%94%AE%E7%B2%98%E8%B4%B4%E5%8A%9F%E8%83%BD/</link>
+      <pubDate>Wed, 07 Mar 2018 10:16:23 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/%E4%BD%BF%E7%94%A8xmodmap%E5%8F%96%E6%B6%88linux%E4%B8%8B%E9%BC%A0%E6%A0%87%E4%B8%AD%E9%94%AE%E7%B2%98%E8%B4%B4%E5%8A%9F%E8%83%BD/</guid>
+      <description>&lt;p&gt;在 Linux 下选中东西后，按住鼠标的滚轮中键进行粘贴，是 Linux 下非常好用的功能。但是不巧，鼠标的滚轮中键太灵敏，在滚动滚轮时候非常容易按下中键，这时候编辑好的文档突然就插入了不知道从哪复制来的东西。&lt;/p&gt;
+
+&lt;p&gt;xmodmap 是用于修改X中键盘映射和指针按钮映射的实用程序，我们可以用 xmodmap 修改鼠标中键的映射，进而关掉鼠标中键的复制功能，解决误触鼠标中键问题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>MegaCli 常用命令汇总</title>
+      <link>http://blog.meoop.me/post/megacli%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/</link>
+      <pubDate>Tue, 09 May 2017 10:17:21 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/megacli%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/</guid>
+      <description>&lt;p&gt;MegaCli 是 LSI 公司提供的工具, 可以实现对 RAID 卡进行配置和状态监控。下面是一些比较常用的 MegaCli 命令：&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>GRUB2 Password Protection</title>
+      <link>http://blog.meoop.me/post/grub2-password-protection/</link>
+      <pubDate>Thu, 30 Mar 2017 10:16:56 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/grub2-password-protection/</guid>
+      <description>&lt;p&gt;GRUB2 为其菜单和终端提供了基本的密码保护。用户可以设置密码用来保护整个菜单，或者某个菜单项。可以设置多个用户，并且为每个用户提供不同的密码，密码可以以加密或非加密格式存储。本文对为什么要使用 GRUB2 的密码保护功能以及如何设置 GRUB2 进行简单介绍。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>使用 debootstrap 建立 Ubuntu 系统</title>
+      <link>http://blog.meoop.me/post/%E4%BD%BF%E7%94%A8debootstrap%E5%BB%BA%E7%AB%8Bubuntu%E7%B3%BB%E7%BB%9F/</link>
+      <pubDate>Mon, 27 Mar 2017 10:15:58 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/%E4%BD%BF%E7%94%A8debootstrap%E5%BB%BA%E7%AB%8Bubuntu%E7%B3%BB%E7%BB%9F/</guid>
+      <description>&lt;p&gt;摘要：debootstrap 能够快速建立一套 Debian 或 Ubuntu 的 rootfs，并且支持多种 CPU 架构。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>几种无损压缩算法实现比较</title>
+      <link>http://blog.meoop.me/post/%E5%87%A0%E7%A7%8D%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95%E6%AF%94%E8%BE%83/</link>
+      <pubDate>Mon, 10 Oct 2016 20:15:48 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/%E5%87%A0%E7%A7%8D%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95%E6%AF%94%E8%BE%83/</guid>
+      <description>&lt;p&gt;数据压缩是按照特定的编码机制用比未经编码少的数据表示信息的过程。数据压缩能够实现是因为多数现实世界的数据都存在统计冗余。无损数据压缩（Lossless Compression）指的是数据经过压缩后，信息不受损失，数据还能完全恢复到压缩前的原样，一般用于严格要求“经过压缩、解压缩的数据必须与原始数据一致”的场合。无损压缩典型的例子包括文字文件、程序可执行文件、程序源代码。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>一起学 Markdown</title>
+      <link>http://blog.meoop.me/post/%E4%B8%80%E8%B5%B7%E5%AD%A6markdown/</link>
+      <pubDate>Wed, 24 Aug 2016 22:34:42 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/%E4%B8%80%E8%B5%B7%E5%AD%A6markdown/</guid>
+      <description>&lt;p&gt;Markdown 是一种轻量级的「标记语言」，他的目标是实现「易读易写」。它的优点很多，目前也被越来越多的写作爱好者，撰稿者广泛使用。不要被「标记」、「语言」所迷惑，Markdown  的语法十分简单。常用的标记符号也不超过十个，这种相对于更为复杂的 HTML 标记语言来说，Markdown 可谓是十分轻量的，学习成本也不需要太多，且一旦熟悉这种语法规则，会有一劳永逸的效果。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>NTP 服务器的搭建</title>
+      <link>http://blog.meoop.me/post/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%90%AD%E5%BB%BA/</link>
+      <pubDate>Mon, 08 Aug 2016 10:17:32 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%90%AD%E5%BB%BA/</guid>
+      <description>&lt;p&gt;由于制造工艺多种多样，所有的(非原子)时钟并不按照完全一致的速度行走。有一些时钟走的比较快而有一些走的比较慢。因此经过很长一段时间以后，一个时钟的时间慢慢的和其它的发生偏移，这就是常说的 “时钟漂移” 或 “时间漂移”。时钟的一致对一些应用有着至关重要的作用，为了将时钟漂移的影响降低到最小，需要将时钟进行同步，这就需要 ntp 服务。
+网络时间协议 (NTP) 用来同步网络上不同主机的系统时间。你管理的所有主机都可以和一个指定的被称为 ntp 服务器的时间服务器同步它们的时间。而另一方面，一个 ntp 服务器会将它的时间和任意公共 ntp 服务器，或者你选定的服务器同步。由 ntp 管理的所有系统时钟都会同步精确到毫秒级。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Gnome 桌面环境顶栏日期显示不全问题</title>
+      <link>http://blog.meoop.me/post/gnome%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%A1%B6%E6%A0%8F%E6%97%A5%E6%9C%9F%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%85%A8%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Sat, 23 Jul 2016 10:16:50 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/gnome%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%A1%B6%E6%A0%8F%E6%97%A5%E6%9C%9F%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%85%A8%E9%97%AE%E9%A2%98/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;2016.08.01 日更新
+该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>nfs&#43;ssh 软连接无法实现免密码登陆</title>
+      <link>http://blog.meoop.me/post/nfs-ssh%E8%BD%AF%E8%BF%9E%E6%8E%A5%E6%97%A0%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E9%99%86/</link>
+      <pubDate>Mon, 14 Mar 2016 10:17:26 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/nfs-ssh%E8%BD%AF%E8%BF%9E%E6%8E%A5%E6%97%A0%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E9%99%86/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一次 Hadoop 集群安装过程中 nfs+ssh 软连接无法实现免密码登陆的问题解决过程&lt;/p&gt;
+
+&lt;p&gt;原文在 &lt;a href=&#34;https://blog.csdn.net/Meoop/article/details/50886535&#34;&gt;CSDN&lt;/a&gt;，现在迁移到这里。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;nfs-ssh-软连接无法实现免密码登陆&#34;&gt;nfs+ssh 软连接无法实现免密码登陆&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;开始以为自己文件名写错，仔细检查未发现文件名有错。&lt;/li&gt;
+&lt;li&gt;检查文件的权限，发现 authorized_keys 文件的权限是 600，修改成 644 后，问题依旧，无法实现免密码登陆。&lt;/li&gt;
+&lt;li&gt;以为是 nfs_share 目录的权限问题。因为当时建立时使用的是 root 用户，查看后发现 nfs_share 目录权限无问题。&lt;/li&gt;
+&lt;li&gt;查看建立的软连接，软连接建立之后所生成的文件权限为 777，尝试各种修改后，完全没有什么用处，依旧无法免密码连接。&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>Hadoop 集群启动成功但 live Node 为 0</title>
+      <link>http://blog.meoop.me/post/hadoop%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%E4%BD%86live-node%E4%B8%BA0/</link>
+      <pubDate>Sat, 05 Mar 2016 10:17:04 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/hadoop%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%E4%BD%86live-node%E4%B8%BA0/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一次 Hadoop 集群启动成功但 live node 为 0 的问题解决过程。&lt;/p&gt;
+
+&lt;p&gt;原文在 &lt;a href=&#34;https://blog.csdn.net/Meoop/article/details/50806724&#34;&gt;CSDN&lt;/a&gt;，现在迁移到这里。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+
+&lt;p&gt;这两天用虚拟机搭建了 hadoop 集群环境，创建了三台虚拟机 hadoop01，hadoop02，hadoop03，hadoop01 代表 Master，hadoop02 以及 hadoop03 作为 Slave 节点。三台虚拟机都是 centos7 最小化安装。hadoop 版本用的最新的版本 2.7.2。
+开始一切都很顺利，启动 hadoop 集群也成功启动，运行 jps，三个节点对应的进程都成功启动，但是检查集群状态时发现 live node 为 0（如图）。&lt;/p&gt;
+
+&lt;figure class=&#34;center&#34;&gt;
+    &lt;img src=&#34;http://blog.meoop.me/images/post/hadoop%e9%9b%86%e7%be%a4%e5%90%af%e5%8a%a8%e6%88%90%e5%8a%9f%e4%bd%86live-node%e4%b8%ba0/20160304233347273.png&#34;
+         alt=&#34;集群状态&#34;/&gt; &lt;figcaption&gt;
+            &lt;h4&gt;集群状态&lt;/h4&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;</description>
+    </item>
+    
+    <item>
+      <title>Linux 修改主机名</title>
+      <link>http://blog.meoop.me/post/linux%E4%BF%AE%E6%94%B9%E4%B8%BB%E6%9C%BA%E5%90%8D/</link>
+      <pubDate>Fri, 04 Mar 2016 10:17:15 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/linux%E4%BF%AE%E6%94%B9%E4%B8%BB%E6%9C%BA%E5%90%8D/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;原文在 &lt;a href=&#34;https://blog.csdn.net/Meoop/article/details/50804308&#34;&gt;CSDN&lt;/a&gt;，作部分更新整理后迁移到这里。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;在 CentOS 或 RHEL 中，有三种定义的主机名:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;静态的（static），&lt;strong&gt;静态&lt;/strong&gt;主机名也称为内核主机名，是系统在启动时从&lt;code&gt;/etc/hostname&lt;/code&gt;自动初始化的主机名。&lt;/li&gt;
+&lt;li&gt;瞬态的（transient），&lt;strong&gt;瞬态&lt;/strong&gt;主机名是在系统运行时临时分配的主机名，例如，通过 DHCP 或 mDNS 服务器分配。静态主机名和瞬态主机名都遵从作为互联网域名同样的字符限制规则。&lt;/li&gt;
+&lt;li&gt;灵活的（pretty），&lt;strong&gt;灵活&lt;/strong&gt;主机名是允许使用自由形式（包括特殊/空白字符）的主机名，展示给终端用户的主机名。&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>fedora23 GRUB2 更换主题</title>
+      <link>http://blog.meoop.me/post/fedora23-grub2%E6%9B%B4%E6%8D%A2%E4%B8%BB%E9%A2%98/</link>
+      <pubDate>Tue, 12 Jan 2016 10:16:42 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/fedora23-grub2%E6%9B%B4%E6%8D%A2%E4%B8%BB%E9%A2%98/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;原文在&lt;a href=&#34;https://blog.csdn.net/Meoop/article/details/50505609&#34;&gt;CSDN&lt;/a&gt;，现在迁移到这里。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;刚刚装了 win10 和 fedora23 双系统，启动时黑框只占屏幕左上角的 1/4，感觉十分的难看，于是就寻思这怎么让其好看点，于是翻了翻资料，看见很多地方都可以换 GRUB2 的主题，就试着动了下手，美化了下。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;效果图&lt;/strong&gt;（主题作者给的效果图），下载地址：&lt;a href=&#34;https://pan.baidu.com/s/1c2mgBCG&#34;&gt;https://pan.baidu.com/s/1c2mgBCG&lt;/a&gt;
+&lt;figure class=&#34;center&#34;&gt;
+    &lt;img src=&#34;http://blog.meoop.me/images/post/fedora23-GRUB2%e6%9b%b4%e6%8d%a2%e4%b8%bb%e9%a2%98/20160112180610905.png&#34;/&gt; &lt;figcaption&gt;
+            &lt;h4&gt;主题样式&lt;/h4&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>K-Means 聚类算法</title>
+      <link>http://blog.meoop.me/post/k-means%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Tue, 16 Jun 2015 10:17:10 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/k-means%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;聚类&lt;/strong&gt;是在给定的数据集合中寻找同类的数据子集合，每一个子集合形成一个类簇，同类簇中的数据具有更大的相似性。聚类算法大体上可分为&lt;strong&gt;基于划分&lt;/strong&gt;的方法、&lt;strong&gt;基于层次&lt;/strong&gt;的方法、&lt;strong&gt;基于密度&lt;/strong&gt;的方法、&lt;strong&gt;基于网格&lt;/strong&gt;的方法以及&lt;strong&gt;基于模型&lt;/strong&gt;的方法。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;基本概念&#34;&gt;基本概念&lt;/h2&gt;
+
+&lt;p&gt;术语 &lt;strong&gt;k-means&lt;/strong&gt; 最早是由 James MacQueen 在 1967 年提出的，这一观点可以追溯到 1957 年 Hugo Steinhaus 所提出的想法。1957 年，斯图亚特·劳埃德最先提出这一标准算法，当初是作为一门应用于脉码调制的技术,直到 1982 年，这一算法才在贝尔实验室被正式提出。1965 年，E.W.Forgy 发表了一个本质上是相同的方法，1975 年和 1979 年，Hartigan 和 Wong 分别提出了一个更高效的版本。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Code Blocks 添加第三方类库</title>
+      <link>http://blog.meoop.me/post/code-blocks%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B1%BB%E5%BA%93/</link>
+      <pubDate>Mon, 13 Apr 2015 10:24:24 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/code-blocks%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B1%BB%E5%BA%93/</guid>
+      <description>&lt;p&gt;第一步：编译第三方库，得到头文件和库，例如路径关系：
+在 include 中放头文件，在 lib 中放置库文件。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;D:\MyLib\include&lt;/p&gt;
+
+&lt;p&gt;D:\MyLib\lib&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://blog.meoop.me/images/post/Code-Blocks添加第三方类库/20150413230733748.png&#34; alt=&#34;编译后的第三方库&#34; /&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Markdown on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/categories/markdown/</link>
+    <description>Recent content in Markdown on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 24 Aug 2016 22:34:42 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/categories/markdown/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>一起学 Markdown</title>
+      <link>http://blog.meoop.me/post/%E4%B8%80%E8%B5%B7%E5%AD%A6markdown/</link>
+      <pubDate>Wed, 24 Aug 2016 22:34:42 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/%E4%B8%80%E8%B5%B7%E5%AD%A6markdown/</guid>
+      <description>&lt;p&gt;Markdown 是一种轻量级的「标记语言」，他的目标是实现「易读易写」。它的优点很多，目前也被越来越多的写作爱好者，撰稿者广泛使用。不要被「标记」、「语言」所迷惑，Markdown  的语法十分简单。常用的标记符号也不超过十个，这种相对于更为复杂的 HTML 标记语言来说，Markdown 可谓是十分轻量的，学习成本也不需要太多，且一旦熟悉这种语法规则，会有一劳永逸的效果。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

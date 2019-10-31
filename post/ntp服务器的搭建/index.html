@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>NTP 服务器的搭建 - 享受编程 - Coding Your Ambition.</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Meoop" /><meta name="description" content="由于制造工艺多种多样，所有的(非原子)时钟并不按照完全一致的速度行走。有一些时钟走的比较快而有一些走的比较慢。因此经过很长一段时间以后，一个时钟的时间慢慢的和其它的发生偏移，这就是常说的 “时钟漂移” 或 “时间漂移”。时钟的一致对一些应用有着至关重要的作用，为了将时钟漂移的影响降低到最小，需要将时钟进行同步，这就需要 ntp 服务。 网络时间协议 (NTP) 用来同步网络上不同主机的系统时间。你管理的所有主机都可以和一个指定的被称为 ntp 服务器的时间服务器同步它们的时间。而另一方面，一个 ntp 服务器会将它的时间和任意公共 ntp 服务器，或者你选定的服务器同步。由 ntp 管理的所有系统时钟都会同步精确到毫秒级。
+" /><meta name="keywords" content="Linux, ntp" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.55.6 with theme even" />
+
+
+<link rel="canonical" href="http://blog.meoop.me/post/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%90%AD%E5%BB%BA/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="NTP 服务器的搭建" />
+<meta property="og:description" content="由于制造工艺多种多样，所有的(非原子)时钟并不按照完全一致的速度行走。有一些时钟走的比较快而有一些走的比较慢。因此经过很长一段时间以后，一个时钟的时间慢慢的和其它的发生偏移，这就是常说的 “时钟漂移” 或 “时间漂移”。时钟的一致对一些应用有着至关重要的作用，为了将时钟漂移的影响降低到最小，需要将时钟进行同步，这就需要 ntp 服务。
+网络时间协议 (NTP) 用来同步网络上不同主机的系统时间。你管理的所有主机都可以和一个指定的被称为 ntp 服务器的时间服务器同步它们的时间。而另一方面，一个 ntp 服务器会将它的时间和任意公共 ntp 服务器，或者你选定的服务器同步。由 ntp 管理的所有系统时钟都会同步精确到毫秒级。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://blog.meoop.me/post/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%90%AD%E5%BB%BA/" />
+<meta property="article:published_time" content="2016-08-08T10:17:32&#43;08:00"/>
+<meta property="article:modified_time" content="2016-08-08T10:17:32&#43;08:00"/>
+
+<meta itemprop="name" content="NTP 服务器的搭建">
+<meta itemprop="description" content="由于制造工艺多种多样，所有的(非原子)时钟并不按照完全一致的速度行走。有一些时钟走的比较快而有一些走的比较慢。因此经过很长一段时间以后，一个时钟的时间慢慢的和其它的发生偏移，这就是常说的 “时钟漂移” 或 “时间漂移”。时钟的一致对一些应用有着至关重要的作用，为了将时钟漂移的影响降低到最小，需要将时钟进行同步，这就需要 ntp 服务。
+网络时间协议 (NTP) 用来同步网络上不同主机的系统时间。你管理的所有主机都可以和一个指定的被称为 ntp 服务器的时间服务器同步它们的时间。而另一方面，一个 ntp 服务器会将它的时间和任意公共 ntp 服务器，或者你选定的服务器同步。由 ntp 管理的所有系统时钟都会同步精确到毫秒级。">
+
+
+<meta itemprop="datePublished" content="2016-08-08T10:17:32&#43;08:00" />
+<meta itemprop="dateModified" content="2016-08-08T10:17:32&#43;08:00" />
+<meta itemprop="wordCount" content="1682">
+
+
+
+<meta itemprop="keywords" content="Linux,ntp," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="NTP 服务器的搭建"/>
+<meta name="twitter:description" content="由于制造工艺多种多样，所有的(非原子)时钟并不按照完全一致的速度行走。有一些时钟走的比较快而有一些走的比较慢。因此经过很长一段时间以后，一个时钟的时间慢慢的和其它的发生偏移，这就是常说的 “时钟漂移” 或 “时间漂移”。时钟的一致对一些应用有着至关重要的作用，为了将时钟漂移的影响降低到最小，需要将时钟进行同步，这就需要 ntp 服务。
+网络时间协议 (NTP) 用来同步网络上不同主机的系统时间。你管理的所有主机都可以和一个指定的被称为 ntp 服务器的时间服务器同步它们的时间。而另一方面，一个 ntp 服务器会将它的时间和任意公共 ntp 服务器，或者你选定的服务器同步。由 ntp 管理的所有系统时钟都会同步精确到毫秒级。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Ambition</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Ambition</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">NTP 服务器的搭建</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-08-08 </span>
+        <div class="post-category">
+            <a href="/categories/linux/"> Linux </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#安装-ntp-服务器">安装 ntp 服务器</a>
+<ul>
+<li><a href="#使用包管理器安装">使用包管理器安装</a></li>
+<li><a href="#通过-ntp-源码包安装">通过 ntp 源码包安装</a></li>
+<li><a href="#查询-ntp-服务状态">查询 ntp 服务状态</a></li>
+</ul></li>
+<li><a href="#ntp-服务器的配置">ntp 服务器的配置</a>
+<ul>
+<li><a href="#设置上层服务器">设置上层服务器</a></li>
+<li><a href="#访问控制">访问控制</a></li>
+<li><a href="#以本地时间作为对时时间">以本地时间作为对时时间</a></li>
+</ul></li>
+<li><a href="#客户机配置">客户机配置</a></li>
+<li><a href="#参考文章">参考文章</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>由于制造工艺多种多样，所有的(非原子)时钟并不按照完全一致的速度行走。有一些时钟走的比较快而有一些走的比较慢。因此经过很长一段时间以后，一个时钟的时间慢慢的和其它的发生偏移，这就是常说的 “时钟漂移” 或 “时间漂移”。时钟的一致对一些应用有着至关重要的作用，为了将时钟漂移的影响降低到最小，需要将时钟进行同步，这就需要 ntp 服务。
+网络时间协议 (NTP) 用来同步网络上不同主机的系统时间。你管理的所有主机都可以和一个指定的被称为 ntp 服务器的时间服务器同步它们的时间。而另一方面，一个 ntp 服务器会将它的时间和任意公共 ntp 服务器，或者你选定的服务器同步。由 ntp 管理的所有系统时钟都会同步精确到毫秒级。</p>
+
+<h2 id="安装-ntp-服务器">安装 ntp 服务器</h2>
+
+<h3 id="使用包管理器安装">使用包管理器安装</h3>
+
+<ul>
+<li><p>Ubuntu/Debian</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">sudo apt-get install ntp              # 安装ntp
+sudo systemctl enable ntp.service     # 设置ntp开机自启动
+sudo systemctl restart ntp.service    # 启动ntp服务</pre></td></tr></table>
+</div>
+</div></li>
+
+<li><p>Centos7/Redhat7</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">sudo dnf install ntp                  # 安装ntp
+sudo systemctl enable ntpd.service    # 设置ntp开机自启动
+sudo systemctl start ntpd.service     # 启动ntp服务</pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+
+<p><strong>注意：</strong>ntp 服务器启动后，服务器需要需要与其 server 进行时间同步，这需要一个时间段，这个过程可能达到 5 分钟，在这个时间段内，客户机与服务器进行同步将可能出现<code>no server suitable for synchronization found</code>错误。</p>
+
+<h3 id="通过-ntp-源码包安装">通过 ntp 源码包安装</h3>
+
+<p>发行版的源里面的 ntp 包不一定是最新的，有时候我们需要使用最新的 ntp 版本，这时候就需要通过 ntp 官网发布的 ntp 源码进行安装 ntp 服务了，下面是具体的安装方式。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 下载ntp源码
+wget https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p8.tar.gz   
+tar -xvf ntp-4.2.8p8.tar.gz           # 解压源码
+cd ntp-4.2.8p8.tar.gz                
+./configure
+make                                  # 编译源码
+sudo make install                     # 安装</pre></td></tr></table>
+</div>
+</div>
+<h3 id="查询-ntp-服务状态">查询 ntp 服务状态</h3>
+
+<p>命令<code>ntpq -p</code>可以打印出该 ntp 服务器已知的节点列表和它们的状态概要信息。<code>ntpq -p</code>输出如下这样一个表：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">    remote           refid      st t when poll reach   delay   offset  jitter
+==============================================================================
+ 2.ubuntu.pool.n .POOL.          16 p    -   64    0    0.000    0.000   0.000
+*ns.buptnet.edu. 10.3.8.150       5 u    7   64    1    7.607   -8.767   1.006</pre></td></tr></table>
+</div>
+</div>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">remote</td>
+<td align="left">源在 ntp.conf 中定义。<code>*</code> 表示当前使用的，也是最好的源；<code>+</code> 表示这些源可作为 NTP 源；<code>-</code> 标记的源是不可用的。</td>
+</tr>
+
+<tr>
+<td align="left">refid</td>
+<td align="left">用于和本地时钟同步的远程服务器的 IP 地址。</td>
+</tr>
+
+<tr>
+<td align="left">st</td>
+<td align="left">Stratum（阶层）</td>
+</tr>
+
+<tr>
+<td align="left">t</td>
+<td align="left">类型。 <code>u</code> 表示单播 (unicast)。其它值包括本地 (local)、多播 (multicast)、广播 (broadcast)。</td>
+</tr>
+
+<tr>
+<td align="left">when</td>
+<td align="left">自从上次和服务器交互后经过的时间(以秒数计)。</td>
+</tr>
+
+<tr>
+<td align="left">poll</td>
+<td align="left">和服务器的轮询间隔，以秒数计。</td>
+</tr>
+
+<tr>
+<td align="left">reach</td>
+<td align="left">表示和服务器交互是否有任何错误的八进制数。值 337 表示 100% 成功（即十进制的 255）。</td>
+</tr>
+
+<tr>
+<td align="left">delay</td>
+<td align="left">服务器和远程服务器来回的时间。</td>
+</tr>
+
+<tr>
+<td align="left">offset</td>
+<td align="left">我们服务器和远程服务器的时间差异，以毫秒数计。</td>
+</tr>
+
+<tr>
+<td align="left">jitter</td>
+<td align="left">两次取样之间平均时差，以毫秒数计。</td>
+</tr>
+</tbody>
+</table>
+
+<p>关于<code>ntpq -p</code>的输出细节可以参考<a href="https://linux.cn/article-4664-1.html">这篇文章</a>，这里不多加叙述。</p>
+
+<h2 id="ntp-服务器的配置">ntp 服务器的配置</h2>
+
+<p>ntp 服务的配置文件在<code>/etc/ntp.conf</code><br />
+ntp 配置官方文档：<a href="http://support.ntp.org/bin/view/Support/ConfiguringNTP">http://support.ntp.org/bin/view/Support/ConfiguringNTP</a></p>
+
+<h3 id="设置上层服务器">设置上层服务器</h3>
+
+<p>ntp 上层服务器，Ubuntu 上默认配置为 ubuntu 提供的 ntp 服务器，通过上游 Ubuntu ntp 服务器来更新本地时间，可以更改这几行，添加其他 ntp 服务器或禁止与 Ubuntu 提供的 ntp 服务器对时。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># Use servers from the NTP Pool Project. Approved by Ubuntu Technical Board
+# on 2011-02-08 (LP: #104525). See http://www.pool.ntp.org/join.html for
+# more information.
+
+# 禁用Ubuntu提供的ntp服务器
+#pool 0.ubuntu.pool.ntp.org iburst
+#pool 1.ubuntu.pool.ntp.org iburst
+#pool 2.ubuntu.pool.ntp.org iburst
+#pool 3.ubuntu.pool.ntp.org iburst
+# Use Ubuntu&#39;s ntp server as a fallback.
+#pool ntp.ubuntu.com
+
+# 设置自己的的ntp上游服务器
+server 192.168.1.1 </pre></td></tr></table>
+</div>
+</div>
+<h3 id="访问控制">访问控制</h3>
+
+<p>ntp 服务器默认情况下对所有机器都提供 ntp 服务，这可能导致一些安全隐患，可以通过设置 ntp 服务的访问策略，进行一些服务的限制，保证 ntp 服务器的安全。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># By default, exchange time with everybody, but don&#39;t allow configuration. 
+restrict -4 default kod notrap nomodify nopeer noquery limited
+restrict -6 default kod notrap nomodify nopeer noquery limited
+
+# Add the following line to allow a subnet to receive time service and query server
+restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap nopeer
+restrict 2001:838:0:1:: mask ffff:ffff:ffff:ffff:: nomodify notrap nopeer</pre></td></tr></table>
+</div>
+</div>
+<h3 id="以本地时间作为对时时间">以本地时间作为对时时间</h3>
+
+<p>设置外部时间服务器不可用，以本地时间作为时间服务</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">server 127.127.1.0 #local clock
+fudge 127.127.1.0 stratum 10</pre></td></tr></table>
+</div>
+</div>
+<h2 id="客户机配置">客户机配置</h2>
+
+<p>客户机可以通过两种方式进行对时:</p>
+
+<ul>
+<li><p>ntpdate 进行对时</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">sudo apt-get install ntpdate   # 安装ntpdate命令
+sudo ntpdate 192.168.1.2       # 与192.168.1.2进行对时</pre></td></tr></table>
+</div>
+</div>
+<p>使用 ntpdate 对时只会时间更新为当前服务器的时间，若后续出现始终漂移，还需要重新执行 ntpdate 进行对时。如果保持时间一直同步，可以使用第二种方法。</p></li>
+
+<li><p>通过 ntp 服务对时
+可以同样在客户机安装 ntp 服务，注释掉其他上游 ntp 服务器，设置对时服务器为前面部署的 ntp 服务器为上游服务器进行对时即可。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">server 192.168.1.1 </pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+
+<h2 id="参考文章">参考文章</h2>
+
+<p>[1]. <a href="http://support.ntp.org/bin/view/Support/ConfiguringNTP">Configuring NTP</a><br />
+[2]. <a href="https://linux.cn/article-4664-1.html">网络时间的那些事及ntpq详解</a><br />
+[3]. <a href="https://linux.cn/article-5581-1-rel.html">如何在CentOS中设置NTP服务器</a></p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Meoop</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2016-08-08
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/linux/">Linux</a>
+          <a href="/tags/ntp/">ntp</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E4%B8%80%E8%B5%B7%E5%AD%A6markdown/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">一起学 Markdown</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/gnome%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%A1%B6%E6%A0%8F%E6%97%A5%E6%9C%9F%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%85%A8%E9%97%AE%E9%A2%98/">
+            <span class="next-text nav-default">Gnome 桌面环境顶栏日期显示不全问题</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'meoop';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="yilei108@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.stackoverflow.com/users/12249756/" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.facebook.com/lei.yi.908" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://www.linkedin.com/in/yilei/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/Meoop" class="iconfont icon-github" title="github"></a>
+      <a href="http://weibo.com/18722081826" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://www.zhihu.com/people/lei.yi" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="http://blog.meoop.me/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2015 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Meoop</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-101122173-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

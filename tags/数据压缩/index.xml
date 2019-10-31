@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>数据压缩 on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/tags/%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9/</link>
+    <description>Recent content in 数据压缩 on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 10 Oct 2016 20:15:48 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/tags/%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>几种无损压缩算法实现比较</title>
+      <link>http://blog.meoop.me/post/%E5%87%A0%E7%A7%8D%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95%E6%AF%94%E8%BE%83/</link>
+      <pubDate>Mon, 10 Oct 2016 20:15:48 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/%E5%87%A0%E7%A7%8D%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95%E6%AF%94%E8%BE%83/</guid>
+      <description>&lt;p&gt;数据压缩是按照特定的编码机制用比未经编码少的数据表示信息的过程。数据压缩能够实现是因为多数现实世界的数据都存在统计冗余。无损数据压缩（Lossless Compression）指的是数据经过压缩后，信息不受损失，数据还能完全恢复到压缩前的原样，一般用于严格要求“经过压缩、解压缩的数据必须与原始数据一致”的场合。无损压缩典型的例子包括文字文件、程序可执行文件、程序源代码。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

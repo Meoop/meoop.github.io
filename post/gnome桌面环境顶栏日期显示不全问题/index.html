@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Gnome 桌面环境顶栏日期显示不全问题 - 享受编程 - Coding Your Ambition.</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Meoop" /><meta name="description" content=" 2016.08.01 日更新 该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。
+ Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。
+" /><meta name="keywords" content="Linux, GNOME" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.55.6 with theme even" />
+
+
+<link rel="canonical" href="http://blog.meoop.me/post/gnome%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%A1%B6%E6%A0%8F%E6%97%A5%E6%9C%9F%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%85%A8%E9%97%AE%E9%A2%98/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Gnome 桌面环境顶栏日期显示不全问题" />
+<meta property="og:description" content="
+2016.08.01 日更新
+该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。
+
+
+Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://blog.meoop.me/post/gnome%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%A1%B6%E6%A0%8F%E6%97%A5%E6%9C%9F%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%85%A8%E9%97%AE%E9%A2%98/" />
+<meta property="article:published_time" content="2016-07-23T10:16:50&#43;08:00"/>
+<meta property="article:modified_time" content="2016-08-01T10:16:50&#43;08:00"/>
+
+<meta itemprop="name" content="Gnome 桌面环境顶栏日期显示不全问题">
+<meta itemprop="description" content="
+2016.08.01 日更新
+该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。
+
+
+Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。">
+
+
+<meta itemprop="datePublished" content="2016-07-23T10:16:50&#43;08:00" />
+<meta itemprop="dateModified" content="2016-08-01T10:16:50&#43;08:00" />
+<meta itemprop="wordCount" content="509">
+
+
+
+<meta itemprop="keywords" content="Linux,GNOME," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Gnome 桌面环境顶栏日期显示不全问题"/>
+<meta name="twitter:description" content="
+2016.08.01 日更新
+该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。
+
+
+Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Ambition</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Ambition</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Gnome 桌面环境顶栏日期显示不全问题</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-07-23 </span>
+        <div class="post-category">
+            <a href="/categories/linux/"> Linux </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#问题描述">问题描述</a></li>
+<li><a href="#解决办法">解决办法</a></li>
+<li><a href="#修改后的文件部分内容">修改后的文件部分内容</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<p>2016.08.01 日更新
+该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。</p>
+</blockquote>
+
+<p>Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。</p>
+
+<h2 id="问题描述">问题描述</h2>
+
+<p>顶栏中文日期显示 <code>XX月XX</code>，后面 <code>日</code> 字不显示，以及星期几没有 <code>星期</code>。
+<figure class="center">
+    <img src="/images/post/Gnome%e6%a1%8c%e9%9d%a2%e7%8e%af%e5%a2%83%e9%a1%b6%e6%a0%8f%e6%97%a5%e6%9c%9f%e6%98%be%e7%a4%ba%e4%b8%8d%e5%85%a8%e9%97%ae%e9%a2%98/1.png"
+         alt="问题描述"/> <figcaption>
+            <h4>问题描述</h4>
+        </figcaption>
+</figure>
+</p>
+
+<h2 id="解决办法">解决办法</h2>
+
+<p>1、在 <code>/usr/share/locale/zh_CN/LC_MESSAGES</code> 文件夹有 <code>gnome-desktop-3.0.mo</code> 的文件，先将 <code>gnome-desktop-3.0.mo</code> 进行备份，然后用命令 <code>msgunfmt</code> 将其还原成 <code>.po</code> 文件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">sudo msgunfmt gnome-desktop-3.0.mo -o gnome-desktop-3.0.po</code></pre></td></tr></table>
+</div>
+</div>
+<p>2、编辑 <code>gnome-desktop-3.0.po</code> 文件，在文件中 <code>msgstr</code> 部分的 <code>%e</code> 后面加个 <code>日</code> 就可以显示出正常的日期（XX月XX日）。</p>
+
+<p>3、把 <code>%a</code> 改成 <code>%A</code> 就可以将星期正常显示。</p>
+
+<p>4、将改好的 <code>.po</code> 文件用 <code>msgfmt</code> 变成 <code>.mo</code> 文件，覆盖 <code>gnome-desktop-3.0.mo</code> 文件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">sudo msgunfmt gnome-desktop-3.0.po -o gnome-desktop-3.0.mo</code></pre></td></tr></table>
+</div>
+</div>
+<p>5、输入 <code>alt+f2</code>，键入命令 <code>r</code>并回车，重启 <code>gnome</code> 即可。
+<figure class="center">
+    <img src="/images/post/Gnome%e6%a1%8c%e9%9d%a2%e7%8e%af%e5%a2%83%e9%a1%b6%e6%a0%8f%e6%97%a5%e6%9c%9f%e6%98%be%e7%a4%ba%e4%b8%8d%e5%85%a8%e9%97%ae%e9%a2%98/2.png"
+         alt="显示正常"/> <figcaption>
+            <h4>显示正常</h4>
+        </figcaption>
+</figure>
+</p>
+
+<h2 id="修改后的文件部分内容">修改后的文件部分内容</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">msgid &#34;%R:%S&#34;
+msgstr &#34;%R:%S&#34;
+
+msgid &#34;%a %R&#34;
+msgstr &#34;%A %R&#34;
+
+msgid &#34;%a %R:%S&#34;
+msgstr &#34;%A %R:%S&#34;
+
+msgid &#34;%a %b %e, %R&#34;
+msgstr &#34;%b %e日 %A, %R&#34;
+
+msgid &#34;%a %b %e, %R:%S&#34;
+msgstr &#34;%b %e日 %A, %R:%S&#34;
+
+msgid &#34;%a %b %e, %l:%M %p&#34;
+msgstr &#34;%b %e日 %A, %p %l:%M&#34;
+
+msgid &#34;%a %b %e, %l:%M:%S %p&#34;
+msgstr &#34;%b %e日 %A, %p %l:%M:%S&#34;
+
+msgid &#34;%a %l:%M %p&#34;
+msgstr &#34;%A %p %l:%M&#34;
+
+msgid &#34;%a %l:%M:%S %p&#34;
+msgstr &#34;%A %p %l:%M:%S&#34;
+
+msgid &#34;%l:%M %p&#34;
+msgstr &#34;%p %l:%M&#34;
+
+msgid &#34;%l:%M:%S %p&#34;
+msgstr &#34;%p %l:%M:%S&#34;</pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Meoop</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2016-08-01
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/linux/">Linux</a>
+          <a href="/tags/gnome/">GNOME</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%90%AD%E5%BB%BA/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">NTP 服务器的搭建</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/nfs-ssh%E8%BD%AF%E8%BF%9E%E6%8E%A5%E6%97%A0%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E9%99%86/">
+            <span class="next-text nav-default">nfs&#43;ssh 软连接无法实现免密码登陆</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'meoop';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="yilei108@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.stackoverflow.com/users/12249756/" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.facebook.com/lei.yi.908" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://www.linkedin.com/in/yilei/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/Meoop" class="iconfont icon-github" title="github"></a>
+      <a href="http://weibo.com/18722081826" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://www.zhihu.com/people/lei.yi" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="http://blog.meoop.me/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2015 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Meoop</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-101122173-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

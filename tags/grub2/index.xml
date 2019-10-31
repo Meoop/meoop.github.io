@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>GRUB2 on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/tags/grub2/</link>
+    <description>Recent content in GRUB2 on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 30 Mar 2017 10:16:56 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/tags/grub2/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>GRUB2 Password Protection</title>
+      <link>http://blog.meoop.me/post/grub2-password-protection/</link>
+      <pubDate>Thu, 30 Mar 2017 10:16:56 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/grub2-password-protection/</guid>
+      <description>&lt;p&gt;GRUB2 为其菜单和终端提供了基本的密码保护。用户可以设置密码用来保护整个菜单，或者某个菜单项。可以设置多个用户，并且为每个用户提供不同的密码，密码可以以加密或非加密格式存储。本文对为什么要使用 GRUB2 的密码保护功能以及如何设置 GRUB2 进行简单介绍。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>fedora23 GRUB2 更换主题</title>
+      <link>http://blog.meoop.me/post/fedora23-grub2%E6%9B%B4%E6%8D%A2%E4%B8%BB%E9%A2%98/</link>
+      <pubDate>Tue, 12 Jan 2016 10:16:42 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/fedora23-grub2%E6%9B%B4%E6%8D%A2%E4%B8%BB%E9%A2%98/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;原文在&lt;a href=&#34;https://blog.csdn.net/Meoop/article/details/50505609&#34;&gt;CSDN&lt;/a&gt;，现在迁移到这里。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;刚刚装了 win10 和 fedora23 双系统，启动时黑框只占屏幕左上角的 1/4，感觉十分的难看，于是就寻思这怎么让其好看点，于是翻了翻资料，看见很多地方都可以换 GRUB2 的主题，就试着动了下手，美化了下。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;效果图&lt;/strong&gt;（主题作者给的效果图），下载地址：&lt;a href=&#34;https://pan.baidu.com/s/1c2mgBCG&#34;&gt;https://pan.baidu.com/s/1c2mgBCG&lt;/a&gt;
+&lt;figure class=&#34;center&#34;&gt;
+    &lt;img src=&#34;http://blog.meoop.me/images/post/fedora23-GRUB2%e6%9b%b4%e6%8d%a2%e4%b8%bb%e9%a2%98/20160112180610905.png&#34;/&gt; &lt;figcaption&gt;
+            &lt;h4&gt;主题样式&lt;/h4&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
