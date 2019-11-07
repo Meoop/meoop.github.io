@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kubernetes on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/tags/kubernetes/</link>
+    <description>Recent content in Kubernetes on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 21 Jan 2019 17:38:53 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Resizing Persistent Volumes Using Kubernetes</title>
+      <link>http://blog.meoop.me/post/resizing-persistent-volumes-using-kubernetes/</link>
+      <pubDate>Mon, 21 Jan 2019 17:38:53 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/resizing-persistent-volumes-using-kubernetes/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;Feature gates:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;enable &lt;code&gt;ExpandPersistentVolumes&lt;/code&gt; feature gate (1.11⬆ default:ture).&lt;/li&gt;
+&lt;li&gt;enable &lt;code&gt;PersistentVolumeClaimResize&lt;/code&gt; admission controller (1.11⬆ default:ture).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;StorageClass:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Storage class’s &lt;code&gt;allowVolumeExpansion&lt;/code&gt; field should set to true.&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

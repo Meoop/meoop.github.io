@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Resizing Persistent Volumes Using Kubernetes - 享受编程 - Coding Your Ambition.</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Meoop" /><meta name="description" content="Feature gates:
+ enable ExpandPersistentVolumes feature gate (1.11⬆ default:ture). enable PersistentVolumeClaimResize admission controller (1.11⬆ default:ture).  StorageClass:
+ Storage class’s allowVolumeExpansion field should set to true. " /><meta name="keywords" content="Kubernetes, PVC, resize" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.55.6 with theme even" />
+
+
+<link rel="canonical" href="http://blog.meoop.me/post/resizing-persistent-volumes-using-kubernetes/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Resizing Persistent Volumes Using Kubernetes" />
+<meta property="og:description" content="Feature gates:
+
+
+enable ExpandPersistentVolumes feature gate (1.11⬆ default:ture).
+enable PersistentVolumeClaimResize admission controller (1.11⬆ default:ture).
+
+
+StorageClass:
+
+
+Storage class’s allowVolumeExpansion field should set to true.
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://blog.meoop.me/post/resizing-persistent-volumes-using-kubernetes/" />
+<meta property="article:published_time" content="2019-01-21T17:38:53&#43;08:00"/>
+<meta property="article:modified_time" content="2019-11-12T10:47:26&#43;08:00"/>
+
+<meta itemprop="name" content="Resizing Persistent Volumes Using Kubernetes">
+<meta itemprop="description" content="Feature gates:
+
+
+enable ExpandPersistentVolumes feature gate (1.11⬆ default:ture).
+enable PersistentVolumeClaimResize admission controller (1.11⬆ default:ture).
+
+
+StorageClass:
+
+
+Storage class’s allowVolumeExpansion field should set to true.
+">
+
+
+<meta itemprop="datePublished" content="2019-01-21T17:38:53&#43;08:00" />
+<meta itemprop="dateModified" content="2019-11-12T10:47:26&#43;08:00" />
+<meta itemprop="wordCount" content="277">
+
+
+
+<meta itemprop="keywords" content="Kubernetes,PVC,resize," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Resizing Persistent Volumes Using Kubernetes"/>
+<meta name="twitter:description" content="Feature gates:
+
+
+enable ExpandPersistentVolumes feature gate (1.11⬆ default:ture).
+enable PersistentVolumeClaimResize admission controller (1.11⬆ default:ture).
+
+
+StorageClass:
+
+
+Storage class’s allowVolumeExpansion field should set to true.
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Ambition</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Ambition</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Resizing Persistent Volumes Using Kubernetes</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-01-21 </span>
+        <div class="post-category">
+            <a href="/categories/kubernetes/"> Kubernetes </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      <p><strong>Feature gates:</strong></p>
+
+<ul>
+<li>enable <code>ExpandPersistentVolumes</code> feature gate (1.11⬆ default:ture).</li>
+<li>enable <code>PersistentVolumeClaimResize</code> admission controller (1.11⬆ default:ture).</li>
+</ul>
+
+<p><strong>StorageClass:</strong></p>
+
+<ul>
+<li>Storage class’s <code>allowVolumeExpansion</code> field should set to true.</li>
+</ul>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>storage.k8s.io/v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>StorageClass<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>gluster-heketi<span class="w">
+</span><span class="w">  </span>resourceVersion<span class="p">:</span><span class="w"> </span><span class="s2">&#34;2557237&#34;</span><span class="w">
+</span><span class="w">  </span>selfLink<span class="p">:</span><span class="w"> </span>/apis/storage.k8s.io/v1/storageclasses/gluster-heketi<span class="w">
+</span><span class="w">  </span>uid<span class="p">:</span><span class="w"> </span>0cab6ccf-09c9-<span class="m">11e9</span>-bb03-525400c73db8<span class="w">
+</span><span class="w"></span>parameters<span class="p">:</span><span class="w">
+</span><span class="w">  </span>resturl<span class="p">:</span><span class="w"> </span>http<span class="p">:</span>//<span class="m">10.104</span>.<span class="m">202.182</span><span class="p">:</span><span class="m">8080</span><span class="w">
+</span><span class="w">  </span>restuser<span class="p">:</span><span class="w"> </span>admin<span class="w">
+</span><span class="w">  </span>restuserkey<span class="p">:</span><span class="w"> </span>My<span class="w"> </span>Secret<span class="w"> </span>Life<span class="w">
+</span><span class="w"></span>provisioner<span class="p">:</span><span class="w"> </span>kubernetes.io/glusterfs<span class="w">
+</span><span class="w"></span>reclaimPolicy<span class="p">:</span><span class="w"> </span>Delete<span class="w">
+</span><span class="w"></span>volumeBindingMode<span class="p">:</span><span class="w"> </span>Immediate<span class="w">
+</span><span class="w"></span>allowVolumeExpansion<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">  </span><span class="c"># &lt;===============</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>To request a larger volume for a PVC, edit the PVC object and specify a larger size. This triggers expansion of the volume that backs the underlying PersistentVolume. A new PersistentVolume is never created to satisfy the claim. Instead, an existing volume is resized.</p>
+
+<p>-&gt; <code>kubectl edit pvc glusterfs-data-01 -n play-by-yl</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>PersistentVolumeClaim<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>annotations<span class="p">:</span><span class="w">
+</span><span class="w">    </span>pv.kubernetes.io/bind-completed<span class="p">:</span><span class="w"> </span><span class="s2">&#34;yes&#34;</span><span class="w">
+</span><span class="w">    </span>pv.kubernetes.io/bound-by-controller<span class="p">:</span><span class="w"> </span><span class="s2">&#34;yes&#34;</span><span class="w">
+</span><span class="w">    </span>storage.resource.caicloud.io/app-ids<span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span><span class="w">    </span>storage.resource.caicloud.io/app-names<span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span><span class="w">    </span>volume.beta.kubernetes.io/storage-provisioner<span class="p">:</span><span class="w"> </span>kubernetes.io/glusterfs<span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="ld">2019-01-29T10:55:26Z</span><span class="w">
+</span><span class="w">  </span>finalizers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>kubernetes.io/pvc-protection<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>glusterfs-data-<span class="m">01</span><span class="w">
+</span><span class="w">  </span>namespace<span class="p">:</span><span class="w"> </span>play-by-yl<span class="w">
+</span><span class="w">  </span>resourceVersion<span class="p">:</span><span class="w"> </span><span class="s2">&#34;130561&#34;</span><span class="w">
+</span><span class="w">  </span>selfLink<span class="p">:</span><span class="w"> </span>/api/v1/namespaces/play-by-yl/persistentvolumeclaims/glusterfs-data-<span class="m">01</span><span class="w">
+</span><span class="w">  </span>uid<span class="p">:</span><span class="w"> </span>62509f38-23b4-<span class="m">11e9</span>-8dc1-525400f31786<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>accessModes<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>ReadWriteMany<span class="w">
+</span><span class="w">  </span>dataSource<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>resources<span class="p">:</span><span class="w">
+</span><span class="w">    </span>requests<span class="p">:</span><span class="w">
+</span><span class="w">      </span>storage<span class="p">:</span><span class="w"> </span>30Gi<span class="w">   </span><span class="c"># &lt;== update this field to resize the PVC</span><span class="w">
+</span><span class="w">  </span>storageClassName<span class="p">:</span><span class="w"> </span>glusterfs-<span class="m">20190129164702</span>-d41e1f<span class="w">
+</span><span class="w">  </span>volumeName<span class="p">:</span><span class="w"> </span>pvc-62509f38-23b4-<span class="m">11e9</span>-8dc1-525400f31786<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w">
+</span><span class="w">  </span>accessModes<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>ReadWriteMany<span class="w">
+</span><span class="w">  </span>capacity<span class="p">:</span><span class="w">
+</span><span class="w">    </span>storage<span class="p">:</span><span class="w"> </span>30Gi<span class="w">
+</span><span class="w">  </span>phase<span class="p">:</span><span class="w"> </span>Bound</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>Support following types of volumes:
+
+<ul>
+<li>gcePersistentDisk</li>
+<li>awsElasticBlockStore</li>
+<li>Cinder</li>
+<li>glusterfs</li>
+<li>rbd</li>
+<li>Azure File</li>
+<li>Azure Disk</li>
+<li>Portworx</li>
+<li>FlexVolumes</li>
+<li>CSI</li>
+</ul></li>
+<li>Resizing a volume containing a file system
+
+<ul>
+<li>file system is XFS, Ext3, or Ext4.</li>
+<li>Pod is started using the <code>PersistentVolumeClaim</code> in ReadWrite mode.</li>
+<li>if volume is using and you want to expand it, you need to delete or recreate the pod after the volume has been expanded by the cloud provider in the controller-manager.</li>
+<li>check the status of resize operation by running the <code>kubectl describe pvc</code> command, if the <code>PersistentVolumeClaim</code> has the status <code>FileSystemResizePending</code>, it is safe to recreate the pod using the PersistentVolumeClaim.</li>
+<li>gcePersistentDisk, awsElasticBlockStore, Azure Disk, Cinder, Ceph RBD</li>
+</ul></li>
+<li>Resizing an in-use PersistentVolumeClaim
+
+<ul>
+<li>Expanding in-use PVCs is an alpha feature. To use it, enable the <code>ExpandInUsePersistentVolumes</code> feature gate (1.15⬆ default:ture).</li>
+<li>Supported by the in-tree volume plugins</li>
+</ul></li>
+</ul>
+
+<p><strong>Reference:</strong></p>
+
+<ul>
+<li><a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#expanding-persistent-volumes-claims">Expanding Persistent Volumes Claims</a></li>
+<li><a href="https://kubernetes.io/blog/2018/07/12/resizing-persistent-volumes-using-kubernetes/">Resizing Persistent Volumes using Kubernetes</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Meoop</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2019-11-12
+        <a href="https://github.com/Meoop/meoop.github.io.git/commit/837fb9ccb62516379eee6ba5173a2f5a6c5dea52" title="new post: Resizing-Persistent-Volumes-using-Kubernetes">(837fb9c)</a>
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/kubernetes/">Kubernetes</a>
+          <a href="/tags/pvc/">PVC</a>
+          <a href="/tags/resize/">resize</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/%E4%BD%BF%E7%94%A8xmodmap%E5%8F%96%E6%B6%88linux%E4%B8%8B%E9%BC%A0%E6%A0%87%E4%B8%AD%E9%94%AE%E7%B2%98%E8%B4%B4%E5%8A%9F%E8%83%BD/">
+            <span class="next-text nav-default">使用 xmodmap 取消 Linux 下鼠标中键粘贴功能</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'meoop';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="yilei108@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.stackoverflow.com/users/12249756/" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.facebook.com/lei.yi.908" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://www.linkedin.com/in/yilei/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/Meoop" class="iconfont icon-github" title="github"></a>
+      <a href="http://weibo.com/18722081826" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://www.zhihu.com/people/lei.yi" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="http://blog.meoop.me/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2015 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Meoop</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-101122173-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

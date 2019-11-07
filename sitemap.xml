@@ -3,7 +3,56 @@
   
   <url>
     <loc>http://blog.meoop.me/categories/</loc>
-    <lastmod>2019-10-31T20:18:24+08:00</lastmod>
+    <lastmod>2019-11-12T10:47:26+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/categories/kubernetes/</loc>
+    <lastmod>2019-11-12T10:47:26+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/tags/kubernetes/</loc>
+    <lastmod>2019-11-12T10:47:26+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/tags/pvc/</loc>
+    <lastmod>2019-11-12T10:47:26+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/post/</loc>
+    <lastmod>2019-11-12T10:47:26+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/post/resizing-persistent-volumes-using-kubernetes/</loc>
+    <lastmod>2019-11-12T10:47:26+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/tags/</loc>
+    <lastmod>2019-11-12T10:47:26+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/tags/resize/</loc>
+    <lastmod>2019-11-12T10:47:26+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/</loc>
+    <lastmod>2019-11-12T10:47:26+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -20,26 +69,8 @@
   </url>
   
   <url>
-    <loc>http://blog.meoop.me/post/</loc>
-    <lastmod>2019-10-31T20:18:24+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.meoop.me/tags/</loc>
-    <lastmod>2019-10-31T20:18:24+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>http://blog.meoop.me/tags/xmodmap/</loc>
     <lastmod>2018-03-07T10:16:23+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.meoop.me/</loc>
-    <lastmod>2019-10-31T20:18:24+08:00</lastmod>
     <priority>0</priority>
   </url>
   

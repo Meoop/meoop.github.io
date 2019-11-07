@@ -45,7 +45,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="http://blog.meoop.me/" />
 
-<meta property="og:updated_time" content="2018-03-07T10:16:23&#43;08:00"/>
+<meta property="og:updated_time" content="2019-01-21T17:38:53&#43;08:00"/>
 
 <meta itemprop="name" content="享受编程 - Coding Your Ambition.">
 <meta itemprop="description" content="Meoop&#39;s Blog">
@@ -113,6 +113,38 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/resizing-persistent-volumes-using-kubernetes/">Resizing Persistent Volumes Using Kubernetes</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2019-01-21 </span>
+      <div class="post-category">
+          <a href="/categories/kubernetes/"> Kubernetes </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p><strong>Feature gates:</strong></p>
+
+<ul>
+<li>enable <code>ExpandPersistentVolumes</code> feature gate (1.11⬆ default:ture).</li>
+<li>enable <code>PersistentVolumeClaimResize</code> admission controller (1.11⬆ default:ture).</li>
+</ul>
+
+<p><strong>StorageClass:</strong></p>
+
+<ul>
+<li>Storage class’s <code>allowVolumeExpansion</code> field should set to true.</li>
+</ul>
+    </div>
+    <div class="read-more">
+      <a href="/post/resizing-persistent-volumes-using-kubernetes/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
     <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/%E4%BD%BF%E7%94%A8xmodmap%E5%8F%96%E6%B6%88linux%E4%B8%8B%E9%BC%A0%E6%A0%87%E4%B8%AD%E9%94%AE%E7%B2%98%E8%B4%B4%E5%8A%9F%E8%83%BD/">使用 xmodmap 取消 Linux 下鼠标中键粘贴功能</a></h1>
@@ -319,43 +351,6 @@
     </div>
     <div class="read-more">
       <a href="/post/nfs-ssh%E8%BD%AF%E8%BF%9E%E6%8E%A5%E6%97%A0%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E9%99%86/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/hadoop%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%E4%BD%86live-node%E4%B8%BA0/">Hadoop 集群启动成功但 live Node 为 0</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-03-05 </span>
-      <div class="post-category">
-          <a href="/categories/hadoop/"> Hadoop </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <blockquote>
-<p>一次 Hadoop 集群启动成功但 live node 为 0 的问题解决过程。</p>
-
-<p>原文在 <a href="https://blog.csdn.net/Meoop/article/details/50806724">CSDN</a>，现在迁移到这里。</p>
-</blockquote>
-
-<h2 id="问题描述">问题描述</h2>
-
-<p>这两天用虚拟机搭建了 hadoop 集群环境，创建了三台虚拟机 hadoop01，hadoop02，hadoop03，hadoop01 代表 Master，hadoop02 以及 hadoop03 作为 Slave 节点。三台虚拟机都是 centos7 最小化安装。hadoop 版本用的最新的版本 2.7.2。
-开始一切都很顺利，启动 hadoop 集群也成功启动，运行 jps，三个节点对应的进程都成功启动，但是检查集群状态时发现 live node 为 0（如图）。</p>
-
-<figure class="center">
-    <img src="/images/post/hadoop%e9%9b%86%e7%be%a4%e5%90%af%e5%8a%a8%e6%88%90%e5%8a%9f%e4%bd%86live-node%e4%b8%ba0/20160304233347273.png"
-         alt="集群状态"/> <figcaption>
-            <h4>集群状态</h4>
-        </figcaption>
-</figure>
-    </div>
-    <div class="read-more">
-      <a href="/post/hadoop%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%E4%BD%86live-node%E4%B8%BA0/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
