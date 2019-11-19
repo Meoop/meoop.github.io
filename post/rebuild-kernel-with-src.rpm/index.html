@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Rebuild kernel package with src.rpm (Centos7) - 享受编程 - Coding Your Ambition.</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Meoop" /><meta name="description" content="注意，应使用非 root 用户进行 rpm 包构建。
+1 2 3  # add user useradd -m -r koji su koji   下载源码包，安装源码包，解压源码。
+1 2 3 4 5 6 7 8 9 10  sudo yum install yum-utils rpm-build # download source package yumdownloader --source kernel # install build dependencies yum-builddep kernel # install source package, rpm -i kernel-*.src.rpm cd ~/rpmbuild # unpacking the sources and applying any patches. rpmbuild -bp SPECS/kernel.spec  " /><meta name="keywords" content="Linux, Centos7, Kernel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="http://blog.meoop.me/post/rebuild-kernel-with-src.rpm/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Rebuild kernel package with src.rpm (Centos7)" />
+<meta property="og:description" content="注意，应使用非 root 用户进行 rpm 包构建。
+
+
+1
+2
+3
+
+
+# add user
+useradd -m -r koji
+su koji
+
+
+下载源码包，安装源码包，解压源码。
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+
+
+sudo yum install yum-utils rpm-build
+# download source package
+yumdownloader --source kernel
+# install build dependencies
+yum-builddep kernel
+# install source package, 
+rpm -i kernel-*.src.rpm
+cd ~/rpmbuild
+# unpacking the sources and applying any patches.
+rpmbuild -bp SPECS/kernel.spec
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://blog.meoop.me/post/rebuild-kernel-with-src.rpm/" />
+<meta property="article:published_time" content="2019-01-24T17:08:04+08:00" />
+<meta property="article:modified_time" content="2019-11-19T17:16:00+08:00" />
+<meta itemprop="name" content="Rebuild kernel package with src.rpm (Centos7)">
+<meta itemprop="description" content="注意，应使用非 root 用户进行 rpm 包构建。
+
+
+1
+2
+3
+
+
+# add user
+useradd -m -r koji
+su koji
+
+
+下载源码包，安装源码包，解压源码。
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+
+
+sudo yum install yum-utils rpm-build
+# download source package
+yumdownloader --source kernel
+# install build dependencies
+yum-builddep kernel
+# install source package, 
+rpm -i kernel-*.src.rpm
+cd ~/rpmbuild
+# unpacking the sources and applying any patches.
+rpmbuild -bp SPECS/kernel.spec
+
+">
+
+
+<meta itemprop="datePublished" content="2019-01-24T17:08:04&#43;08:00" />
+<meta itemprop="dateModified" content="2019-11-19T17:16:00&#43;08:00" />
+<meta itemprop="wordCount" content="389">
+
+
+
+<meta itemprop="keywords" content="Linux,Centos7,Kernel," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Rebuild kernel package with src.rpm (Centos7)"/>
+<meta name="twitter:description" content="注意，应使用非 root 用户进行 rpm 包构建。
+
+
+1
+2
+3
+
+
+# add user
+useradd -m -r koji
+su koji
+
+
+下载源码包，安装源码包，解压源码。
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+
+
+sudo yum install yum-utils rpm-build
+# download source package
+yumdownloader --source kernel
+# install build dependencies
+yum-builddep kernel
+# install source package, 
+rpm -i kernel-*.src.rpm
+cd ~/rpmbuild
+# unpacking the sources and applying any patches.
+rpmbuild -bp SPECS/kernel.spec
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Ambition</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Ambition</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Rebuild kernel package with src.rpm (Centos7)</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-01-24 </span>
+        <div class="post-category">
+            <a href="/categories/linux/"> Linux </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      <p><strong>注意，应使用非 root 用户进行 rpm 包构建。</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># add user</span>
+useradd -m -r koji
+su koji</code></pre></td></tr></table>
+</div>
+</div>
+<p>下载源码包，安装源码包，解压源码。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">sudo yum install yum-utils rpm-build
+<span class="c1"># download source package</span>
+yumdownloader --source kernel
+<span class="c1"># install build dependencies</span>
+yum-builddep kernel
+<span class="c1"># install source package,</span> 
+rpm -i kernel-*.src.rpm
+<span class="nb">cd</span> ~/rpmbuild
+<span class="c1"># unpacking the sources and applying any patches.</span>
+rpmbuild -bp SPECS/kernel.spec</code></pre></td></tr></table>
+</div>
+</div>
+<p>进入源码目录，复制一份源码，修改代码，生成 patch 放入 SOURCE 中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> BUILD/kernel-3.10.0-957.1.3.el7/
+cp -a BUILD/kernel-3.10.0-957.1.3.el7 BUILD/kernel-3.10.0-957.1.3.el7.orig
+<span class="c1"># fix bug</span>
+diff -uprN linux-3.10.0-957.1.3.el7.x86_64.orig linux-3.10.0-957.1.3.el7.x86_64 &gt; ../../SOURCES/remove-rmrr-check.patch</code></pre></td></tr></table>
+</div>
+</div>
+<p>将 patch 头修改为如下格式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-diff" data-lang="diff"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-diff" data-lang="diff"><span class="gd">--- a/drivers/iommu/intel-iommu.c       2019-01-22 18:24:42.622374819 +0800
+</span><span class="gd"></span><span class="gi">+++ b/drivers/iommu/intel-iommu.c       2019-01-22 18:16:46.131348561 +0800
+</span><span class="gi"></span><span class="gu">@@ -4834,7 +4834,7 @@
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>修改 <code>SPECS/kernel.spec</code>，应用 patch，更新版本号。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-diff" data-lang="diff"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-diff" data-lang="diff"><span class="gd">--- kernel.spec.orig	2019-01-24 10:46:53.448383625 +0800
+</span><span class="gd"></span><span class="gi">+++ kernel.spec	2019-01-24 10:49:52.094393470 +0800
+</span><span class="gi"></span><span class="gu">@@ -5,7 +5,7 @@ Summary: The Linux kernel
+</span><span class="gu"></span> 
+ %define dist .el7
+ 
+<span class="gd">-# % define buildid .local
+</span><span class="gd"></span><span class="gi">+%define buildid .c1
+</span><span class="gi"></span> 
+ # For a kernel released for public testing, released_kernel should be 1.
+ # For internal testing builds during development, it should be 0.
+<span class="gu">@@ -449,6 +449,7 @@ Patch999999: linux-kernel-test.patch
+</span><span class="gu"></span> Patch1000: debrand-single-cpu.patch
+ Patch1001: debrand-rh_taint.patch
+ Patch1002: debrand-rh-i686-cpu.patch
+<span class="gi">+Patch2000: remove-rmrr-check.patch
+</span><span class="gi"></span> 
+ BuildRoot: %{_tmppath}/kernel-%{KVRA}-root
+ 
+<span class="gu">@@ -781,6 +782,7 @@ ApplyOptionalPatch linux-kernel-test.pat
+</span><span class="gu"></span> ApplyOptionalPatch debrand-single-cpu.patch
+ ApplyOptionalPatch debrand-rh_taint.patch
+ ApplyOptionalPatch debrand-rh-i686-cpu.patch
+<span class="gi">+ApplyOptionalPatch remove-rmrr-check.patch
+</span><span class="gi"></span> 
+ # Any further pre-build tree manipulations happen here.
+ 
+<span class="gu">@@ -1757,6 +1759,9 @@ fi
+</span><span class="gu"></span> %kernel_variant_files %{with_kdump} kdump
+ 
+ %changelog
+<span class="gi">+* Tue Jan 22 2019 CentOS Sources &lt;bugs@centos.org&gt; - 3.10.0-957.1.3.el7.c1
+</span><span class="gi">+- Remove RMRR check (caicloud)
+</span><span class="gi">+
+</span><span class="gi"></span> * Mon Nov 26 2018 CentOS Sources &lt;bugs@centos.org&gt; - 3.10.0-957.1.3.el7
+ - Apply debranding changes
+ - Sign with new secureboot key
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>构建源码包和二进制包：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">rpmbuild -ba SPECS/kernel.spec</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Meoop</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2019-11-19
+        <a href="https://github.com/Meoop/meoop.github.io.git/commit/28e22851b457bcc0e8712be8e3fd364e577d7c84" title="new post: rebuild kernel package with src.rpm">(28e2285)</a>
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/linux/">Linux</a>
+          <a href="/tags/centos7/">Centos7</a>
+          <a href="/tags/kernel/">Kernel</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/resizing-persistent-volumes-using-kubernetes/">
+            <span class="next-text nav-default">Resizing Persistent Volumes Using Kubernetes</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'meoop';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="yilei108@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.stackoverflow.com/users/12249756/" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.facebook.com/lei.yi.908" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://www.linkedin.com/in/yilei/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/Meoop" class="iconfont icon-github" title="github"></a>
+      <a href="http://weibo.com/18722081826" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://www.zhihu.com/people/lei.yi" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="http://blog.meoop.me/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2015 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Meoop</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-101122173-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

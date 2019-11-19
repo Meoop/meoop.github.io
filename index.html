@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.55.6 with theme even" />
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
 
 
 <link rel="canonical" href="http://blog.meoop.me/" />
@@ -45,8 +45,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="http://blog.meoop.me/" />
 
-<meta property="og:updated_time" content="2019-01-21T17:38:53&#43;08:00"/>
-
+<meta property="og:updated_time" content="2019-01-24T17:08:04+08:00" />
 <meta itemprop="name" content="享受编程 - Coding Your Ambition.">
 <meta itemprop="description" content="Meoop&#39;s Blog">
 
@@ -113,6 +112,66 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/rebuild-kernel-with-src.rpm/">Rebuild kernel package with src.rpm (Centos7)</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2019-01-24 </span>
+      <div class="post-category">
+          <a href="/categories/linux/"> Linux </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p><strong>注意，应使用非 root 用户进行 rpm 包构建。</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># add user</span>
+useradd -m -r koji
+su koji</code></pre></td></tr></table>
+</div>
+</div>
+<p>下载源码包，安装源码包，解压源码。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">sudo yum install yum-utils rpm-build
+<span class="c1"># download source package</span>
+yumdownloader --source kernel
+<span class="c1"># install build dependencies</span>
+yum-builddep kernel
+<span class="c1"># install source package,</span> 
+rpm -i kernel-*.src.rpm
+<span class="nb">cd</span> ~/rpmbuild
+<span class="c1"># unpacking the sources and applying any patches.</span>
+rpmbuild -bp SPECS/kernel.spec</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+    <div class="read-more">
+      <a href="/post/rebuild-kernel-with-src.rpm/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
     <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/resizing-persistent-volumes-using-kubernetes/">Resizing Persistent Volumes Using Kubernetes</a></h1>
@@ -317,40 +376,6 @@
     </div>
     <div class="read-more">
       <a href="/post/gnome%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%A1%B6%E6%A0%8F%E6%97%A5%E6%9C%9F%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%85%A8%E9%97%AE%E9%A2%98/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/nfs-ssh%E8%BD%AF%E8%BF%9E%E6%8E%A5%E6%97%A0%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E9%99%86/">nfs&#43;ssh 软连接无法实现免密码登陆</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-03-14 </span>
-      <div class="post-category">
-          <a href="/categories/hadoop/"> Hadoop </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <blockquote>
-<p>一次 Hadoop 集群安装过程中 nfs+ssh 软连接无法实现免密码登陆的问题解决过程</p>
-
-<p>原文在 <a href="https://blog.csdn.net/Meoop/article/details/50886535">CSDN</a>，现在迁移到这里。</p>
-</blockquote>
-
-<h2 id="nfs-ssh-软连接无法实现免密码登陆">nfs+ssh 软连接无法实现免密码登陆</h2>
-
-<ol>
-<li>开始以为自己文件名写错，仔细检查未发现文件名有错。</li>
-<li>检查文件的权限，发现 authorized_keys 文件的权限是 600，修改成 644 后，问题依旧，无法实现免密码登陆。</li>
-<li>以为是 nfs_share 目录的权限问题。因为当时建立时使用的是 root 用户，查看后发现 nfs_share 目录权限无问题。</li>
-<li>查看建立的软连接，软连接建立之后所生成的文件权限为 777，尝试各种修改后，完全没有什么用处，依旧无法免密码连接。</li>
-</ol>
-    </div>
-    <div class="read-more">
-      <a href="/post/nfs-ssh%E8%BD%AF%E8%BF%9E%E6%8E%A5%E6%97%A0%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E9%99%86/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
