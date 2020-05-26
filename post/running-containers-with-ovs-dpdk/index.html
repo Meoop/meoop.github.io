@@ -75,7 +75,7 @@ DPDK(Data Plane Development Kit)，即数据平面开发工具包，是一组用
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://blog.meoop.me/post/running-containers-with-ovs-dpdk/" />
 <meta property="article:published_time" content="2018-07-31T12:56:20+08:00" />
-<meta property="article:modified_time" content="2020-05-26T20:52:40+08:00" />
+<meta property="article:modified_time" content="2018-09-24T12:56:20+08:00" />
 <meta itemprop="name" content="Running Containers With OVS-DPDK">
 <meta itemprop="description" content="
 OVS-DPDK 是什么
@@ -108,7 +108,7 @@ DPDK(Data Plane Development Kit)，即数据平面开发工具包，是一组用
 
 在 X86 架构中，处理数据包的传统方式是 CPU 中断方式，即网卡驱动接收到数据包后通过中断通知 CPU 处理，然后由 CPU 拷贝数据并交给协议栈。在数据量大时，这种方式会产生大量 CPU 中断，导致 CPU 无法运行其他程序。而 DPDK 则采用轮询方式实现数据包处理过程：DPDK 重载了网卡驱动，在收到数据包后不中断通知 CPU，而是将数据包通过零拷贝技术存入内存，这时应用层程序就可以通过 DPDK 提供的接口，直接从内存读取数据包。这种处理方式节省了 CPU 中断时间、内存拷贝时间，并向应用层提供了简单易行且高效的数据包处理方式，使得网络应用的开发更加方便。但同时，由于需要重载网卡驱动，因此该开发包目前只能用在部分网络处理芯片的网卡中。">
 <meta itemprop="datePublished" content="2018-07-31T12:56:20&#43;08:00" />
-<meta itemprop="dateModified" content="2020-05-26T20:52:40&#43;08:00" />
+<meta itemprop="dateModified" content="2018-09-24T12:56:20&#43;08:00" />
 <meta itemprop="wordCount" content="3894">
 
 
@@ -838,7 +838,7 @@ DDoS 攻击防护:基于 Intel DPDK 技术实现高性能实时抗攻击</p>
   <p class="copyright-item">
     <span class="item-title">LastMod</span>
     <span class="item-content">
-        2020-05-26
+        2018-09-24
         <a href="https://github.com/Meoop/meoop.github.io.git/commit/c26d5fe8549621a70afdedf69c77622b3bab9b6d" title="new post: Running-Containers-with-OVS-DPDK.md">(c26d5fe)</a>
     </span>
   </p>
