@@ -16,7 +16,7 @@ hideHeaderAndFooter: false
 
 容器是当前的热门技术，容器使用到 Linux 的 `namespace` 和 `cgroup` 功能，`namespace` 用于资源隔离，`cgroup` 用于资源限制。除了这两个外，容器还使用到了 selinux/apparmor 增强容器安全，veth pair/bridge/ovs 等技术提供容器网络，aufs/overlayfs/lvm 等技术构建容器的 rootfs。这篇文章主要对 namespace 进行介绍，了解它功能已经使用方式，后续文章再对其他技术进行介绍。
 
-# Linux Namespace
+## Linux Namespace
 
 `Namespace` 是 Linux 内核的一项功能，用于对资源进行隔离，`namespace` 以一种抽象的方式包装特定的资源，使得在这个 `namespace` 中的进程实例看起来它们具有自己的受到隔离的全局资源，不同 `namespace` 的进程能看到的资源是不同的。
 <!--more-->
@@ -47,10 +47,10 @@ hideHeaderAndFooter: false
 
 **`UTS namespace`** 隔离由 `uname()` 系统调用返回的两个系统标识符--节点名和 NIS 域名。使用 `sethostname()` 和 `setdomainname()` 系统调用可以设置节点名和节点域名。新创建的 UTS namespace 的 hostname 和 domain 复制自调用者 UTS namespace。在 container 中，UTS namespace 功能允许每个 container 拥有自己的主机名和 NIS 域名。
 
-# Namespace API
+## Namespace API
 与 namespace 相关的主要有 3 个系统调用，分别是 `clone()`、`setns()`、`unshare()`。
 
-## clone()
+### clone()
 [clone()](http://man7.org/linux/man-pages/man2/clone.2.html) 系统调用用于创建一个新的进程，如果 `clone()` 系统调用包含 `CLONE_NEW*` 相关的 flag 时，会根据 flag 创建新的 namespace，将子进程作为新 namespace 的成员。`clone()` 系统调用是创建新进程比较常用的函数，也包含了许多跟 namespace 无关的功能。`clone()` 系统调用的定义如下：
 
 ``` c
@@ -103,7 +103,7 @@ int main()
 }
 ```
 
-## setns()
+### setns()
 
 [setns()](http://man7.org/linux/man-pages/man2/setns.2.html) 用于将调用者进程加入到指定的命名空间，要加入的 namespace 可以通过 `/proc/[PID]/ns` 看到。
 
@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
 ```
 
 
-## unshare()
+### unshare()
 [unshare()](http://man7.org/linux/man-pages/man2/unshare.2.html) 系统调用将调用者移动到新的 namespace 中。`unshare()` 调用根据包含的 `CLONE_NEW*` 相关 flag，创建对应的 namespace。
 
 ``` c
@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-# /proc/[pid]/ns
+## /proc/[pid]/ns
 `/proc/[pid]/ns` 下保存有进程所在的 namespace 信息，用户可以通过 `/proc/[pid]/ns` 下看到进程所在的 namespace。如果两个进程指向的 namespace 的 inode 号相同，就说明这两个进程在同一个 namespace 下。`/proc/[pid]/ns` 下的这些文件只要被打开，其 fd 被占用着，那么就算所属的所有进程都已经结束，该 namespace 也会一直存在，可以通过 `setns()` 系统调用进入所维持的 namespace。此外，通过 bind mount 这些文件到其他地方，也可以维持 namespace 在进程退出时 namespace 被回收。
 
 ``` bash
@@ -264,7 +264,7 @@ lrwxrwxrwx. 1 meoop meoop 0  3月 28 19:12 user -> 'user:[4026531837]'
 lrwxrwxrwx. 1 meoop meoop 0  3月 28 19:12 uts -> 'uts:[4026531838]'
 ```
 
-# nsenter and unshare
+## nsenter and unshare
 Linux 系统提供了 `nsenter` 和 `unshare` 两个工具可以对 namespace 进行操作。
 
 `nsenter` 用于进入指定进程的 namespace 运行命令。
@@ -278,6 +278,6 @@ nsenter -t $$ --uts --ipc --net --pid
 unshare --fork --pid --mount-proc readlink /proc/self
 ```
 
-# 参考文档
+## 参考文档
 - [overview of Linux namespaces](http://man7.org/linux/man-pages/man7/namespaces.7.html)
 - [Namespaces in operation, part 1: namespaces overview](https://lwn.net/Articles/531114/)
