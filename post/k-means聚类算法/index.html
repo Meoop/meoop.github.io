@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.59.1 with theme even" />
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
 
 
 <link rel="canonical" href="http://blog.meoop.me/post/k-means%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/" />
@@ -36,7 +36,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -44,9 +45,7 @@
 <meta property="og:description" content="
 聚类是在给定的数据集合中寻找同类的数据子集合，每一个子集合形成一个类簇，同类簇中的数据具有更大的相似性。聚类算法大体上可分为基于划分的方法、基于层次的方法、基于密度的方法、基于网格的方法以及基于模型的方法。
 
-
 基本概念
-
 术语 k-means 最早是由 James MacQueen 在 1967 年提出的，这一观点可以追溯到 1957 年 Hugo Steinhaus 所提出的想法。1957 年，斯图亚特·劳埃德最先提出这一标准算法，当初是作为一门应用于脉码调制的技术,直到 1982 年，这一算法才在贝尔实验室被正式提出。1965 年，E.W.Forgy 发表了一个本质上是相同的方法，1975 年和 1979 年，Hartigan 和 Wong 分别提出了一个更高效的版本。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://blog.meoop.me/post/k-means%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/" />
@@ -56,27 +55,20 @@
 <meta itemprop="description" content="
 聚类是在给定的数据集合中寻找同类的数据子集合，每一个子集合形成一个类簇，同类簇中的数据具有更大的相似性。聚类算法大体上可分为基于划分的方法、基于层次的方法、基于密度的方法、基于网格的方法以及基于模型的方法。
 
-
 基本概念
-
 术语 k-means 最早是由 James MacQueen 在 1967 年提出的，这一观点可以追溯到 1957 年 Hugo Steinhaus 所提出的想法。1957 年，斯图亚特·劳埃德最先提出这一标准算法，当初是作为一门应用于脉码调制的技术,直到 1982 年，这一算法才在贝尔实验室被正式提出。1965 年，E.W.Forgy 发表了一个本质上是相同的方法，1975 年和 1979 年，Hartigan 和 Wong 分别提出了一个更高效的版本。">
-
-
 <meta itemprop="datePublished" content="2015-06-16T10:17:10&#43;08:00" />
 <meta itemprop="dateModified" content="2015-06-16T10:17:10&#43;08:00" />
-<meta itemprop="wordCount" content="2195">
+<meta itemprop="wordCount" content="2193">
 
 
 
-<meta itemprop="keywords" content="K-means,聚类,数据分析," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="K-means,聚类,数据分析," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="K-Means 聚类算法"/>
 <meta name="twitter:description" content="
 聚类是在给定的数据集合中寻找同类的数据子集合，每一个子集合形成一个类簇，同类簇中的数据具有更大的相似性。聚类算法大体上可分为基于划分的方法、基于层次的方法、基于密度的方法、基于网格的方法以及基于模型的方法。
 
-
 基本概念
-
 术语 k-means 最早是由 James MacQueen 在 1967 年提出的，这一观点可以追溯到 1957 年 Hugo Steinhaus 所提出的想法。1957 年，斯图亚特·劳埃德最先提出这一标准算法，当初是作为一门应用于脉码调制的技术,直到 1982 年，这一算法才在贝尔实验室被正式提出。1965 年，E.W.Forgy 发表了一个本质上是相同的方法，1975 年和 1979 年，Hartigan 和 Wong 分别提出了一个更高效的版本。"/>
 
 <!--[if lte IE 9]>
@@ -155,20 +147,18 @@
   <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#基本概念">基本概念</a></li>
-<li><a href="#k-means算法的性能分析">K-means算法的性能分析</a>
-<ul>
-<li><a href="#优点">优点</a></li>
-<li><a href="#缺点">缺点</a></li>
-</ul></li>
-<li><a href="#k-means-算法基本步骤">K-means 算法基本步骤</a></li>
-<li><a href="#鸢尾花数据集测试实例">鸢尾花数据集测试实例</a></li>
-<li><a href="#参考">参考</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#基本概念">基本概念</a></li>
+    <li><a href="#k-means算法的性能分析">K-means算法的性能分析</a>
+      <ul>
+        <li><a href="#优点">优点</a></li>
+        <li><a href="#缺点">缺点</a></li>
+      </ul>
+    </li>
+    <li><a href="#k-means-算法基本步骤">K-means 算法基本步骤</a></li>
+    <li><a href="#鸢尾花数据集测试实例">鸢尾花数据集测试实例</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
 </nav>
   </div>
 </div>
@@ -176,52 +166,38 @@
       <blockquote>
 <p><strong>聚类</strong>是在给定的数据集合中寻找同类的数据子集合，每一个子集合形成一个类簇，同类簇中的数据具有更大的相似性。聚类算法大体上可分为<strong>基于划分</strong>的方法、<strong>基于层次</strong>的方法、<strong>基于密度</strong>的方法、<strong>基于网格</strong>的方法以及<strong>基于模型</strong>的方法。</p>
 </blockquote>
-
 <h2 id="基本概念">基本概念</h2>
-
 <p>术语 <strong>k-means</strong> 最早是由 James MacQueen 在 1967 年提出的，这一观点可以追溯到 1957 年 Hugo Steinhaus 所提出的想法。1957 年，斯图亚特·劳埃德最先提出这一标准算法，当初是作为一门应用于脉码调制的技术,直到 1982 年，这一算法才在贝尔实验室被正式提出。1965 年，E.W.Forgy 发表了一个本质上是相同的方法，1975 年和 1979 年，Hartigan 和 Wong 分别提出了一个更高效的版本。</p>
-
 <p>目前 k-means 算法是一种得到最广泛使用的<strong>基于划分的聚类算法</strong>，把 n 个对象分为 k 个簇，以使簇内具有较高的相似度。相似度的计算根据一个簇中对象的平均值来进行。它与处理混合正态分布的最大期望算法很相似，因为他们都试图找到<strong>数据中自然聚类的中心</strong>。</p>
-
 <p>算法首先随机地选择 k 个对象，每个对象初始地代表了一个簇的平均值或中心。对剩余的每个对象根据其与各个簇中心的距离，将它赋给最近的簇，然后重新计算每个簇的平均值。这个过程不断重复，直到准则函数收敛。</p>
-
 <p>它假设对象属性来自于空间向量，并且目标是使各个群组内部的均方误差总和最小。假设有 k 个群组 Si, i=1,2,&hellip;,k。μi 是群组 Si 内所有元素 xj 的重心，或叫中心点。</p>
-
 <p>K 值的选择应该在 2 和 √n 之间，其中 n 为数据个数。</p>
-
 <h2 id="k-means算法的性能分析">K-means算法的性能分析</h2>
-
 <h3 id="优点">优点</h3>
-
 <ol>
 <li>k-平均算法是解决聚类问题的一种经典算法，算法<strong>简单、快速</strong>。</li>
 <li>对处理大数据集，该算法是相对可伸缩的和高效率的，因为它的复杂度大约是 O(nkt)，其中 n 是所有对象的数目，k 是簇的数目,t 是迭代的次数。通常 k 远小于 n。这个算法经常以<strong>局部最优</strong>结束。</li>
 <li>算法尝试找出使平方误差函数值最小的 k 个划分。当簇是密集的、球状或团状的，而簇与簇之间区别明显时，它的聚类效果很好。</li>
 </ol>
-
 <h3 id="缺点">缺点</h3>
-
 <ol>
 <li>k-means 只有在簇的平均值被定义的情况下才能使用，不适用于某些应用，如涉及有分类属性的数据不适用。</li>
 <li>要求用户必须事先给出要生成的簇的数目 k。</li>
 <li>对初值敏感，对于不同的初始值，可能会导致不同的聚类结果。</li>
 <li>不适合于发现非凸面形状的簇，或者大小差别很大的簇。</li>
-<li>对于&rdquo;噪声&rdquo;和孤立点数据敏感，少量的该类数据能够对平均值产生极大影响。</li>
+<li>对于&quot;噪声&quot;和孤立点数据敏感，少量的该类数据能够对平均值产生极大影响。</li>
 </ol>
-
 <h2 id="k-means-算法基本步骤">K-means 算法基本步骤</h2>
-
 <ol>
 <li>从 n 个数据对象任意选择 k 个对象作为初始聚类中心；</li>
 <li>计算每个对象与这些中心对象的距离；并根据最小距离对相应对象进行划分；</li>
 <li>重新计算每个中心对象；</li>
 <li>重复 2、3 直至满足准则收敛函数。</li>
 </ol>
-
 <h2 id="鸢尾花数据集测试实例">鸢尾花数据集测试实例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="lnt">  1
+<pre class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
 </span><span class="lnt">  3
 </span><span class="lnt">  4
@@ -656,10 +632,10 @@
     <span class="p">}</span>
     <span class="n">printf</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\n</span><span class="s">迭代次数：%d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="n">h</span><span class="p">)</span> <span class="p">;</span>
     <span class="k">return</span> <span class="mi">0</span> <span class="p">;</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>输出结果：
+</div><p>输出结果：
 <figure class="center">
     <img src="/images/post/K-means%e8%81%9a%e7%b1%bb%e7%ae%97%e6%b3%95/20150616004340650.png"
          alt="输出结果"/> <figcaption>
@@ -667,9 +643,7 @@
         </figcaption>
 </figure>
 </p>
-
 <h2 id="参考">参考</h2>
-
 <ol>
 <li>Jiawei Han 等著，《数据挖掘概念与技术》，2008</li>
 <li>吴夙慧等，k-means 算法研究综述，2011</li>
@@ -765,7 +739,7 @@
   <span class="copyright-year">
     &copy; 
     2015 - 
-    2019
+    2020
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
@@ -782,7 +756,10 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       showProcessingMessages: false,

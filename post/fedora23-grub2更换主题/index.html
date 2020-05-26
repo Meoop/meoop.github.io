@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.59.1 with theme even" />
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
 
 
 <link rel="canonical" href="http://blog.meoop.me/post/fedora23-grub2%E6%9B%B4%E6%8D%A2%E4%B8%BB%E9%A2%98/" />
@@ -36,7 +36,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -44,9 +45,7 @@
 <meta property="og:description" content="
 原文在CSDN，现在迁移到这里。
 
-
 刚刚装了 win10 和 fedora23 双系统，启动时黑框只占屏幕左上角的 1/4，感觉十分的难看，于是就寻思这怎么让其好看点，于是翻了翻资料，看见很多地方都可以换 GRUB2 的主题，就试着动了下手，美化了下。
-
 效果图（主题作者给的效果图），下载地址：https://pan.baidu.com/s/1c2mgBCG
 
      
@@ -62,9 +61,7 @@
 <meta itemprop="description" content="
 原文在CSDN，现在迁移到这里。
 
-
 刚刚装了 win10 和 fedora23 双系统，启动时黑框只占屏幕左上角的 1/4，感觉十分的难看，于是就寻思这怎么让其好看点，于是翻了翻资料，看见很多地方都可以换 GRUB2 的主题，就试着动了下手，美化了下。
-
 效果图（主题作者给的效果图），下载地址：https://pan.baidu.com/s/1c2mgBCG
 
      
@@ -72,23 +69,18 @@
         
 
 ">
-
-
 <meta itemprop="datePublished" content="2016-01-12T10:16:42&#43;08:00" />
 <meta itemprop="dateModified" content="2016-01-12T10:16:42&#43;08:00" />
 <meta itemprop="wordCount" content="493">
 
 
 
-<meta itemprop="keywords" content="Linux,GRUB2,fedora," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Linux,GRUB2,fedora," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="fedora23 GRUB2 更换主题"/>
 <meta name="twitter:description" content="
 原文在CSDN，现在迁移到这里。
 
-
 刚刚装了 win10 和 fedora23 双系统，启动时黑框只占屏幕左上角的 1/4，感觉十分的难看，于是就寻思这怎么让其好看点，于是翻了翻资料，看见很多地方都可以换 GRUB2 的主题，就试着动了下手，美化了下。
-
 效果图（主题作者给的效果图），下载地址：https://pan.baidu.com/s/1c2mgBCG
 
      
@@ -173,17 +165,15 @@
   <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#修改方法">修改方法</a>
-<ul>
-<li><a href="#下载主题">下载主题</a></li>
-<li><a href="#更该-grub-配置">更该 grub 配置</a></li>
-<li><a href="#更新-grub2">更新 grub2</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#修改方法">修改方法</a>
+      <ul>
+        <li><a href="#下载主题">下载主题</a></li>
+        <li><a href="#更该-grub-配置">更该 grub 配置</a></li>
+        <li><a href="#更新-grub2">更新 grub2</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
@@ -191,73 +181,65 @@
       <blockquote>
 <p>原文在<a href="https://blog.csdn.net/Meoop/article/details/50505609">CSDN</a>，现在迁移到这里。</p>
 </blockquote>
-
 <p>刚刚装了 win10 和 fedora23 双系统，启动时黑框只占屏幕左上角的 1/4，感觉十分的难看，于是就寻思这怎么让其好看点，于是翻了翻资料，看见很多地方都可以换 GRUB2 的主题，就试着动了下手，美化了下。</p>
-
-<p><strong>效果图</strong>（主题作者给的效果图），下载地址：<a href="https://pan.baidu.com/s/1c2mgBCG">https://pan.baidu.com/s/1c2mgBCG</a>
+<p><strong>效果图</strong>（主题作者给的效果图），下载地址：https://pan.baidu.com/s/1c2mgBCG
 <figure class="center">
     <img src="/images/post/fedora23-GRUB2%e6%9b%b4%e6%8d%a2%e4%b8%bb%e9%a2%98/20160112180610905.png"/> <figcaption>
             <h4>主题样式</h4>
         </figcaption>
 </figure>
 </p>
-
 <h2 id="修改方法">修改方法</h2>
-
 <h3 id="下载主题">下载主题</h3>
-
 <p>将下载下的主题放到 <code>/boot/grub2/theme</code> 文件夹中。这个主题文件夹里应该有个 theme.txt 的文件。</p>
-
 <h3 id="更该-grub-配置">更该 grub 配置</h3>
-
 <p>更改 <code>/etc/default/grub</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">sudo gedit /etc/default/grub</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">sudo gedit /etc/default/grub
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>在文件中添加下面内容：</p>
+</div><p>在文件中添加下面内容：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">GRUB_THEME</span><span class="o">=</span><span class="s2">&#34;theme.txt所在的路径/theme.txt&#34;</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">GRUB_THEME</span><span class="o">=</span><span class="s2">&#34;theme.txt所在的路径/theme.txt&#34;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>并且注释掉 <code>GRUB_TERMINAL_OUTPUT=&quot;console&quot;</code>（这个控制是以哪种方式显示，不注释的话会以 console 窗口显示启动列表）</p>
+</div><p>并且注释掉 <code>GRUB_TERMINAL_OUTPUT=&quot;console&quot;</code>（这个控制是以哪种方式显示，不注释的话会以 console 窗口显示启动列表）</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1">#GRUB_TERMINAL_OUTPUT=&#34;console&#34;</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1">#GRUB_TERMINAL_OUTPUT=&#34;console&#34;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="更新-grub2">更新 grub2</h3>
-
+</div><h3 id="更新-grub2">更新 grub2</h3>
 <p>如果是 <code>gpt</code> 分区，以 <code>uefi</code> 启动方式启动的话，启动时读取的文件是 <code>/boot/efi/EFI/fedora/grub.cfg</code> ，这个时候更新时需更新这个文件，命令如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg </code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg 
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>如果是一般的启动方式，启动时读取的文件是 <code>/boot/grub2/grub.cfg</code>，这个时候更新时需更新这个文件，命令如下：</p>
+</div><p>如果是一般的启动方式，启动时读取的文件是 <code>/boot/grub2/grub.cfg</code>，这个时候更新时需更新这个文件，命令如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">sudo grub2-mkconfig -o /boot/grub2/grub.cfg</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>好了，现在启动下看看，就可以看看美美的启动界面了。</p>
+</div><p>好了，现在启动下看看，就可以看看美美的启动界面了。</p>
     </div>
 
     <div class="post-copyright">
@@ -349,7 +331,7 @@
   <span class="copyright-year">
     &copy; 
     2015 - 
-    2019
+    2020
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
@@ -366,7 +348,10 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
 
 
 <script type="application/javascript">

@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.59.1 with theme even" />
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
 
 
 <link rel="canonical" href="http://blog.meoop.me/post/megacli%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/" />
@@ -35,7 +35,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -47,16 +48,13 @@
 <meta property="article:modified_time" content="2017-05-09T10:17:21+08:00" />
 <meta itemprop="name" content="MegaCli 常用命令汇总">
 <meta itemprop="description" content="MegaCli 是 LSI 公司提供的工具, 可以实现对 RAID 卡进行配置和状态监控。下面是一些比较常用的 MegaCli 命令：">
-
-
 <meta itemprop="datePublished" content="2017-05-09T10:17:21&#43;08:00" />
 <meta itemprop="dateModified" content="2017-05-09T10:17:21&#43;08:00" />
 <meta itemprop="wordCount" content="968">
 
 
 
-<meta itemprop="keywords" content="Linux,MegaCli," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Linux,MegaCli," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MegaCli 常用命令汇总"/>
 <meta name="twitter:description" content="MegaCli 是 LSI 公司提供的工具, 可以实现对 RAID 卡进行配置和状态监控。下面是一些比较常用的 MegaCli 命令："/>
 
@@ -136,253 +134,237 @@
   <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#状态信息读取">状态信息读取</a></li>
-<li><a href="#raid-设置相关">Raid 设置相关</a></li>
-<li><a href="#电池设置相关">电池设置相关</a></li>
-<li><a href="#缓存设置相关">缓存设置相关</a>
-<ul>
-<li><a href="#缓存策略">缓存策略</a></li>
-<li><a href="#缓存模式设置">缓存模式设置</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#状态信息读取">状态信息读取</a></li>
+    <li><a href="#raid-设置相关">Raid 设置相关</a></li>
+    <li><a href="#电池设置相关">电池设置相关</a></li>
+    <li><a href="#缓存设置相关">缓存设置相关</a>
+      <ul>
+        <li><a href="#缓存策略">缓存策略</a></li>
+        <li><a href="#缓存模式设置">缓存模式设置</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p>MegaCli 是 LSI 公司提供的工具, 可以实现对 RAID 卡进行配置和状态监控。下面是一些比较常用的 MegaCli 命令：</p>
-
 <h2 id="状态信息读取">状态信息读取</h2>
-
 <p>1.1 显示所有逻辑硬盘组信息</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -LDInfo -LALL -aAll</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -LDInfo -LALL -aAll
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>1.2 显示所有物理硬盘信息</p>
+</div><p>1.2 显示所有物理硬盘信息</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -PDList -aAll</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -PDList -aAll
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>1.3 显示 raid 卡信息</p>
+</div><p>1.3 显示 raid 卡信息</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -AdpAllInfo -aALL</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -AdpAllInfo -aALL
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>1.4 查询 raid 级别，磁盘数量，容量，条带大小</p>
+</div><p>1.4 查询 raid 级别，磁盘数量，容量，条带大小</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -ldinfo -lall -aall</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -ldinfo -lall -aall
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>1.5 查询 cache 策略（Cache Policy 后面跟的是磁盘的缓存策略）</p>
+</div><p>1.5 查询 cache 策略（Cache Policy 后面跟的是磁盘的缓存策略）</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -cfgdsply -aALL <span class="p">|</span>grep Policy</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -cfgdsply -aALL <span class="p">|</span>grep Policy
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="raid-设置相关">Raid 设置相关</h2>
-
+</div><h2 id="raid-设置相关">Raid 设置相关</h2>
 <p>2.1 清除当前 raid 配置(L1 表示编号为 1 的 raid 组；a0 表示 0 号适配器)</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -CfgLdDel -L1 -force -a0</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -CfgLdDel -L1 -force -a0
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>2.2 清除所有的 raid 组的配置</p>
+</div><p>2.2 清除所有的 raid 组的配置</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -cfgforeign -clear -a0</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -cfgforeign -clear -a0
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>2.3 增加 raid0 (r0 表示 raid0；[E0:S0] 表示 <code>Enclosure Device ID</code> 为 0，<code>Slot Number</code> 是 0 的硬盘；<code>WB NORA Cached CachedBadBBU</code> 表示缓存策略)</p>
+</div><p>2.3 增加 raid0 (r0 表示 raid0；[E0:S0] 表示 <code>Enclosure Device ID</code> 为 0，<code>Slot Number</code> 是 0 的硬盘；<code>WB NORA Cached CachedBadBBU</code> 表示缓存策略)</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -CfgLdAdd -r0<span class="o">[</span>E0:S0<span class="o">]</span> WB NORA Cached CachedBadBBU -a0</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -CfgLdAdd -r0<span class="o">[</span>E0:S0<span class="o">]</span> WB NORA Cached CachedBadBBU -a0
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>2.4 增加 raid1</p>
+</div><p>2.4 增加 raid1</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -CfgLdAdd -r1<span class="o">[</span>E0:S0,E1:S1<span class="o">]</span> WB NORA Cached CachedBadBBU -a0</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -CfgLdAdd -r1<span class="o">[</span>E0:S0,E1:S1<span class="o">]</span> WB NORA Cached CachedBadBBU -a0
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>2.5 增加 raid5</p>
+</div><p>2.5 增加 raid5</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -CfgLdAdd -r5<span class="o">[</span>E0:S0,E1:S1,E2:S2<span class="o">]</span> WB NORA Cached CachedBadBBU -a0</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -CfgLdAdd -r5<span class="o">[</span>E0:S0,E1:S1,E2:S2<span class="o">]</span> WB NORA Cached CachedBadBBU -a0
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>2.6 阵列创建完后，会有一个初始化同步块的过程，可以看看其进度。</p>
+</div><p>2.6 阵列创建完后，会有一个初始化同步块的过程，可以看看其进度。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -LDInit -ProgDsply -LALL -aALL</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -LDInit -ProgDsply -LALL -aALL
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="电池设置相关">电池设置相关</h2>
-
+</div><h2 id="电池设置相关">电池设置相关</h2>
 <p>3.1 查看电池信息</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span></pre></td>
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">MegaCli -AdpBbuCmd -aAll</pre></td></tr></table>
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">MegaCli -AdpBbuCmd -aAll
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>3.2 查看电池容量</p>
+</div><p>3.2 查看电池容量</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span></pre></td>
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">MegaCli -AdpBbuCmd -GetBbuCapacityInfo –aALL</pre></td></tr></table>
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">MegaCli -AdpBbuCmd -GetBbuCapacityInfo –aALL
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>3.3 查看充电状态</p>
+</div><p>3.3 查看充电状态</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span></pre></td>
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">MegaCli -AdpBbuCmd -GetBbuStatus -aALL</pre></td></tr></table>
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">MegaCli -AdpBbuCmd -GetBbuStatus -aALL
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>3.4 查看电池设计参数</p>
+</div><p>3.4 查看电池设计参数</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span></pre></td>
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">MegaCli -AdpBbuCmd -GetBbuDesignInfo –aALL</pre></td></tr></table>
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">MegaCli -AdpBbuCmd -GetBbuDesignInfo –aALL
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>3.5 设置电池为学习模式为循环模式</p>
+</div><p>3.5 设置电池为学习模式为循环模式</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span></pre></td>
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">MegaCli -AdpBbuCmd -BbuLearn -aN|-a0,1,2|-aALL</pre></td></tr></table>
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">MegaCli -AdpBbuCmd -BbuLearn -aN|-a0,1,2|-aALL
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>3.6 设置即使电池坏了还是保持wb功能</p>
+</div><p>3.6 设置即使电池坏了还是保持wb功能</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span></pre></td>
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">MegaCli -LDSetProp CachedBadBBU -L0 -a0</pre></td></tr></table>
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">MegaCli -LDSetProp CachedBadBBU -L0 -a0
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="缓存设置相关">缓存设置相关</h2>
-
+</div><h2 id="缓存设置相关">缓存设置相关</h2>
 <h3 id="缓存策略">缓存策略</h3>
-
 <p>4.1.1 WriteBack 和 WriteThrough</p>
-
 <ul>
 <li>WriteBack：进行写操作时，将数据写入 RAID 卡缓存，并直接返回，RAID 卡控制器将在系统负载低或者 Cache 满了的情况下把数据写入硬盘。该设置会大大提升 RAID 卡写性能，绝大多数的情况下会降低系统 IO 负载。数据的可靠性由 BBU(Battery Backup Unit) 电池进行保证。大多数情况下，我们都使用这种策略。</li>
 <li>WriteThrough: 数据写操作不使用缓存，数据直接写入磁盘。RAID 卡写性能下降，在大多数情况下该设置会造成系统 IO 负载上升;</li>
 </ul>
-
 <p>4.1.2 ReadAheadNone, ReadAdaptive, ReadAhead</p>
-
 <ul>
 <li>ReadAheadNone: 不开启预读。默认的设置；</li>
 <li>ReadAhead: 在读操作时，预先把后面顺序的数据加载入 Cache，在顺序读取时，能提高性能，相反会降低随机读的性能。</li>
 <li>ReadAdaptive: 自适应预读，当 Cache memory 和 IO 空闲时，采取顺序预读，平衡了连续读性能及随机读的性能，需要消耗一定的计算能力。</li>
 </ul>
-
 <p>4.1.3 Cached,Direct</p>
-
 <ul>
 <li>Direct: Direct IO 模式，读操作不缓存到 Cache memory 中，数据将同时传输到 cache 中和应用，如果接下来要读取相同的数据块，则直接从 Cache memory 中获取. 这是默认的设置。</li>
 <li>Cached: Cached IO 模式，所有读操作都会缓存到 Cache memory 中。</li>
 </ul>
-
 <p>4.1.4 Write Cache OK if Bad BBU, No Write Cacheif Bad BBU</p>
-
 <ul>
 <li>WriteCache OK if Bad BBU: 在 BBU 有问题时(如电池失效), 依旧使用 WriteCache, 有一定的数据丢失风险。</li>
 <li>NoWrite Cache if Bad BBU: 在 BBU 有问题时, 不使用 Write Cache。</li>
 </ul>
-
 <h3 id="缓存模式设置">缓存模式设置</h3>
-
 <p>4.2.1 设置 WriteBack 功能</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -LDSetProp WB -L0 -a0</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -LDSetProp WB -L0 -a0
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>4.2.2 设置 WriteThrough 功能</p>
+</div><p>4.2.2 设置 WriteThrough 功能</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -LDSetProp -WT -L0 -a0</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -LDSetProp -WT -L0 -a0
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>4.2.3 设置 No Write Cache if Bad BBU 功能</p>
+</div><p>4.2.3 设置 No Write Cache if Bad BBU 功能</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -LDSetProp -NoCachedBadBBU -Lall -aAll</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -LDSetProp -NoCachedBadBBU -Lall -aAll
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>4.2.3 设置 Write Cache OK if Bad BBU 功能</p>
+</div><p>4.2.3 设置 Write Cache OK if Bad BBU 功能</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -LDSetProp -CachedBadBBU -Lall -aAll</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">MegaCli -LDSetProp -CachedBadBBU -Lall -aAll
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -411,9 +393,9 @@
           <a href="/tags/megacli/">MegaCli</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/post/%E4%BD%BF%E7%94%A8xmodmap%E5%8F%96%E6%B6%88linux%E4%B8%8B%E9%BC%A0%E6%A0%87%E4%B8%AD%E9%94%AE%E7%B2%98%E8%B4%B4%E5%8A%9F%E8%83%BD/">
+        <a class="prev" href="/post/%E5%AE%B9%E5%99%A8%E5%AE%9E%E7%8E%B0%E6%8A%80%E6%9C%AF%E6%8A%80%E6%9C%AF%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86namespace/">
             <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">使用 xmodmap 取消 Linux 下鼠标中键粘贴功能</span>
+            <span class="prev-text nav-default">容器实现技术技术及其原理：Namespace</span>
             <span class="prev-text nav-mobile">Prev</span>
           </a>
         <a class="next" href="/post/grub2-password-protection/">
@@ -475,7 +457,7 @@
   <span class="copyright-year">
     &copy; 
     2015 - 
-    2019
+    2020
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
@@ -492,7 +474,10 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
 
 
 <script type="application/javascript">

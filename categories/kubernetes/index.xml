@@ -18,14 +18,11 @@
       
       <guid>http://blog.meoop.me/post/resizing-persistent-volumes-using-kubernetes/</guid>
       <description>&lt;p&gt;&lt;strong&gt;Feature gates:&lt;/strong&gt;&lt;/p&gt;
-
 &lt;ul&gt;
-&lt;li&gt;enable &lt;code&gt;ExpandPersistentVolumes&lt;/code&gt; feature gate (1.11⬆ default:ture).&lt;/li&gt;
-&lt;li&gt;enable &lt;code&gt;PersistentVolumeClaimResize&lt;/code&gt; admission controller (1.11⬆ default:ture).&lt;/li&gt;
+&lt;li&gt;enable &lt;code&gt;ExpandPersistentVolumes&lt;/code&gt; feature gate (1.11⬆️ default:ture).&lt;/li&gt;
+&lt;li&gt;enable &lt;code&gt;PersistentVolumeClaimResize&lt;/code&gt; admission controller (1.11⬆️ default:ture).&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;&lt;strong&gt;StorageClass:&lt;/strong&gt;&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;Storage class’s &lt;code&gt;allowVolumeExpansion&lt;/code&gt; field should set to true.&lt;/li&gt;
 &lt;/ul&gt;</description>

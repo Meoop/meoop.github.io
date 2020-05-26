@@ -18,14 +18,14 @@
 
 <meta name="author" content="Meoop" /><meta name="description" content="注意，应使用非 root 用户进行 rpm 包构建。
 1 2 3  # add user useradd -m -r koji su koji   下载源码包，安装源码包，解压源码。
-1 2 3 4 5 6 7 8 9 10  sudo yum install yum-utils rpm-build # download source package yumdownloader --source kernel # install build dependencies yum-builddep kernel # install source package, rpm -i kernel-*.src.rpm cd ~/rpmbuild # unpacking the sources and applying any patches. rpmbuild -bp SPECS/kernel.spec  " /><meta name="keywords" content="Linux, Centos7, Kernel" />
+1 2 3 4 5 6 7 8 9 10  sudo yum install yum-utils rpm-build # download source package yumdownloader --source kernel # install build dependencies yum-builddep kernel # install source package, rpm -i kernel-*.src.rpm cd ~/rpmbuild # unpacking the sources and applying any patches. rpmbuild -bp SPECS/kernel.spec   " /><meta name="keywords" content="Linux, Centos7, Kernel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.59.1 with theme even" />
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
 
 
 <link rel="canonical" href="http://blog.meoop.me/post/rebuild-kernel-with-src.rpm/" />
@@ -36,7 +36,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -79,6 +80,7 @@ rpm -i kernel-*.src.rpm
 cd ~/rpmbuild
 # unpacking the sources and applying any patches.
 rpmbuild -bp SPECS/kernel.spec
+
 
 " />
 <meta property="og:type" content="article" />
@@ -125,17 +127,15 @@ cd ~/rpmbuild
 # unpacking the sources and applying any patches.
 rpmbuild -bp SPECS/kernel.spec
 
+
 ">
-
-
 <meta itemprop="datePublished" content="2019-01-24T17:08:04&#43;08:00" />
 <meta itemprop="dateModified" content="2019-11-19T17:16:00&#43;08:00" />
 <meta itemprop="wordCount" content="389">
 
 
 
-<meta itemprop="keywords" content="Linux,Centos7,Kernel," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Linux,Centos7,Kernel," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Rebuild kernel package with src.rpm (Centos7)"/>
 <meta name="twitter:description" content="注意，应使用非 root 用户进行 rpm 包构建。
 
@@ -175,6 +175,7 @@ rpm -i kernel-*.src.rpm
 cd ~/rpmbuild
 # unpacking the sources and applying any patches.
 rpmbuild -bp SPECS/kernel.spec
+
 
 "/>
 
@@ -255,20 +256,20 @@ rpmbuild -bp SPECS/kernel.spec
       <p><strong>注意，应使用非 root 用户进行 rpm 包构建。</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># add user</span>
 useradd -m -r koji
-su koji</code></pre></td></tr></table>
+su koji
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>下载源码包，安装源码包，解压源码。</p>
+</div><p>下载源码包，安装源码包，解压源码。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -289,13 +290,13 @@ yum-builddep kernel
 rpm -i kernel-*.src.rpm
 <span class="nb">cd</span> ~/rpmbuild
 <span class="c1"># unpacking the sources and applying any patches.</span>
-rpmbuild -bp SPECS/kernel.spec</code></pre></td></tr></table>
+rpmbuild -bp SPECS/kernel.spec
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>进入源码目录，复制一份源码，修改代码，生成 patch 放入 SOURCE 中。</p>
+</div><p>进入源码目录，复制一份源码，修改代码，生成 patch 放入 SOURCE 中。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -304,13 +305,13 @@ rpmbuild -bp SPECS/kernel.spec</code></pre></td></tr></table>
 <pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> BUILD/kernel-3.10.0-957.1.3.el7/
 cp -a BUILD/kernel-3.10.0-957.1.3.el7 BUILD/kernel-3.10.0-957.1.3.el7.orig
 <span class="c1"># fix bug</span>
-diff -uprN linux-3.10.0-957.1.3.el7.x86_64.orig linux-3.10.0-957.1.3.el7.x86_64 &gt; ../../SOURCES/remove-rmrr-check.patch</code></pre></td></tr></table>
+diff -uprN linux-3.10.0-957.1.3.el7.x86_64.orig linux-3.10.0-957.1.3.el7.x86_64 &gt; ../../SOURCES/remove-rmrr-check.patch
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>将 patch 头修改为如下格式：</p>
+</div><p>将 patch 头修改为如下格式：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-diff" data-lang="diff"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
@@ -320,11 +321,10 @@ diff -uprN linux-3.10.0-957.1.3.el7.x86_64.orig linux-3.10.0-957.1.3.el7.x86_64 
 </span><span class="gi"></span><span class="gu">@@ -4834,7 +4834,7 @@
 </span></code></pre></td></tr></table>
 </div>
-</div>
-<p>修改 <code>SPECS/kernel.spec</code>，应用 patch，更新版本号。</p>
+</div><p>修改 <code>SPECS/kernel.spec</code>，应用 patch，更新版本号。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-diff" data-lang="diff"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -402,14 +402,14 @@ diff -uprN linux-3.10.0-957.1.3.el7.x86_64.orig linux-3.10.0-957.1.3.el7.x86_64 
  - Sign with new secureboot key
 </code></pre></td></tr></table>
 </div>
-</div>
-<p>构建源码包和二进制包：</p>
+</div><p>构建源码包和二进制包：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">rpmbuild -ba SPECS/kernel.spec</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">rpmbuild -ba SPECS/kernel.spec
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -499,7 +499,7 @@ diff -uprN linux-3.10.0-957.1.3.el7.x86_64.orig linux-3.10.0-957.1.3.el7.x86_64 
   <span class="copyright-year">
     &copy; 
     2015 - 
-    2019
+    2020
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
@@ -516,7 +516,10 @@ diff -uprN linux-3.10.0-957.1.3.el7.x86_64.orig linux-3.10.0-957.1.3.el7.x86_64 
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
 
 
 <script type="application/javascript">

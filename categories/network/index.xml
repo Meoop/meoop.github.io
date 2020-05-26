@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>network on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/categories/network/</link>
+    <description>Recent content in network on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 31 Jul 2018 12:56:20 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/categories/network/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Running Containers With OVS-DPDK</title>
+      <link>http://blog.meoop.me/post/running-containers-with-ovs-dpdk/</link>
+      <pubDate>Tue, 31 Jul 2018 12:56:20 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/running-containers-with-ovs-dpdk/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#ovs-dpdk-%E6%98%AF%E4%BB%80%E4%B9%88&#34;&gt;OVS-DPDK 是什么&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ovs-dpdk-%E4%B8%BA%E5%AE%B9%E5%99%A8%E6%8F%90%E4%BE%9B%E7%BD%91%E7%BB%9C%E6%94%AF%E6%8C%81&#34;&gt;OVS-DPDK 为容器提供网络支持&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%9F%BA%E4%BA%8E-dpdk-%E7%9A%84%E5%BA%94%E7%94%A8&#34;&gt;基于 DPDK 的应用&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%9F%BA%E4%BA%8E%E5%86%85%E6%A0%B8%E5%8D%8F%E8%AE%AE%E6%A0%88%E7%9A%84%E5%BA%94%E7%94%A8&#34;&gt;基于内核协议栈的应用&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ovs-dpdk-%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C%E6%96%B9%E6%A1%88%E9%AA%8C%E8%AF%81&#34;&gt;OVS-DPDK 容器网络方案验证&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E6%90%AD%E5%BB%BA-dpdk-%E7%8E%AF%E5%A2%83&#34;&gt;搭建 DPDK 环境&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C-ovs-dpdk&#34;&gt;编译运行 OVS-DPDK&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#dpdk-%E5%BA%94%E7%94%A8%E7%9A%84%E5%AE%B9%E5%99%A8&#34;&gt;DPDK 应用的容器&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%9F%BA%E4%BA%8E%E5%86%85%E6%A0%B8%E5%8D%8F%E8%AE%AE%E6%A0%88%E7%9A%84%E5%BA%94%E7%94%A8%E4%BD%BF%E7%94%A8-veth-pair-%E8%BF%9E%E6%8E%A5-ovs-dpdk&#34;&gt;基于内核协议栈的应用（使用 veth pair 连接 ovs-dpdk）&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%9F%BA%E4%BA%8E%E5%86%85%E6%A0%B8%E5%8D%8F%E8%AE%AE%E6%A0%88%E7%9A%84%E5%BA%94%E7%94%A8%E4%BD%BF%E7%94%A8-tap-%E8%BF%9E%E6%8E%A5-ovs-dpdk-%E7%9A%84-virtio-user-%E6%8E%A5%E5%8F%A3&#34;&gt;基于内核协议栈的应用（使用 tap 连接 ovs-dpdk 的 virtio-user 接口）&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%8E%82%E5%95%86%E6%96%B9%E6%A1%88&#34;&gt;厂商方案&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%E7%BE%8E%E5%9B%A2%E7%82%B9%E8%AF%84%E5%AE%B9%E5%99%A8%E5%B9%B3%E5%8F%B0%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84&#34;&gt;美团点评容器平台网络架构&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E7%BD%91%E6%98%93&#34;&gt;网易&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#intel&#34;&gt;Intel&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0&#34;&gt;参考文章&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;DPDK(Data Plane Development Kit)，即数据平面开发工具包，是一组用于快速数据包处理的数据平面库和网络接口控制器驱动程序，DPDK 为 x86，ARM 和 PowerPC 处理器提供编程框架，可以更快地开发高速数据包网络应用程序。该平台采用 BSD 许可证发布，目前作为 Linux Foundation 下的开源项目进行管理。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;在 X86 架构中，处理数据包的传统方式是 CPU 中断方式，即网卡驱动接收到数据包后通过中断通知 CPU 处理，然后由 CPU 拷贝数据并交给协议栈。在数据量大时，这种方式会产生大量 CPU 中断，导致 CPU 无法运行其他程序。而 DPDK 则采用轮询方式实现数据包处理过程：DPDK 重载了网卡驱动，在收到数据包后不中断通知 CPU，而是将数据包通过零拷贝技术存入内存，这时应用层程序就可以通过 DPDK 提供的接口，直接从内存读取数据包。这种处理方式节省了 CPU 中断时间、内存拷贝时间，并向应用层提供了简单易行且高效的数据包处理方式，使得网络应用的开发更加方便。但同时，由于需要重载网卡驱动，因此该开发包目前只能用在部分网络处理芯片的网卡中。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

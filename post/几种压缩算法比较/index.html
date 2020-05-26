@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.59.1 with theme even" />
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
 
 
 <link rel="canonical" href="http://blog.meoop.me/post/%E5%87%A0%E7%A7%8D%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95%E6%AF%94%E8%BE%83/" />
@@ -35,7 +35,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -47,16 +48,13 @@
 <meta property="article:modified_time" content="2016-10-10T10:15:48+08:00" />
 <meta itemprop="name" content="几种无损压缩算法实现比较">
 <meta itemprop="description" content="数据压缩是按照特定的编码机制用比未经编码少的数据表示信息的过程。数据压缩能够实现是因为多数现实世界的数据都存在统计冗余。无损数据压缩（Lossless Compression）指的是数据经过压缩后，信息不受损失，数据还能完全恢复到压缩前的原样，一般用于严格要求“经过压缩、解压缩的数据必须与原始数据一致”的场合。无损压缩典型的例子包括文字文件、程序可执行文件、程序源代码。">
-
-
 <meta itemprop="datePublished" content="2016-10-10T20:15:48&#43;08:00" />
 <meta itemprop="dateModified" content="2016-10-10T10:15:48&#43;08:00" />
 <meta itemprop="wordCount" content="2517">
 
 
 
-<meta itemprop="keywords" content="数据压缩," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="数据压缩," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="几种无损压缩算法实现比较"/>
 <meta name="twitter:description" content="数据压缩是按照特定的编码机制用比未经编码少的数据表示信息的过程。数据压缩能够实现是因为多数现实世界的数据都存在统计冗余。无损数据压缩（Lossless Compression）指的是数据经过压缩后，信息不受损失，数据还能完全恢复到压缩前的原样，一般用于严格要求“经过压缩、解压缩的数据必须与原始数据一致”的场合。无损压缩典型的例子包括文字文件、程序可执行文件、程序源代码。"/>
 
@@ -136,100 +134,70 @@
   <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#无损压缩工具">无损压缩工具</a>
-<ul>
-<li><a href="#snappy">Snappy</a></li>
-<li><a href="#lz4">LZ4</a></li>
-<li><a href="#quicklz">QuickLZ</a></li>
-<li><a href="#lzop">lzop</a></li>
-<li><a href="#gzip-和-pigz-多线程gzip">gzip 和 pigz（多线程gzip）</a></li>
-<li><a href="#bzip2-和-pbzip2-多线程-bzip2">bzip2 和 pbzip2（多线程 bzip2）</a></li>
-<li><a href="#7-zip">7-Zip</a></li>
-<li><a href="#xz-和-pxz-多线程-xz">xz 和 pxz（多线程 xz）</a></li>
-</ul></li>
-<li><a href="#不同压缩工具的性能比较">不同压缩工具的性能比较</a>
-<ul>
-<li><a href="#测试环境及方法">测试环境及方法：</a></li>
-<li><a href="#压缩解压缩测试结果">压缩解压缩测试结果</a></li>
-</ul></li>
-<li><a href="#参考文章">参考文章</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#无损压缩工具">无损压缩工具</a>
+      <ul>
+        <li><a href="#snappy">Snappy</a></li>
+        <li><a href="#lz4">LZ4</a></li>
+        <li><a href="#quicklz">QuickLZ</a></li>
+        <li><a href="#lzop">lzop</a></li>
+        <li><a href="#gzip-和-pigz多线程gzip">gzip 和 pigz（多线程gzip）</a></li>
+        <li><a href="#bzip2-和-pbzip2多线程-bzip2">bzip2 和 pbzip2（多线程 bzip2）</a></li>
+        <li><a href="#7-zip">7-Zip</a></li>
+        <li><a href="#xz-和-pxz多线程-xz">xz 和 pxz（多线程 xz）</a></li>
+      </ul>
+    </li>
+    <li><a href="#不同压缩工具的性能比较">不同压缩工具的性能比较</a>
+      <ul>
+        <li><a href="#测试环境及方法">测试环境及方法：</a></li>
+        <li><a href="#压缩解压缩测试结果">压缩解压缩测试结果</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考文章">参考文章</a></li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p>数据压缩是按照特定的编码机制用比未经编码少的数据表示信息的过程。数据压缩能够实现是因为多数现实世界的数据都存在统计冗余。无损数据压缩（Lossless Compression）指的是数据经过压缩后，信息不受损失，数据还能完全恢复到压缩前的原样，一般用于严格要求“经过压缩、解压缩的数据必须与原始数据一致”的场合。无损压缩典型的例子包括文字文件、程序可执行文件、程序源代码。</p>
-
 <h2 id="无损压缩工具">无损压缩工具</h2>
-
 <h3 id="snappy">Snappy</h3>
-
-<p>Snappy 是谷歌基于 LZ77 算法思想编写出的压缩解压缩库，其目标并非最大压缩率或与其他压缩程序库的兼容性，而是非常高的速度和合理的压缩率。谷歌在 2011 年将该库开源。Snappy 广泛应用在 Google 的项目，例如 BigTable、MapReduce 和 Google 内部 RPC 系统的压缩数据。它可在许多开源项目中被使用，例如 Cassandra、Hadoop、LevelDB、MongoDB、RocksDB 和 Lucene。<br />
+<p>Snappy 是谷歌基于 LZ77 算法思想编写出的压缩解压缩库，其目标并非最大压缩率或与其他压缩程序库的兼容性，而是非常高的速度和合理的压缩率。谷歌在 2011 年将该库开源。Snappy 广泛应用在 Google 的项目，例如 BigTable、MapReduce 和 Google 内部 RPC 系统的压缩数据。它可在许多开源项目中被使用，例如 Cassandra、Hadoop、LevelDB、MongoDB、RocksDB 和 Lucene。<br>
 Snappy 项目地址：<a href="https://github.com/google/snappy">https://github.com/google/snappy</a>。</p>
-
 <h3 id="lz4">LZ4</h3>
-
 <p>LZ4 是一种比较新新的高速压缩软件和算法，着重于压缩和解压缩的速度。该算法已有多种语言的移植和绑定，包括 Java、C#、Python 等。Linux 在内核 3.11 中原生实现了 LZ4 算法，从 3.19-rc1 开始在 SquashFS 中支持 LZ4。ZFS 文件系统在 linux 中的实现使用的是 LZ4 算法进行即时压缩。</p>
-
 <p>LZ4 项目地址：<a href="https://github.com/lz4">https://github.com/lz4</a>。大多数 linux 发行版都集成了 LZ4 算法库，要使用 LZ4 命令行工具，ubuntu 需要安装 liblz4-tool 包。</p>
-
 <h3 id="quicklz">QuickLZ</h3>
-
 <p>QuickLZ 是一种高速压缩软件和算法，其自称是世界上最快的压缩库。</p>
-
 <p>QuickLZ 的官网：<a href="http://www.quicklz.com/">http://www.quicklz.com/</a>。</p>
-
 <h3 id="lzop">lzop</h3>
-
 <p>lzop 使用 LZO 数据压缩库进行压缩服务，适合在注重压缩速度的场合。lzop 的压缩量取决于输入的大小和公共子串的分布。通常，诸如源代码或英文的文本被压缩到原始大小的 40-50％，而大文件通常比小的文件压缩得更好。压缩和解压速度通常比通过 gzip 实现的速度快得多，但压缩比更差。</p>
-
 <p>lzop 项目地址：<a href="https://www.lzop.org/">https://www.lzop.org/</a>。</p>
-
-<h3 id="gzip-和-pigz-多线程gzip">gzip 和 pigz（多线程gzip）</h3>
-
+<h3 id="gzip-和-pigz多线程gzip">gzip 和 pigz（多线程gzip）</h3>
 <p>gzip 和 pigz（多线程 gzip）的实现基于 zip 库，实现了 ZIP 算法。Gzip 代表的是 GUN zip，通常指的是 GUN 计划的实现。Gzip 是一个老牌的压缩解压缩工具，最初在 1992 年 10 月 31 日公开发布，是一个很受欢迎的数据压缩解压缩程序。起初写该程序目的是由于 Unisys 和 IBM 的专利涵盖了 compress 使用的 LZW 算法，因此开发了该程序作为compress 的替代。pzip 是 gzip 的一个多线程实现，利用多核进行压缩，他的压缩速度是 gzip 的 5 倍，同时 cpu 消耗也比 gzip 大，但实际上做的事情和 gzip 是一样的。</p>
-
-<p>gzip 项目地址：<a href="http://www.gzip.org/">http://www.gzip.org/</a>。<br />
+<p>gzip 项目地址：<a href="http://www.gzip.org/">http://www.gzip.org/</a>。<br>
 pigz 项目地址：<a href="https://zlib.net/pigz/">https://zlib.net/pigz/</a>。</p>
-
-<h3 id="bzip2-和-pbzip2-多线程-bzip2">bzip2 和 pbzip2（多线程 bzip2）</h3>
-
+<h3 id="bzip2-和-pbzip2多线程-bzip2">bzip2 和 pbzip2（多线程 bzip2）</h3>
 <p>bzip2 和 pbzip2（多线程 bzip2）基于 libbzip2 库，实现了 Burrows–Wheeler 压缩方法。bzip2 是 Julian Seward 开发并按照开源软件协议发布的数据压缩算法及程序，Seward 在 1996 年 7 月第一次公开发布了 bzip2 0.15 版，在随后几年中这个压缩工具稳定性得到改善并且日渐流行。bzip2 比传统的 gzip 或者 ZIP 的压缩效率更高，但是它的压缩速度较慢。pbzip2 作为多线程版本的 bzip2 工具，压缩比和 bzip2 基本相当，但是压缩时间比 bzip2 减少了线程数倍数。</p>
-
-<p>bzip2 项目地址：<a href="http://www.bzip.org/">http://www.bzip.org/</a>。<br />
+<p>bzip2 项目地址：<a href="http://www.bzip.org/">http://www.bzip.org/</a>。<br>
 pbzip2 项目地址：<a href="http://compression.ca/pbzip2/">http://compression.ca/pbzip2/</a>。</p>
-
 <h3 id="7-zip">7-Zip</h3>
-
 <p>7-Zip 主要基于 LZMA 和 LZMA2 算法实现的软件，有着很高的压缩比，压缩和解压缩速度比较慢。7-Zip 是开源软件。大多数源代码都是 GNU LGPL 许可证，unRAR 代码是混合许可证：GNU LGPL + unRAR 限制。7-Zip 与 winrar 是竞争关系，但是 winrar 是专有软件。7-Zip 也是目前最普及的开源压缩程序。</p>
-
 <p>7-Zip 官网：<a href="http://www.7-zip.org/">http://www.7-zip.org/</a>。</p>
-
-<h3 id="xz-和-pxz-多线程-xz">xz 和 pxz（多线程 xz）</h3>
-
+<h3 id="xz-和-pxz多线程-xz">xz 和 pxz（多线程 xz）</h3>
 <p>xz 和 pxz（多线程 xz）是基于 LZMA 算法实现的软件，使用的库为 liblzma。类似于 7-zip，和 7-zip 一样，比较适合注重压缩比，而不是速度的场合。</p>
-
 <p>xz 工具的官方网址：<a href="https://tukaani.org/xz/">https://tukaani.org/xz/</a>.</p>
-
 <h2 id="不同压缩工具的性能比较">不同压缩工具的性能比较</h2>
-
 <h3 id="测试环境及方法">测试环境及方法：</h3>
-
 <ul>
-<li>Intel&reg; Core&trade; i3-4160 CPU @ 3.60GHz   MemTotal：4G</li>
+<li>Intel(R) Core(TM) i3-4160 CPU @ 3.60GHz   MemTotal：4G</li>
 <li>Ubuntu 16.04 x64  kernel：4.4.0-42-generic</li>
 <li>为避免磁盘 IO 导致的测试不准，将两个数据集都移到了使用内存作为后备存储器的 <code>/dev/shm</code> 目录（你可以将它视作内存虚拟盘）。</li>
 <li>部分支持多线程的也进行了多线程测试。不过 7-zip 貌似未提供多线程的选项，默认情况下，处理器有多少硬件线程，他就能生成多少个线程。</li>
 <li>测试中使用 <code>time</code> 进行时间统计，测试命令类似于 <code>time cat comppression_html.tar | lz4 | wc -c</code></li>
 <li>测试文件大小：用 <code>tar</code> 打包的 html 文件，大小 15226880KB</li>
 </ul>
-
 <h3 id="压缩解压缩测试结果">压缩解压缩测试结果</h3>
-
 <table>
 <thead>
 <tr>
@@ -242,7 +210,6 @@ pbzip2 项目地址：<a href="http://compression.ca/pbzip2/">http://compression
 <th align="center">解压速度(MB/s)</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td align="center">snappy</td>
@@ -253,7 +220,6 @@ pbzip2 项目地址：<a href="http://compression.ca/pbzip2/">http://compression
 <td align="center">*</td>
 <td align="center">706.1</td>
 </tr>
-
 <tr>
 <td align="center">lz4(r128)</td>
 <td align="center">lz4(lz77变种)</td>
@@ -263,7 +229,6 @@ pbzip2 项目地址：<a href="http://compression.ca/pbzip2/">http://compression
 <td align="center">0.04</td>
 <td align="center">363.03</td>
 </tr>
-
 <tr>
 <td align="center">quicklz</td>
 <td align="center">*</td>
@@ -273,7 +238,6 @@ pbzip2 项目地址：<a href="http://compression.ca/pbzip2/">http://compression
 <td align="center">0.058</td>
 <td align="center">250.37</td>
 </tr>
-
 <tr>
 <td align="center">lzop(v1.03)</td>
 <td align="center">lzo(lz77变种)</td>
@@ -283,7 +247,6 @@ pbzip2 项目地址：<a href="http://compression.ca/pbzip2/">http://compression
 <td align="center">0.07</td>
 <td align="center">207.44</td>
 </tr>
-
 <tr>
 <td align="center">Gzip(1.6)</td>
 <td align="center">lz77</td>
@@ -293,7 +256,6 @@ pbzip2 项目地址：<a href="http://compression.ca/pbzip2/">http://compression
 <td align="center">0.04</td>
 <td align="center">363.03</td>
 </tr>
-
 <tr>
 <td align="center">Pigz(2.3.1)</td>
 <td align="center">lz77</td>
@@ -303,7 +265,6 @@ pbzip2 项目地址：<a href="http://compression.ca/pbzip2/">http://compression
 <td align="center">0.02</td>
 <td align="center">726.07</td>
 </tr>
-
 <tr>
 <td align="center">bzip2(v1.0.6)</td>
 <td align="center">Burrows-Wheelser</td>
@@ -313,7 +274,6 @@ pbzip2 项目地址：<a href="http://compression.ca/pbzip2/">http://compression
 <td align="center">0.353</td>
 <td align="center">41.13</td>
 </tr>
-
 <tr>
 <td align="center">pbzip2(1.1.9)</td>
 <td align="center">Burrows-Wheelser</td>
@@ -323,7 +283,6 @@ pbzip2 项目地址：<a href="http://compression.ca/pbzip2/">http://compression
 <td align="center">0.320</td>
 <td align="center">45.37</td>
 </tr>
-
 <tr>
 <td align="center">*7-zip(9.20)</td>
 <td align="center">lzma</td>
@@ -333,7 +292,6 @@ pbzip2 项目地址：<a href="http://compression.ca/pbzip2/">http://compression
 <td align="center">0.097</td>
 <td align="center">149.70</td>
 </tr>
-
 <tr>
 <td align="center">xz(5.1.0a)</td>
 <td align="center">lzma</td>
@@ -343,7 +301,6 @@ pbzip2 项目地址：<a href="http://compression.ca/pbzip2/">http://compression
 <td align="center">0.054</td>
 <td align="center">268.91</td>
 </tr>
-
 <tr>
 <td align="center">pxz(4.999.9)</td>
 <td align="center">lzma</td>
@@ -355,19 +312,14 @@ pbzip2 项目地址：<a href="http://compression.ca/pbzip2/">http://compression
 </tr>
 </tbody>
 </table>
-
 <p>从测试结果中可以看出 lz4，quicklz，lzop 都兑现了其速度很快的承诺，lz4 的性能较其他两个可能更好点。另一方面，他们的压缩比都比较低，不过，可以通过设置参数提高压缩比，这将会导致压缩速度降下来，经测试改变压缩比生成的压缩文件并不比原来小多少。gzip 和 pigz 是压缩比和压缩速度的折中方案。7-zip 和 xz 有着非常高的压缩比，但是压缩速度非常慢。多线程方面，Pigz、pbzip2 和 pxz 得到的结果都胜于它们的单线程结果（这里未列出多线程测试结果）。</p>
-
 <p>从上边的测试可以看出，每个压缩方式都有着自己特定的使用场景：</p>
-
 <ul>
 <li>lz4 和 lzop 非常适合实时压缩或近实时压缩，以非常快的速度，提供了大幅节省空间的优点。</li>
 <li>gzip 尤其是多线程 pgiz 版本，非常适合一般的使用场合：它既有相当高的压缩比，速度也不慢，比较消耗 cpu 资源。</li>
 <li>xz 是压缩比方面明显的赢家，但它却是压缩和解压缩方面速度较慢的软件之一。适合用于存储压力较大、不对数据做更新或更新频率较低的场景，比如在网盘上存储的文件用 7z 压缩就挺好的。</li>
 </ul>
-
 <h2 id="参考文章">参考文章</h2>
-
 <ul>
 <li>[1] <a href="http://linuxaria.com/article/linux-compressors-comparison-on-centos-6-5-x86-64-lzo-vs-lz4-vs-gzip-vs-bzip2-vs-lzma">Linux compressors comparison on CentOS 6.5 x86-64: lzo vs lz4 vs gzip vs bzip2 vs lzma</a></li>
 <li>[2] <a href="https://github.com/lz4/lz4">https://github.com/lz4/lz4</a></li>
@@ -465,7 +417,7 @@ pbzip2 项目地址：<a href="http://compression.ca/pbzip2/">http://compression
   <span class="copyright-year">
     &copy; 
     2015 - 
-    2019
+    2020
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
@@ -482,7 +434,10 @@ pbzip2 项目地址：<a href="http://compression.ca/pbzip2/">http://compression
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
 
 
 <script type="application/javascript">

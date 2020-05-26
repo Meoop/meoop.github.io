@@ -20,20 +20,20 @@
       <description>&lt;p&gt;&lt;strong&gt;注意，应使用非 root 用户进行 rpm 包构建。&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
 &lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# add user&lt;/span&gt;
 useradd -m -r koji
-su koji&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+su koji
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;下载源码包，安装源码包，解压源码。&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;下载源码包，安装源码包，解压源码。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
@@ -54,7 +54,8 @@ yum-builddep kernel
 rpm -i kernel-*.src.rpm
 &lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; ~/rpmbuild
 &lt;span class=&#34;c1&#34;&gt;# unpacking the sources and applying any patches.&lt;/span&gt;
-rpmbuild -bp SPECS/kernel.spec&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+rpmbuild -bp SPECS/kernel.spec
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;</description>
     </item>
@@ -66,8 +67,18 @@ rpmbuild -bp SPECS/kernel.spec&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt
       
       <guid>http://blog.meoop.me/post/%E4%BD%BF%E7%94%A8xmodmap%E5%8F%96%E6%B6%88linux%E4%B8%8B%E9%BC%A0%E6%A0%87%E4%B8%AD%E9%94%AE%E7%B2%98%E8%B4%B4%E5%8A%9F%E8%83%BD/</guid>
       <description>&lt;p&gt;在 Linux 下选中东西后，按住鼠标的滚轮中键进行粘贴，是 Linux 下非常好用的功能。但是不巧，鼠标的滚轮中键太灵敏，在滚动滚轮时候非常容易按下中键，这时候编辑好的文档突然就插入了不知道从哪复制来的东西。&lt;/p&gt;
-
 &lt;p&gt;xmodmap 是用于修改X中键盘映射和指针按钮映射的实用程序，我们可以用 xmodmap 修改鼠标中键的映射，进而关掉鼠标中键的复制功能，解决误触鼠标中键问题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>容器实现技术技术及其原理：Namespace</title>
+      <link>http://blog.meoop.me/post/%E5%AE%B9%E5%99%A8%E5%AE%9E%E7%8E%B0%E6%8A%80%E6%9C%AF%E6%8A%80%E6%9C%AF%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86namespace/</link>
+      <pubDate>Sun, 24 Dec 2017 11:25:47 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/%E5%AE%B9%E5%99%A8%E5%AE%9E%E7%8E%B0%E6%8A%80%E6%9C%AF%E6%8A%80%E6%9C%AF%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86namespace/</guid>
+      <description>&lt;p&gt;容器是当前的热门技术，容器使用到 Linux 的 &lt;code&gt;namespace&lt;/code&gt; 和 &lt;code&gt;cgroup&lt;/code&gt; 功能，&lt;code&gt;namespace&lt;/code&gt; 用于资源隔离，&lt;code&gt;cgroup&lt;/code&gt; 用于资源限制。除了这两个外，容器还使用到了 selinux/apparmor 增强容器安全，veth pair/bridge/ovs 等技术提供容器网络，aufs/overlayfs/lvm 等技术构建容器的 rootfs。这篇文章主要对 namespace 进行介绍，了解它功能已经使用方式，后续文章再对其他技术进行介绍。&lt;/p&gt;
+&lt;h2 id=&#34;linux-namespace&#34;&gt;Linux Namespace&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;Namespace&lt;/code&gt; 是 Linux 内核的一项功能，用于对资源进行隔离，&lt;code&gt;namespace&lt;/code&gt; 以一种抽象的方式包装特定的资源，使得在这个 &lt;code&gt;namespace&lt;/code&gt; 中的进程实例看起来它们具有自己的受到隔离的全局资源，不同 &lt;code&gt;namespace&lt;/code&gt; 的进程能看到的资源是不同的。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -117,7 +128,6 @@ rpmbuild -bp SPECS/kernel.spec&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt
 &lt;p&gt;2016.08.01 日更新
 该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;p&gt;Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。&lt;/p&gt;</description>
     </item>
     
@@ -129,12 +139,9 @@ rpmbuild -bp SPECS/kernel.spec&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt
       <guid>http://blog.meoop.me/post/nfs-ssh%E8%BD%AF%E8%BF%9E%E6%8E%A5%E6%97%A0%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E9%99%86/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;一次 Hadoop 集群安装过程中 nfs+ssh 软连接无法实现免密码登陆的问题解决过程&lt;/p&gt;
-
 &lt;p&gt;原文在 &lt;a href=&#34;https://blog.csdn.net/Meoop/article/details/50886535&#34;&gt;CSDN&lt;/a&gt;，现在迁移到这里。&lt;/p&gt;
 &lt;/blockquote&gt;
-
-&lt;h2 id=&#34;nfs-ssh-软连接无法实现免密码登陆&#34;&gt;nfs+ssh 软连接无法实现免密码登陆&lt;/h2&gt;
-
+&lt;h2 id=&#34;nfsssh-软连接无法实现免密码登陆&#34;&gt;nfs+ssh 软连接无法实现免密码登陆&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;开始以为自己文件名写错，仔细检查未发现文件名有错。&lt;/li&gt;
 &lt;li&gt;检查文件的权限，发现 authorized_keys 文件的权限是 600，修改成 644 后，问题依旧，无法实现免密码登陆。&lt;/li&gt;
@@ -151,15 +158,11 @@ rpmbuild -bp SPECS/kernel.spec&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt
       <guid>http://blog.meoop.me/post/hadoop%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%E4%BD%86live-node%E4%B8%BA0/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;一次 Hadoop 集群启动成功但 live node 为 0 的问题解决过程。&lt;/p&gt;
-
 &lt;p&gt;原文在 &lt;a href=&#34;https://blog.csdn.net/Meoop/article/details/50806724&#34;&gt;CSDN&lt;/a&gt;，现在迁移到这里。&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
-
 &lt;p&gt;这两天用虚拟机搭建了 hadoop 集群环境，创建了三台虚拟机 hadoop01，hadoop02，hadoop03，hadoop01 代表 Master，hadoop02 以及 hadoop03 作为 Slave 节点。三台虚拟机都是 centos7 最小化安装。hadoop 版本用的最新的版本 2.7.2。
 开始一切都很顺利，启动 hadoop 集群也成功启动，运行 jps，三个节点对应的进程都成功启动，但是检查集群状态时发现 live node 为 0（如图）。&lt;/p&gt;
-
 &lt;figure class=&#34;center&#34;&gt;
     &lt;img src=&#34;http://blog.meoop.me/images/post/hadoop%e9%9b%86%e7%be%a4%e5%90%af%e5%8a%a8%e6%88%90%e5%8a%9f%e4%bd%86live-node%e4%b8%ba0/20160304233347273.png&#34;
          alt=&#34;集群状态&#34;/&gt; &lt;figcaption&gt;
@@ -177,9 +180,7 @@ rpmbuild -bp SPECS/kernel.spec&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt
       <description>&lt;blockquote&gt;
 &lt;p&gt;原文在 &lt;a href=&#34;https://blog.csdn.net/Meoop/article/details/50804308&#34;&gt;CSDN&lt;/a&gt;，作部分更新整理后迁移到这里。&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;p&gt;在 CentOS 或 RHEL 中，有三种定义的主机名:&lt;/p&gt;
-
 &lt;ol&gt;
 &lt;li&gt;静态的（static），&lt;strong&gt;静态&lt;/strong&gt;主机名也称为内核主机名，是系统在启动时从&lt;code&gt;/etc/hostname&lt;/code&gt;自动初始化的主机名。&lt;/li&gt;
 &lt;li&gt;瞬态的（transient），&lt;strong&gt;瞬态&lt;/strong&gt;主机名是在系统运行时临时分配的主机名，例如，通过 DHCP 或 mDNS 服务器分配。静态主机名和瞬态主机名都遵从作为互联网域名同样的字符限制规则。&lt;/li&gt;
@@ -196,10 +197,8 @@ rpmbuild -bp SPECS/kernel.spec&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt
       <description>&lt;blockquote&gt;
 &lt;p&gt;原文在&lt;a href=&#34;https://blog.csdn.net/Meoop/article/details/50505609&#34;&gt;CSDN&lt;/a&gt;，现在迁移到这里。&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;p&gt;刚刚装了 win10 和 fedora23 双系统，启动时黑框只占屏幕左上角的 1/4，感觉十分的难看，于是就寻思这怎么让其好看点，于是翻了翻资料，看见很多地方都可以换 GRUB2 的主题，就试着动了下手，美化了下。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;效果图&lt;/strong&gt;（主题作者给的效果图），下载地址：&lt;a href=&#34;https://pan.baidu.com/s/1c2mgBCG&#34;&gt;https://pan.baidu.com/s/1c2mgBCG&lt;/a&gt;
+&lt;p&gt;&lt;strong&gt;效果图&lt;/strong&gt;（主题作者给的效果图），下载地址：https://pan.baidu.com/s/1c2mgBCG
 &lt;figure class=&#34;center&#34;&gt;
     &lt;img src=&#34;http://blog.meoop.me/images/post/fedora23-GRUB2%e6%9b%b4%e6%8d%a2%e4%b8%bb%e9%a2%98/20160112180610905.png&#34;/&gt; &lt;figcaption&gt;
             &lt;h4&gt;主题样式&lt;/h4&gt;

@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.59.1 with theme even" />
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
 
 
 <link rel="canonical" href="http://blog.meoop.me/post/gnome%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%A1%B6%E6%A0%8F%E6%97%A5%E6%9C%9F%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%85%A8%E9%97%AE%E9%A2%98/" />
@@ -36,7 +36,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -44,7 +45,6 @@
 <meta property="og:description" content="
 2016.08.01 日更新
 该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。
-
 
 Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。" />
 <meta property="og:type" content="article" />
@@ -56,23 +56,18 @@ Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示�
 2016.08.01 日更新
 该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。
 
-
 Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。">
-
-
 <meta itemprop="datePublished" content="2016-07-23T10:16:50&#43;08:00" />
 <meta itemprop="dateModified" content="2016-08-01T10:16:50&#43;08:00" />
 <meta itemprop="wordCount" content="509">
 
 
 
-<meta itemprop="keywords" content="Linux,GNOME," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Linux,GNOME," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gnome 桌面环境顶栏日期显示不全问题"/>
 <meta name="twitter:description" content="
 2016.08.01 日更新
 该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。
-
 
 Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。"/>
 
@@ -152,14 +147,11 @@ Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示�
   <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#问题描述">问题描述</a></li>
-<li><a href="#解决办法">解决办法</a></li>
-<li><a href="#修改后的文件部分内容">修改后的文件部分内容</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#问题描述">问题描述</a></li>
+    <li><a href="#解决办法">解决办法</a></li>
+    <li><a href="#修改后的文件部分内容">修改后的文件部分内容</a></li>
+  </ul>
 </nav>
   </div>
 </div>
@@ -168,11 +160,8 @@ Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示�
 <p>2016.08.01 日更新
 该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。</p>
 </blockquote>
-
 <p>Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。</p>
-
 <h2 id="问题描述">问题描述</h2>
-
 <p>顶栏中文日期显示 <code>XX月XX</code>，后面 <code>日</code> 字不显示，以及星期几没有 <code>星期</code>。
 <figure class="center">
     <img src="/images/post/Gnome%e6%a1%8c%e9%9d%a2%e7%8e%af%e5%a2%83%e9%a1%b6%e6%a0%8f%e6%97%a5%e6%9c%9f%e6%98%be%e7%a4%ba%e4%b8%8d%e5%85%a8%e9%97%ae%e9%a2%98/1.png"
@@ -181,32 +170,28 @@ Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示�
         </figcaption>
 </figure>
 </p>
-
 <h2 id="解决办法">解决办法</h2>
-
 <p>1、在 <code>/usr/share/locale/zh_CN/LC_MESSAGES</code> 文件夹有 <code>gnome-desktop-3.0.mo</code> 的文件，先将 <code>gnome-desktop-3.0.mo</code> 进行备份，然后用命令 <code>msgunfmt</code> 将其还原成 <code>.po</code> 文件。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">sudo msgunfmt gnome-desktop-3.0.mo -o gnome-desktop-3.0.po</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">sudo msgunfmt gnome-desktop-3.0.mo -o gnome-desktop-3.0.po
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>2、编辑 <code>gnome-desktop-3.0.po</code> 文件，在文件中 <code>msgstr</code> 部分的 <code>%e</code> 后面加个 <code>日</code> 就可以显示出正常的日期（XX月XX日）。</p>
-
+</div><p>2、编辑 <code>gnome-desktop-3.0.po</code> 文件，在文件中 <code>msgstr</code> 部分的 <code>%e</code> 后面加个 <code>日</code> 就可以显示出正常的日期（XX月XX日）。</p>
 <p>3、把 <code>%a</code> 改成 <code>%A</code> 就可以将星期正常显示。</p>
-
 <p>4、将改好的 <code>.po</code> 文件用 <code>msgfmt</code> 变成 <code>.mo</code> 文件，覆盖 <code>gnome-desktop-3.0.mo</code> 文件。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">sudo msgunfmt gnome-desktop-3.0.po -o gnome-desktop-3.0.mo</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">sudo msgunfmt gnome-desktop-3.0.po -o gnome-desktop-3.0.mo
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>5、输入 <code>alt+f2</code>，键入命令 <code>r</code>并回车，重启 <code>gnome</code> 即可。
+</div><p>5、输入 <code>alt+f2</code>，键入命令 <code>r </code>并回车，重启 <code>gnome</code> 即可。
 <figure class="center">
     <img src="/images/post/Gnome%e6%a1%8c%e9%9d%a2%e7%8e%af%e5%a2%83%e9%a1%b6%e6%a0%8f%e6%97%a5%e6%9c%9f%e6%98%be%e7%a4%ba%e4%b8%8d%e5%85%a8%e9%97%ae%e9%a2%98/2.png"
          alt="显示正常"/> <figcaption>
@@ -214,11 +199,10 @@ Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示�
         </figcaption>
 </figure>
 </p>
-
 <h2 id="修改后的文件部分内容">修改后的文件部分内容</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -250,9 +234,9 @@ Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示�
 </span><span class="lnt">30
 </span><span class="lnt">31
 </span><span class="lnt">32
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">msgid &#34;%R:%S&#34;
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">msgid &#34;%R:%S&#34;
 msgstr &#34;%R:%S&#34;
 
 msgid &#34;%a %R&#34;
@@ -283,7 +267,8 @@ msgid &#34;%l:%M %p&#34;
 msgstr &#34;%p %l:%M&#34;
 
 msgid &#34;%l:%M:%S %p&#34;
-msgstr &#34;%p %l:%M:%S&#34;</pre></td></tr></table>
+msgstr &#34;%p %l:%M:%S&#34;
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -376,7 +361,7 @@ msgstr &#34;%p %l:%M:%S&#34;</pre></td></tr></table>
   <span class="copyright-year">
     &copy; 
     2015 - 
-    2019
+    2020
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
@@ -393,7 +378,10 @@ msgstr &#34;%p %l:%M:%S&#34;</pre></td></tr></table>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
 
 
 <script type="application/javascript">

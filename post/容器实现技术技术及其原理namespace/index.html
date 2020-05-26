@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>容器实现技术技术及其原理：Namespace - 享受编程 - Coding Your Ambition.</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Meoop" /><meta name="description" content="容器是当前的热门技术，容器使用到 Linux 的 namespace 和 cgroup 功能，namespace 用于资源隔离，cgroup 用于资源限制。除了这两个外，容器还使用到了 selinux/apparmor 增强容器安全，veth pair/bridge/ovs 等技术提供容器网络，aufs/overlayfs/lvm 等技术构建容器的 rootfs。这篇文章主要对 namespace 进行介绍，了解它功能已经使用方式，后续文章再对其他技术进行介绍。
+Linux Namespace Namespace 是 Linux 内核的一项功能，用于对资源进行隔离，namespace 以一种抽象的方式包装特定的资源，使得在这个 namespace 中的进程实例看起来它们具有自己的受到隔离的全局资源，不同 namespace 的进程能看到的资源是不同的。
+" /><meta name="keywords" content="linux, namespace, container" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
+
+
+<link rel="canonical" href="http://blog.meoop.me/post/%E5%AE%B9%E5%99%A8%E5%AE%9E%E7%8E%B0%E6%8A%80%E6%9C%AF%E6%8A%80%E6%9C%AF%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86namespace/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="容器实现技术技术及其原理：Namespace" />
+<meta property="og:description" content="容器是当前的热门技术，容器使用到 Linux 的 namespace 和 cgroup 功能，namespace 用于资源隔离，cgroup 用于资源限制。除了这两个外，容器还使用到了 selinux/apparmor 增强容器安全，veth pair/bridge/ovs 等技术提供容器网络，aufs/overlayfs/lvm 等技术构建容器的 rootfs。这篇文章主要对 namespace 进行介绍，了解它功能已经使用方式，后续文章再对其他技术进行介绍。
+Linux Namespace
+Namespace 是 Linux 内核的一项功能，用于对资源进行隔离，namespace 以一种抽象的方式包装特定的资源，使得在这个 namespace 中的进程实例看起来它们具有自己的受到隔离的全局资源，不同 namespace 的进程能看到的资源是不同的。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://blog.meoop.me/post/%E5%AE%B9%E5%99%A8%E5%AE%9E%E7%8E%B0%E6%8A%80%E6%9C%AF%E6%8A%80%E6%9C%AF%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86namespace/" />
+<meta property="article:published_time" content="2017-12-24T11:25:47+08:00" />
+<meta property="article:modified_time" content="2018-06-24T11:25:47+08:00" />
+<meta itemprop="name" content="容器实现技术技术及其原理：Namespace">
+<meta itemprop="description" content="容器是当前的热门技术，容器使用到 Linux 的 namespace 和 cgroup 功能，namespace 用于资源隔离，cgroup 用于资源限制。除了这两个外，容器还使用到了 selinux/apparmor 增强容器安全，veth pair/bridge/ovs 等技术提供容器网络，aufs/overlayfs/lvm 等技术构建容器的 rootfs。这篇文章主要对 namespace 进行介绍，了解它功能已经使用方式，后续文章再对其他技术进行介绍。
+Linux Namespace
+Namespace 是 Linux 内核的一项功能，用于对资源进行隔离，namespace 以一种抽象的方式包装特定的资源，使得在这个 namespace 中的进程实例看起来它们具有自己的受到隔离的全局资源，不同 namespace 的进程能看到的资源是不同的。">
+<meta itemprop="datePublished" content="2017-12-24T11:25:47&#43;08:00" />
+<meta itemprop="dateModified" content="2018-06-24T11:25:47&#43;08:00" />
+<meta itemprop="wordCount" content="3203">
+
+
+
+<meta itemprop="keywords" content="Linux,container," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="容器实现技术技术及其原理：Namespace"/>
+<meta name="twitter:description" content="容器是当前的热门技术，容器使用到 Linux 的 namespace 和 cgroup 功能，namespace 用于资源隔离，cgroup 用于资源限制。除了这两个外，容器还使用到了 selinux/apparmor 增强容器安全，veth pair/bridge/ovs 等技术提供容器网络，aufs/overlayfs/lvm 等技术构建容器的 rootfs。这篇文章主要对 namespace 进行介绍，了解它功能已经使用方式，后续文章再对其他技术进行介绍。
+Linux Namespace
+Namespace 是 Linux 内核的一项功能，用于对资源进行隔离，namespace 以一种抽象的方式包装特定的资源，使得在这个 namespace 中的进程实例看起来它们具有自己的受到隔离的全局资源，不同 namespace 的进程能看到的资源是不同的。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Ambition</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Ambition</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">容器实现技术技术及其原理：Namespace</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-12-24 </span>
+        <div class="post-category">
+            <a href="/categories/linux/"> Linux </a>
+            <a href="/categories/container/"> container </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#linux-namespace">Linux Namespace</a></li>
+    <li><a href="#namespace-api">Namespace API</a>
+      <ul>
+        <li><a href="#clone">clone()</a></li>
+        <li><a href="#setns">setns()</a></li>
+        <li><a href="#unshare">unshare()</a></li>
+      </ul>
+    </li>
+    <li><a href="#procpidns">/proc/[pid]/ns</a></li>
+    <li><a href="#nsenter-and-unshare">nsenter and unshare</a></li>
+    <li><a href="#参考文档">参考文档</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>容器是当前的热门技术，容器使用到 Linux 的 <code>namespace</code> 和 <code>cgroup</code> 功能，<code>namespace</code> 用于资源隔离，<code>cgroup</code> 用于资源限制。除了这两个外，容器还使用到了 selinux/apparmor 增强容器安全，veth pair/bridge/ovs 等技术提供容器网络，aufs/overlayfs/lvm 等技术构建容器的 rootfs。这篇文章主要对 namespace 进行介绍，了解它功能已经使用方式，后续文章再对其他技术进行介绍。</p>
+<h2 id="linux-namespace">Linux Namespace</h2>
+<p><code>Namespace</code> 是 Linux 内核的一项功能，用于对资源进行隔离，<code>namespace</code> 以一种抽象的方式包装特定的资源，使得在这个 <code>namespace</code> 中的进程实例看起来它们具有自己的受到隔离的全局资源，不同 <code>namespace</code> 的进程能看到的资源是不同的。</p>
+<p>当前 Linux Namespace 的类型有 7 种，提供了对 <code>UTS</code>、<code>IPC</code>、<code>Mount</code>、<code>PID</code>、<code>Network</code>、<code>User</code>、<code>Cgroup</code> 等资源的隔离机制。</p>
+<table>
+<thead>
+<tr>
+<th>namespace</th>
+<th>Constant</th>
+<th>Isolates</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cgroup</td>
+<td>CLONE_NEWCGROUP</td>
+<td>Cgroup root directory (since Linux 4.6)</td>
+</tr>
+<tr>
+<td>IPC</td>
+<td>CLONE_NEWIPC</td>
+<td>System V IPC, POSIX message queues (since Linux 2.6.19)</td>
+</tr>
+<tr>
+<td>Network</td>
+<td>CLONE_NEWNET</td>
+<td>Network devices, stacks, ports, etc. (since Linux 2.6.24)</td>
+</tr>
+<tr>
+<td>Mount</td>
+<td>CLONE_NEWNS</td>
+<td>Mount points (since Linux 2.4.19)</td>
+</tr>
+<tr>
+<td>PID</td>
+<td>CLONE_NEWPID</td>
+<td>Process IDs (since Linux 2.6.24)</td>
+</tr>
+<tr>
+<td>User</td>
+<td>CLONE_NEWUSER</td>
+<td>User and group IDs (started in Linux 2.6.23 and completed in Linux 3.8)</td>
+</tr>
+<tr>
+<td>UTS</td>
+<td>CLONE_NEWUTS</td>
+<td>Hostname and NIS domain name (since Linux 2.6.19)</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>Cgroup namespace</code></strong> 提供了对 cgroup 资源的隔离，对从 <code>/proc/[pid]/cgroup</code> 和 <code>/proc/[pid]/mountinfo</code> 获取到的 cgroup 目录提供了虚拟的视图。每个 cgroup namespace 都有自己的 cgroup 根目录被记录在 <code>/proc/[pid]/cgroup</code> 中，创建新的 cgroup namespace 时，当前的 cgroup 目录将会作为新的 cgroup namespace 的根目录，cgourp namespace 可以避免保存在 cgroup 中的进程信息被泄露。cgroup namespace 比较新，功能也还尚未稳定，docker 在启动容器中也未使用 cgroup namespace。</p>
+<p><strong><code>IPC namespace</code></strong> 隔离 IPC 资源，包括 System V IPC 以及 POSIX 消息队列，每个 IPC namespace 都有其自己的 System V IPC 标识符集和自己的 POSIX 消息队列文件系统。在当前 IPC namespace 中的进程可以看到当前 IPC namespace 中的所有 IPC 对象，无法看到其他 IPC namespace 中的 IPC 对象，当 IPC namespace 被销毁时，IPC namespace 中的所有 IPC 对象会被自动销毁。</p>
+<p><strong><code>Network namespace</code></strong> 提供了与网络相关的资源的隔离，每个 Network namespace 都有其自己的网络设备，IPv4 和 IPv6 地址栈，路由表，防火墙规则表，/proc/net 目录，端口号等。在不同 Network namespace 中的应用可以使用相同的端口号。一个物理网络设备只可以被放入到一个 Network namespace 中，当 Network namespace 释放时，物理设备会被移到原先的 Network namespace 中。veth pair 的实现类与于管道，可以用于连接两个 Network namespace，当 Network namespace 被删除时，在该 namespace 中创建的 veth pair 也会被删除。</p>
+<p><strong><code>Mount namespace</code></strong> 实现了对文件系统挂载点进行隔离，不同 Mount namespace 中的进程可以具有不同视图的文件系统结构（可以通过 <code>/proc/[pid]/mounts</code>, <code>/proc/[pid]/mountinfo</code>,和 <code>/proc/[pid]/mountstats</code> 看到）。通过 <code>clone()</code> 调用创建 Mount namespace 时，会把当前进程的文件系统结构复制给新的 namespace；使用 <code>unshare()</code> 方式创建 Mount namespace 时，会将调用者先前的文件系统结构复制给新的 namespace。默认情况下新 namespace 中的所有 mount 操作都只影响自身的文件系统结构，而对外界不会产生任何影响。为解决挂载共享问题，内核中中引入的挂载传播（mount propagation），挂载传播定义了挂载点之间的关系，系统用这些关系决定挂载点中的挂载/卸载操作如何传播到其他挂载点中。关于挂载传播的的更多细节参考 <a href="http://man7.org/linux/man-pages/man7/mount_namespaces.7.html">Mount namespace 文档</a>。</p>
+<p><strong><code>PID namespace</code></strong> 对进程 ID 号进行隔离，不同 PID namespace 中的进程可以具有相同的 PID。在 PID namespace 中创建的第一个进程作为 PID 1 的进程，作为该 namespace 的 init 进程，用于管理各种系统初始化任务，并对孤儿进程进行回收。当 PID  namespace 中的 1 号进程消亡时，PID namespace 将会被内核回收，namespace 中的所有进程会收到 SIGKILL 的信号。PID namespace 可以嵌套，在 PID namespace 中的进程只能看到自己 PID namespace 以及嵌套在该 PID namespace 下的 namespace 中的进程。需要注意的是<code>unshare()</code> 以及 <code>setns()</code> 系统调用创建新的 PID namespace，调用者并不进入新的 PID namespace，接下来创建的子进程才会进入新的 namespace，这个子进程也就随之成为新 namespace 中的 init 进程。这是因为 pid 是在程序创建的时候就确立的，一旦程序进程创建以后，那么它的 PID namespace 的关系（父子进程关系）就被确定下来了，进程不能改变他们对应的 PID namespace，否则会引起歧义。</p>
+<p><strong><code>User namespace</code></strong> 隔离跟安全相关的用户标识符和属性，例如用户 ID、组 ID、根目录、key 等，在 User namespace 内和外的 UID 和 GID 可以不同。进程可以在 User namespace 之外具有正常的非特权用户 ID，而在 User namespace 内部具有 0 的用户 ID，意味着该进程可以在 User namespace 内的操作具有完全的 root 权限，但对于该 namespace 外则没有 root 权限。从 Linux 3.8 开始，无特权的进程也可以创建 User namespace。</p>
+<p><strong><code>UTS namespace</code></strong> 隔离由 <code>uname()</code> 系统调用返回的两个系统标识符&ndash;节点名和 NIS 域名。使用 <code>sethostname()</code> 和 <code>setdomainname()</code> 系统调用可以设置节点名和节点域名。新创建的 UTS namespace 的 hostname 和 domain 复制自调用者 UTS namespace。在 container 中，UTS namespace 功能允许每个 container 拥有自己的主机名和 NIS 域名。</p>
+<h2 id="namespace-api">Namespace API</h2>
+<p>与 namespace 相关的主要有 3 个系统调用，分别是 <code>clone()</code>、<code>setns()</code>、<code>unshare()</code>。</p>
+<h3 id="clone">clone()</h3>
+<p><a href="http://man7.org/linux/man-pages/man2/clone.2.html">clone()</a> 系统调用用于创建一个新的进程，如果 <code>clone()</code> 系统调用包含 <code>CLONE_NEW*</code> 相关的 flag 时，会根据 flag 创建新的 namespace，将子进程作为新 namespace 的成员。<code>clone()</code> 系统调用是创建新进程比较常用的函数，也包含了许多跟 namespace 无关的功能。<code>clone()</code> 系统调用的定义如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Prototype for the glibc wrapper function */</span>
+
+<span class="cp">#define _GNU_SOURCE
+</span><span class="cp">#include</span> <span class="cpf">&lt;sched.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">clone</span><span class="p">(</span><span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">fn</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="p">),</span> <span class="kt">void</span> <span class="o">*</span><span class="n">child_stack</span><span class="p">,</span>
+                 <span class="kt">int</span> <span class="n">flags</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="p">...</span>
+                 <span class="cm">/* pid_t *ptid, void *newtls, pid_t *ctid */</span> <span class="p">);</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>利用 <code>clone()</code> 系统调用创建新的 UTS namespace:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#define _GNU_SOURCE
+</span><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;sys/wait.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;sched.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;signal.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="cp">#define STACK_SIZE (1024 * 1024)
+</span><span class="cp"></span><span class="k">static</span> <span class="kt">char</span> <span class="n">container_stack</span><span class="p">[</span><span class="n">STACK_SIZE</span><span class="p">];</span>
+<span class="kt">char</span><span class="o">*</span> <span class="k">const</span> <span class="n">container_args</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#34;/bin/bash&#34;</span><span class="p">,</span>
+    <span class="nb">NULL</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">container_main</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">arg</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Container - inside the container!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+    <span class="n">sethostname</span><span class="p">(</span><span class="s">&#34;container&#34;</span><span class="p">,</span><span class="mi">10</span><span class="p">);</span>         <span class="c1">// set hostname
+</span><span class="c1"></span>    <span class="n">execv</span><span class="p">(</span><span class="n">container_args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">container_args</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Something&#39;s wrong!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Parent - start a container!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">container_pid</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">container_main</span><span class="p">,</span> <span class="n">container_stack</span><span class="o">+</span><span class="n">STACK_SIZE</span><span class="p">,</span> 
+            <span class="n">CLONE_NEWUTS</span> <span class="o">|</span> <span class="n">SIGCHLD</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>          <span class="c1">// new UTS Namespace
+</span><span class="c1"></span>    <span class="n">waitpid</span><span class="p">(</span><span class="n">container_pid</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Parent - container stopped!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="setns">setns()</h3>
+<p><a href="http://man7.org/linux/man-pages/man2/setns.2.html">setns()</a> 用于将调用者进程加入到指定的命名空间，要加入的 namespace 可以通过 <code>/proc/[PID]/ns</code> 看到。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#define _GNU_SOURCE             </span><span class="cm">/* See feature_test_macros(7) */</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;sched.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">setns</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nstype</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>加入到已存在的 namespace 中:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">// usage: ./ns_exec /proc/[PID]/ns/uts /bin/bash
+</span><span class="c1"></span><span class="cp">#define _GNU_SOURCE
+</span><span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;sched.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="cp">#define errExit(msg)    do { perror(msg); exit(EXIT_FAILURE); \
+</span><span class="cp">                       } while (0)
+</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+   <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span>
+
+   <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+       <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;%s /proc/PID/ns/FILE cmd args...</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+       <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+   <span class="p">}</span>
+
+   <span class="n">fd</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">O_RDONLY</span><span class="p">);</span> <span class="cm">/* Get file descriptor for namespace */</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">fd</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+       <span class="n">errExit</span><span class="p">(</span><span class="s">&#34;open&#34;</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">setns</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>       <span class="cm">/* Join that namespace */</span>
+        <span class="n">errExit</span><span class="p">(</span><span class="s">&#34;setns&#34;</span><span class="p">);</span>
+
+    <span class="n">execvp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>    <span class="cm">/* Execute a command in namespace */</span>
+    <span class="n">errExit</span><span class="p">(</span><span class="s">&#34;execvp&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="unshare">unshare()</h3>
+<p><a href="http://man7.org/linux/man-pages/man2/unshare.2.html">unshare()</a> 系统调用将调用者移动到新的 namespace 中。<code>unshare()</code> 调用根据包含的 <code>CLONE_NEW*</code> 相关 flag，创建对应的 namespace。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#define _GNU_SOURCE
+</span><span class="cp">#include</span> <span class="cpf">&lt;sched.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">unshare</span><span class="p">(</span><span class="kt">int</span> <span class="n">flags</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>unshare</code> 命令简单实现:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* unshare.c
+</span><span class="cm">
+</span><span class="cm">   A simple implementation of the unshare(1) command: unshare
+</span><span class="cm">   namespaces and execute a command.
+</span><span class="cm">
+</span><span class="cm">   See https://lwn.net/Articles/531381/
+</span><span class="cm">*/</span>
+<span class="cp">#define _GNU_SOURCE
+</span><span class="cp">#include</span> <span class="cpf">&lt;sched.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;sys/wait.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="cp">#ifndef CLONE_NEWCGROUP         </span><span class="cm">/* Added in Linux 4.6 */</span><span class="cp">
+</span><span class="cp">#define CLONE_NEWCGROUP         0x02000000
+</span><span class="cp">#endif
+</span><span class="cp"></span>
+<span class="cm">/* A simple error-handling function: print an error message based
+</span><span class="cm">   on the value in &#39;errno&#39; and terminate the calling process */</span>
+
+<span class="cp">#define errExit(msg)    do { perror(msg); exit(EXIT_FAILURE); \
+</span><span class="cp">                        } while (0)
+</span><span class="cp"></span><span class="k">static</span> <span class="kt">void</span> <span class="nf">usage</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">pname</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;Usage: %s [options] cmd [arg...]</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">pname</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;Options can be:</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;    -f   fork() before executing cmd &#34;</span>
+            <span class="s">&#34;(useful when unsharing PID namespace)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;    -C   unshare cgroup namespace</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;    -i   unshare IPC namespace</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;    -m   unshare mount namespace</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;    -n   unshare network namespace</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;    -p   unshare PID namespace</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;    -u   unshare UTS namespace</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;    -U   unshare user namespace</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+    <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">flags</span><span class="p">,</span> <span class="n">do_fork</span><span class="p">,</span> <span class="n">opt</span><span class="p">;</span>
+
+    <span class="n">flags</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">do_fork</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">((</span><span class="n">opt</span> <span class="o">=</span> <span class="n">getopt</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="s">&#34;CfimnpuU&#34;</span><span class="p">))</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">opt</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="sc">&#39;f&#39;</span><span class="o">:</span> <span class="n">do_fork</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>                  <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;C&#39;</span><span class="o">:</span> <span class="n">flags</span> <span class="o">|=</span> <span class="n">CLONE_NEWCGROUP</span><span class="p">;</span>     <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;i&#39;</span><span class="o">:</span> <span class="n">flags</span> <span class="o">|=</span> <span class="n">CLONE_NEWIPC</span><span class="p">;</span>        <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;m&#39;</span><span class="o">:</span> <span class="n">flags</span> <span class="o">|=</span> <span class="n">CLONE_NEWNS</span><span class="p">;</span>         <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;n&#39;</span><span class="o">:</span> <span class="n">flags</span> <span class="o">|=</span> <span class="n">CLONE_NEWNET</span><span class="p">;</span>        <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;p&#39;</span><span class="o">:</span> <span class="n">flags</span> <span class="o">|=</span> <span class="n">CLONE_NEWPID</span><span class="p">;</span>        <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;u&#39;</span><span class="o">:</span> <span class="n">flags</span> <span class="o">|=</span> <span class="n">CLONE_NEWUTS</span><span class="p">;</span>        <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;U&#39;</span><span class="o">:</span> <span class="n">flags</span> <span class="o">|=</span> <span class="n">CLONE_NEWUSER</span><span class="p">;</span>       <span class="k">break</span><span class="p">;</span>
+        <span class="k">default</span><span class="o">:</span>  <span class="n">usage</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">optind</span> <span class="o">&gt;=</span> <span class="n">argc</span><span class="p">)</span>
+        <span class="n">usage</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">unshare</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">errExit</span><span class="p">(</span><span class="s">&#34;unshare&#34;</span><span class="p">);</span>
+
+    <span class="cm">/* If we are unsharing the PID namespace, then the caller is *not*
+</span><span class="cm">       moved into the new namespace. Instead, only the children are moved
+</span><span class="cm">       into the namespace. Therefore, we support an option that causes
+</span><span class="cm">       the program to call fork() before executing the specified program,
+</span><span class="cm">       in order to create a new child that will be created in a new PID
+</span><span class="cm">       namespace. */</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">do_fork</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">fork</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">wait</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>         <span class="cm">/* Parent waits for child to complete */</span>
+            <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_SUCCESS</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="cm">/* Child falls through to execute command */</span>
+    <span class="p">}</span>
+
+    <span class="n">execvp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">optind</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">argv</span><span class="p">[</span><span class="n">optind</span><span class="p">]);</span>
+    <span class="n">errExit</span><span class="p">(</span><span class="s">&#34;execvp&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="procpidns">/proc/[pid]/ns</h2>
+<p><code>/proc/[pid]/ns</code> 下保存有进程所在的 namespace 信息，用户可以通过 <code>/proc/[pid]/ns</code> 下看到进程所在的 namespace。如果两个进程指向的 namespace 的 inode 号相同，就说明这两个进程在同一个 namespace 下。<code>/proc/[pid]/ns</code> 下的这些文件只要被打开，其 fd 被占用着，那么就算所属的所有进程都已经结束，该 namespace 也会一直存在，可以通过 <code>setns()</code> 系统调用进入所维持的 namespace。此外，通过 bind mount 这些文件到其他地方，也可以维持 namespace 在进程退出时 namespace 被回收。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">$ ls -l /proc/<span class="nv">$$</span>/ns         &lt;&lt;-- <span class="nv">$$</span> 表示应用的PID
+total <span class="m">0</span>
+lrwxrwxrwx. <span class="m">1</span> meoop meoop <span class="m">0</span>  3月 <span class="m">28</span> 19:12 cgroup -&gt; <span class="s1">&#39;cgroup:[4026531835]&#39;</span>
+lrwxrwxrwx. <span class="m">1</span> meoop meoop <span class="m">0</span>  3月 <span class="m">28</span> 19:12 ipc -&gt; <span class="s1">&#39;ipc:[4026531839]&#39;</span>
+lrwxrwxrwx. <span class="m">1</span> meoop meoop <span class="m">0</span>  3月 <span class="m">28</span> 19:12 mnt -&gt; <span class="s1">&#39;mnt:[4026531840]&#39;</span>
+lrwxrwxrwx. <span class="m">1</span> meoop meoop <span class="m">0</span>  3月 <span class="m">28</span> 19:12 net -&gt; <span class="s1">&#39;net:[4026532008]&#39;</span>
+lrwxrwxrwx. <span class="m">1</span> meoop meoop <span class="m">0</span>  3月 <span class="m">28</span> 19:12 pid -&gt; <span class="s1">&#39;pid:[4026531836]&#39;</span>
+lrwxrwxrwx. <span class="m">1</span> meoop meoop <span class="m">0</span>  3月 <span class="m">28</span> 19:12 pid_for_children -&gt; <span class="s1">&#39;pid:[4026531836]&#39;</span>
+lrwxrwxrwx. <span class="m">1</span> meoop meoop <span class="m">0</span>  3月 <span class="m">28</span> 19:12 user -&gt; <span class="s1">&#39;user:[4026531837]&#39;</span>
+lrwxrwxrwx. <span class="m">1</span> meoop meoop <span class="m">0</span>  3月 <span class="m">28</span> 19:12 uts -&gt; <span class="s1">&#39;uts:[4026531838]&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="nsenter-and-unshare">nsenter and unshare</h2>
+<p>Linux 系统提供了 <code>nsenter</code> 和 <code>unshare</code> 两个工具可以对 namespace 进行操作。</p>
+<p><code>nsenter</code> 用于进入指定进程的 namespace 运行命令。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">nsenter -t <span class="nv">$$</span> --uts --ipc --net --pid
+</code></pre></td></tr></table>
+</div>
+</div><p><code>unshare</code> 命令从当前父进程的 namespace 脱离出来，根据参数进入新的 namespace。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 创建新的pid空间，并让其作为pid为1的进程</span>
+unshare --fork --pid --mount-proc readlink /proc/self
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="参考文档">参考文档</h2>
+<ul>
+<li><a href="http://man7.org/linux/man-pages/man7/namespaces.7.html">overview of Linux namespaces</a></li>
+<li><a href="https://lwn.net/Articles/531114/">Namespaces in operation, part 1: namespaces overview</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Meoop</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2018-06-24
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/linux/">Linux</a>
+          <a href="/tags/container/">container</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E4%BD%BF%E7%94%A8xmodmap%E5%8F%96%E6%B6%88linux%E4%B8%8B%E9%BC%A0%E6%A0%87%E4%B8%AD%E9%94%AE%E7%B2%98%E8%B4%B4%E5%8A%9F%E8%83%BD/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">使用 xmodmap 取消 Linux 下鼠标中键粘贴功能</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/megacli%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/">
+            <span class="next-text nav-default">MegaCli 常用命令汇总</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'meoop';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="yilei108@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.stackoverflow.com/users/12249756/" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.facebook.com/lei.yi.908" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://www.linkedin.com/in/yilei/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/Meoop" class="iconfont icon-github" title="github"></a>
+      <a href="http://weibo.com/18722081826" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://www.zhihu.com/people/lei.yi" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="http://blog.meoop.me/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2015 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Meoop</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-101122173-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

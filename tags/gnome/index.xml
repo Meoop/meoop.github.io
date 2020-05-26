@@ -21,7 +21,6 @@
 &lt;p&gt;2016.08.01 日更新
 该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;p&gt;Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。&lt;/p&gt;</description>
     </item>
     

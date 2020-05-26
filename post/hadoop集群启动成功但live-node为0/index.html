@@ -26,7 +26,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.59.1 with theme even" />
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
 
 
 <link rel="canonical" href="http://blog.meoop.me/post/hadoop%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%E4%BD%86live-node%E4%B8%BA0/" />
@@ -37,22 +37,19 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:title" content="Hadoop 集群启动成功但 live Node 为 0" />
 <meta property="og:description" content="
 一次 Hadoop 集群启动成功但 live node 为 0 的问题解决过程。
-
 原文在 CSDN，现在迁移到这里。
 
-
 问题描述
-
 这两天用虚拟机搭建了 hadoop 集群环境，创建了三台虚拟机 hadoop01，hadoop02，hadoop03，hadoop01 代表 Master，hadoop02 以及 hadoop03 作为 Slave 节点。三台虚拟机都是 centos7 最小化安装。hadoop 版本用的最新的版本 2.7.2。
 开始一切都很顺利，启动 hadoop 集群也成功启动，运行 jps，三个节点对应的进程都成功启动，但是检查集群状态时发现 live node 为 0（如图）。
-
 
      
             集群状态
@@ -65,42 +62,31 @@
 <meta itemprop="name" content="Hadoop 集群启动成功但 live Node 为 0">
 <meta itemprop="description" content="
 一次 Hadoop 集群启动成功但 live node 为 0 的问题解决过程。
-
 原文在 CSDN，现在迁移到这里。
 
-
 问题描述
-
 这两天用虚拟机搭建了 hadoop 集群环境，创建了三台虚拟机 hadoop01，hadoop02，hadoop03，hadoop01 代表 Master，hadoop02 以及 hadoop03 作为 Slave 节点。三台虚拟机都是 centos7 最小化安装。hadoop 版本用的最新的版本 2.7.2。
 开始一切都很顺利，启动 hadoop 集群也成功启动，运行 jps，三个节点对应的进程都成功启动，但是检查集群状态时发现 live node 为 0（如图）。
-
 
      
             集群状态
         
 ">
-
-
 <meta itemprop="datePublished" content="2016-03-05T10:17:04&#43;08:00" />
 <meta itemprop="dateModified" content="2016-03-05T10:17:04&#43;08:00" />
 <meta itemprop="wordCount" content="839">
 
 
 
-<meta itemprop="keywords" content="Linux,Hadoop," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Linux,Hadoop," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Hadoop 集群启动成功但 live Node 为 0"/>
 <meta name="twitter:description" content="
 一次 Hadoop 集群启动成功但 live node 为 0 的问题解决过程。
-
 原文在 CSDN，现在迁移到这里。
 
-
 问题描述
-
 这两天用虚拟机搭建了 hadoop 集群环境，创建了三台虚拟机 hadoop01，hadoop02，hadoop03，hadoop01 代表 Master，hadoop02 以及 hadoop03 作为 Slave 节点。三台虚拟机都是 centos7 最小化安装。hadoop 版本用的最新的版本 2.7.2。
 开始一切都很顺利，启动 hadoop 集群也成功启动，运行 jps，三个节点对应的进程都成功启动，但是检查集群状态时发现 live node 为 0（如图）。
-
 
      
             集群状态
@@ -183,15 +169,11 @@
     <div class="post-content">
       <blockquote>
 <p>一次 Hadoop 集群启动成功但 live node 为 0 的问题解决过程。</p>
-
 <p>原文在 <a href="https://blog.csdn.net/Meoop/article/details/50806724">CSDN</a>，现在迁移到这里。</p>
 </blockquote>
-
 <h2 id="问题描述">问题描述</h2>
-
 <p>这两天用虚拟机搭建了 hadoop 集群环境，创建了三台虚拟机 hadoop01，hadoop02，hadoop03，hadoop01 代表 Master，hadoop02 以及 hadoop03 作为 Slave 节点。三台虚拟机都是 centos7 最小化安装。hadoop 版本用的最新的版本 2.7.2。
 开始一切都很顺利，启动 hadoop 集群也成功启动，运行 jps，三个节点对应的进程都成功启动，但是检查集群状态时发现 live node 为 0（如图）。</p>
-
 <figure class="center">
     <img src="/images/post/hadoop%e9%9b%86%e7%be%a4%e5%90%af%e5%8a%a8%e6%88%90%e5%8a%9f%e4%bd%86live-node%e4%b8%ba0/20160304233347273.png"
          alt="集群状态"/> <figcaption>
@@ -199,11 +181,8 @@
         </figcaption>
 </figure>
 
-
 <h2 id="问题跟踪">问题跟踪</h2>
-
 <p>这个就让人很郁闷了，检查了下 Slave 节点日志，发现一些异常的地方：</p>
-
 <blockquote>
 <p>2016-03-05 07:34:23,972 WARN org.apache.hadoop.hdfs.server.datanode.DataNode: Problem connecting to server: hadoop01/192.168.116.101:9000
 2016-03-05 07:34:29,980 INFO org.apache.hadoop.ipc.Client: Retrying connect to server: hadoop01/192.168.116.101:9000. Already tried 0 time(s); retry policy is RetryUpToMaximumCountWithFixedSleep(maxRetries=10, sleepTime=1000 MILLISECONDS)
@@ -217,9 +196,7 @@
 2016-03-05 07:34:38,006 INFO org.apache.hadoop.ipc.Client: Retrying connect to server: hadoop01/192.168.116.101:9000. Already tried 8 time(s); retry policy is RetryUpToMaximumCountWithFixedSleep(maxRetries=10, sleepTime=1000 MILLISECONDS)
 2016-03-05 07:34:39,009 INFO org.apache.hadoop.ipc.Client: Retrying connect to server: hadoop01/192.168.116.101:9000. Already tried 9 time(s); retry policy is RetryUpToMaximumCountWithFixedSleep(maxRetries=10, sleepTime=1000 MILLISECONDS)</p>
 </blockquote>
-
 <p>hadoop01 节点的 9000 端口<strong>无法访问</strong>，在 hadoop01 上运行 netstat，发现 hadoop01 上没有监听 9000 端口：</p>
-
 <figure class="center">
     <img src="/images/post/hadoop%e9%9b%86%e7%be%a4%e5%90%af%e5%8a%a8%e6%88%90%e5%8a%9f%e4%bd%86live-node%e4%b8%ba0/20160304234330058.png"
          alt="集端口状态"/> <figcaption>
@@ -227,9 +204,7 @@
         </figcaption>
 </figure>
 
-
 <p>这个就让人很郁闷了，到底什么原因呢，防火墙早就关闭了啊，不应该会出现端口被拒绝。检查了半天也没检查到，最后终于发现罪魁祸首了，原来是 hosts 文件的问题。</p>
-
 <p>在开始时我就将 hadoop01 节点上的 <code>/etc/hosts</code> 文件改成了下面的样子：
 <figure class="center">
     <img src="/images/post/hadoop%e9%9b%86%e7%be%a4%e5%90%af%e5%8a%a8%e6%88%90%e5%8a%9f%e4%bd%86live-node%e4%b8%ba0/20160304234956138.png"
@@ -238,14 +213,10 @@
         </figcaption>
 </figure>
 </p>
-
 <p>问题就出现在这两个红框出，我在设置时在 127.0.0.1 后面添加了 hadoop01，这样 hadoop 在启动的时候，根据配置文件监听的时候监听的是 hadoop01 的 9000 端口，而这个hadoop01 被解析成了 127.0.0.1，这样 hadoop01 节点就不会监听 192.168.116.101 的 9000 端口，来自 hadoop02 和 hadoop03 的信息不会被 hadoop01 节点接收到，也就会出现 hadoop02 和 hadoop03 节点日志里面的内容，live node 一直为 0。</p>
-
 <h2 id="问题解决">问题解决</h2>
-
-<p>方法一：修改hosts文件，删除上边红框的内容。<br />
+<p>方法一：修改hosts文件，删除上边红框的内容。<br>
 方法二：修改hadoop集群配置文件中的主机名，把所有主机名全换成对应的ip地址。</p>
-
 <p>修改后重新启动 hadoop 集群：
 <figure class="center">
     <img src="/images/post/hadoop%e9%9b%86%e7%be%a4%e5%90%af%e5%8a%a8%e6%88%90%e5%8a%9f%e4%bd%86live-node%e4%b8%ba0/20160305002038858.png"
@@ -344,7 +315,7 @@
   <span class="copyright-year">
     &copy; 
     2015 - 
-    2019
+    2020
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
@@ -361,7 +332,10 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
 
 
 <script type="application/javascript">

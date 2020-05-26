@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.59.1 with theme even" />
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
 
 
 <link rel="canonical" href="http://blog.meoop.me/post/linux%E4%BF%AE%E6%94%B9%E4%B8%BB%E6%9C%BA%E5%90%8D/" />
@@ -36,7 +36,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -44,9 +45,7 @@
 <meta property="og:description" content="
 原文在 CSDN，作部分更新整理后迁移到这里。
 
-
 在 CentOS 或 RHEL 中，有三种定义的主机名:
-
 
 静态的（static），静态主机名也称为内核主机名，是系统在启动时从/etc/hostname自动初始化的主机名。
 瞬态的（transient），瞬态主机名是在系统运行时临时分配的主机名，例如，通过 DHCP 或 mDNS 服务器分配。静态主机名和瞬态主机名都遵从作为互联网域名同样的字符限制规则。
@@ -60,31 +59,24 @@
 <meta itemprop="description" content="
 原文在 CSDN，作部分更新整理后迁移到这里。
 
-
 在 CentOS 或 RHEL 中，有三种定义的主机名:
-
 
 静态的（static），静态主机名也称为内核主机名，是系统在启动时从/etc/hostname自动初始化的主机名。
 瞬态的（transient），瞬态主机名是在系统运行时临时分配的主机名，例如，通过 DHCP 或 mDNS 服务器分配。静态主机名和瞬态主机名都遵从作为互联网域名同样的字符限制规则。
 灵活的（pretty），灵活主机名是允许使用自由形式（包括特殊/空白字符）的主机名，展示给终端用户的主机名。
 ">
-
-
 <meta itemprop="datePublished" content="2016-03-04T10:17:15&#43;08:00" />
 <meta itemprop="dateModified" content="2016-03-04T10:17:15&#43;08:00" />
 <meta itemprop="wordCount" content="820">
 
 
 
-<meta itemprop="keywords" content="Linux,hostname," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Linux,hostname," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Linux 修改主机名"/>
 <meta name="twitter:description" content="
 原文在 CSDN，作部分更新整理后迁移到这里。
 
-
 在 CentOS 或 RHEL 中，有三种定义的主机名:
-
 
 静态的（static），静态主机名也称为内核主机名，是系统在启动时从/etc/hostname自动初始化的主机名。
 瞬态的（transient），瞬态主机名是在系统运行时临时分配的主机名，例如，通过 DHCP 或 mDNS 服务器分配。静态主机名和瞬态主机名都遵从作为互联网域名同样的字符限制规则。
@@ -167,15 +159,12 @@
   <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#通过-hostname-修改">通过 hostname 修改</a></li>
-<li><a href="#通过-hostnamectl-命令修改">通过 hostnamectl 命令修改</a></li>
-<li><a href="#通过-nmcli-工具修改">通过 nmcli 工具修改</a></li>
-<li><a href="#参考文章">参考文章</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#通过-hostname-修改">通过 hostname 修改</a></li>
+    <li><a href="#通过-hostnamectl-命令修改">通过 hostnamectl 命令修改</a></li>
+    <li><a href="#通过-nmcli-工具修改">通过 nmcli 工具修改</a></li>
+    <li><a href="#参考文章">参考文章</a></li>
+  </ul>
 </nav>
   </div>
 </div>
@@ -183,103 +172,93 @@
       <blockquote>
 <p>原文在 <a href="https://blog.csdn.net/Meoop/article/details/50804308">CSDN</a>，作部分更新整理后迁移到这里。</p>
 </blockquote>
-
 <p>在 CentOS 或 RHEL 中，有三种定义的主机名:</p>
-
 <ol>
 <li>静态的（static），<strong>静态</strong>主机名也称为内核主机名，是系统在启动时从<code>/etc/hostname</code>自动初始化的主机名。</li>
 <li>瞬态的（transient），<strong>瞬态</strong>主机名是在系统运行时临时分配的主机名，例如，通过 DHCP 或 mDNS 服务器分配。静态主机名和瞬态主机名都遵从作为互联网域名同样的字符限制规则。</li>
 <li>灵活的（pretty），<strong>灵活</strong>主机名是允许使用自由形式（包括特殊/空白字符）的主机名，展示给终端用户的主机名。</li>
 </ol>
-
 <h2 id="通过-hostname-修改">通过 hostname 修改</h2>
-
 <p>CentOS 可以使用 hostname 修改主机。但是这样修改重启就失效了。还需要在 <code>/etc/hostname</code> 文件中一并修改才可以。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-bash" data-lang="bash">$ hostname                    <span class="c1"># 查看主机名</span>
 $ sudo hostname  &lt;host-name&gt;  <span class="c1"># 临时设置主机名，重启后失效</span>
-$ sudo vim /etc/hostname      <span class="c1"># 修改/etc/hostname文件内容</span></code></pre></td></tr></table>
+$ sudo vim /etc/hostname      <span class="c1"># 修改/etc/hostname文件内容</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<figure class="center">
+</div><figure class="center">
     <img src="/images/post/Linux%e4%bf%ae%e6%94%b9%e4%b8%bb%e6%9c%ba%e5%90%8d/1.png"
          alt="通过 hostname 修改主机名"/> <figcaption>
             <h4>通过 hostname 修改主机名</h4>
         </figcaption>
 </figure>
 
-
 <h2 id="通过-hostnamectl-命令修改">通过 hostnamectl 命令修改</h2>
-
 <p>在 CentOS7 中，可以通过 <code>hostnamectl</code> 命令查看或修改与主机名相关的配置。查看主机名相关的设置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">$ hostnamectl status</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">$ hostnamectl status
+</code></pre></td></tr></table>
 </div>
-</div>
-<figure class="center">
+</div><figure class="center">
     <img src="/images/post/Linux%e4%bf%ae%e6%94%b9%e4%b8%bb%e6%9c%ba%e5%90%8d/2.png"
          alt="通过 hostnamectl 命令查看主机名相关配置"/> <figcaption>
             <h4>通过 hostnamectl 命令查看主机名相关配置</h4>
         </figcaption>
 </figure>
 
-
 <p>只查看静态、瞬态或灵活主机名，分别使用 <code>--static</code>，<code>--transient</code> 或 <code>--pretty</code>。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">$ hostnamectl status <span class="o">[</span>--static<span class="p">|</span>--transient<span class="p">|</span>--pretty<span class="o">]</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">$ hostnamectl status <span class="o">[</span>--static<span class="p">|</span>--transient<span class="p">|</span>--pretty<span class="o">]</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<figure class="center">
+</div><figure class="center">
     <img src="/images/post/Linux%e4%bf%ae%e6%94%b9%e4%b8%bb%e6%9c%ba%e5%90%8d/3.png"
          alt="通过 hostnamectl 命令查看主机名相关配置"/> <figcaption>
             <h4>通过 hostnamectl 命令查看主机名相关配置</h4>
         </figcaption>
 </figure>
 
-
 <p>同时修改静态、瞬态和灵活主机名：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">$ sudo hostnamectl set-hostname &lt;host-name&gt;</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">$ sudo hostnamectl set-hostname &lt;host-name&gt;
+</code></pre></td></tr></table>
 </div>
-</div>
-<figure class="center">
+</div><figure class="center">
     <img src="/images/post/Linux%e4%bf%ae%e6%94%b9%e4%b8%bb%e6%9c%ba%e5%90%8d/4.png"
          alt="通过 hostnamectl 命令修改主机名"/> <figcaption>
             <h4>通过 hostnamectl 命令修改主机名</h4>
         </figcaption>
 </figure>
 
-
 <p>在修改静态/瞬态主机名时，任何特殊字符或空白字符会被移除，而提供的参数中的任何大写字母会自动转化为小写。一旦修改了静态主机名，<code>/etc/hostname</code> 将被自动更新。然而，<code>/etc/hosts</code> 不会更新以保存所做的修改，所以你需要手动更新 <code>/etc/hosts</code>。</p>
-
 <p>如果你只想修改特定的主机名（静态，瞬态或灵活），你可以使用 <code>--static</code>，<code>--transient</code> 或 <code>--pretty</code> 选项。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">$ sudo hostnamectl <span class="o">[</span>--static<span class="p">|</span>--transient<span class="p">|</span>--pretty<span class="o">]</span> set-hostname &lt;host-name&gt;</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">$ sudo hostnamectl <span class="o">[</span>--static<span class="p">|</span>--transient<span class="p">|</span>--pretty<span class="o">]</span> set-hostname &lt;host-name&gt;
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>例如修改静态主机名：
+</div><p>例如修改静态主机名：
 <figure class="center">
     <img src="/images/post/Linux%e4%bf%ae%e6%94%b9%e4%b8%bb%e6%9c%ba%e5%90%8d/5.png"
          alt="修改静态主机名"/> <figcaption>
@@ -287,33 +266,28 @@ $ sudo vim /etc/hostname      <span class="c1"># 修改/etc/hostname文件内容
         </figcaption>
 </figure>
 </p>
-
 <p>注意，不必重启机器以激活永久主机名修改。上面的命令会立即修改内核主机名。注销并重新登入后在命令行提示就可以看到新的主机名。</p>
-
 <h2 id="通过-nmcli-工具修改">通过 nmcli 工具修改</h2>
-
 <p>在 Centos 7 中包含 nmcli 工具，可被用来修改主机名。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-bash" data-lang="bash">$ nmcli g hostname
-$ nmcli g hostname &lt;host-name&gt;</code></pre></td></tr></table>
+$ nmcli g hostname &lt;host-name&gt;
+</code></pre></td></tr></table>
 </div>
-</div>
-<figure class="center">
+</div><figure class="center">
     <img src="/images/post/Linux%e4%bf%ae%e6%94%b9%e4%b8%bb%e6%9c%ba%e5%90%8d/6.png"
          alt="通过 nmcli 工具修改主机名"/> <figcaption>
             <h4>通过 nmcli 工具修改主机名</h4>
         </figcaption>
 </figure>
 
-
 <h2 id="参考文章">参考文章</h2>
-
-<p><a href="https://help.aliyun.com/knowledge_detail/6705956.html">https://help.aliyun.com/knowledge_detail/6705956.html</a><br />
+<p><a href="https://help.aliyun.com/knowledge_detail/6705956.html">https://help.aliyun.com/knowledge_detail/6705956.html</a><br>
 <a href="http://www.centoscn.com/CentOS/config/2014/1031/4039.html">http://www.centoscn.com/CentOS/config/2014/1031/4039.html</a></p>
     </div>
 
@@ -405,7 +379,7 @@ $ nmcli g hostname &lt;host-name&gt;</code></pre></td></tr></table>
   <span class="copyright-year">
     &copy; 
     2015 - 
-    2019
+    2020
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
@@ -422,7 +396,10 @@ $ nmcli g hostname &lt;host-name&gt;</code></pre></td></tr></table>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
 
 
 <script type="application/javascript">

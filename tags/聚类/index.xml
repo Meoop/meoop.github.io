@@ -20,9 +20,7 @@
       <description>&lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;聚类&lt;/strong&gt;是在给定的数据集合中寻找同类的数据子集合，每一个子集合形成一个类簇，同类簇中的数据具有更大的相似性。聚类算法大体上可分为&lt;strong&gt;基于划分&lt;/strong&gt;的方法、&lt;strong&gt;基于层次&lt;/strong&gt;的方法、&lt;strong&gt;基于密度&lt;/strong&gt;的方法、&lt;strong&gt;基于网格&lt;/strong&gt;的方法以及&lt;strong&gt;基于模型&lt;/strong&gt;的方法。&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;h2 id=&#34;基本概念&#34;&gt;基本概念&lt;/h2&gt;
-
 &lt;p&gt;术语 &lt;strong&gt;k-means&lt;/strong&gt; 最早是由 James MacQueen 在 1967 年提出的，这一观点可以追溯到 1957 年 Hugo Steinhaus 所提出的想法。1957 年，斯图亚特·劳埃德最先提出这一标准算法，当初是作为一门应用于脉码调制的技术,直到 1982 年，这一算法才在贝尔实验室被正式提出。1965 年，E.W.Forgy 发表了一个本质上是相同的方法，1975 年和 1979 年，Hartigan 和 Wong 分别提出了一个更高效的版本。&lt;/p&gt;</description>
     </item>
     

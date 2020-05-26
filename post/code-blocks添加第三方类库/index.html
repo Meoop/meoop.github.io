@@ -26,7 +26,7 @@ D:\MyLib\lib
 
 
 
-<meta name="generator" content="Hugo 0.59.1 with theme even" />
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
 
 
 <link rel="canonical" href="http://blog.meoop.me/post/code-blocks%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B1%BB%E5%BA%93/" />
@@ -37,7 +37,8 @@ D:\MyLib\lib
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -45,11 +46,8 @@ D:\MyLib\lib
 <meta property="og:description" content="第一步：编译第三方库，得到头文件和库，例如路径关系：
 在 include 中放头文件，在 lib 中放置库文件。
 
-
 D:\MyLib\include
-
 D:\MyLib\lib
-
 
 " />
 <meta property="og:type" content="article" />
@@ -60,32 +58,23 @@ D:\MyLib\lib
 <meta itemprop="description" content="第一步：编译第三方库，得到头文件和库，例如路径关系：
 在 include 中放头文件，在 lib 中放置库文件。
 
-
 D:\MyLib\include
-
 D:\MyLib\lib
 
-
 ">
-
-
 <meta itemprop="datePublished" content="2015-04-13T10:24:24&#43;08:00" />
 <meta itemprop="dateModified" content="2015-04-13T10:24:24&#43;08:00" />
 <meta itemprop="wordCount" content="247">
 
 
 
-<meta itemprop="keywords" content="Code::Blocks," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Code::Blocks," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Code Blocks 添加第三方类库"/>
 <meta name="twitter:description" content="第一步：编译第三方库，得到头文件和库，例如路径关系：
 在 include 中放头文件，在 lib 中放置库文件。
 
-
 D:\MyLib\include
-
 D:\MyLib\lib
-
 
 "/>
 
@@ -164,49 +153,35 @@ D:\MyLib\lib
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
-    
+    <nav id="TableOfContents"></nav>
   </div>
 </div>
     <div class="post-content">
       <p>第一步：编译第三方库，得到头文件和库，例如路径关系：
 在 include 中放头文件，在 lib 中放置库文件。</p>
-
 <blockquote>
 <p>D:\MyLib\include</p>
-
 <p>D:\MyLib\lib</p>
 </blockquote>
-
-<p><img src="/images/post/Code-Blocks添加第三方类库/20150413230733748.png" alt="编译后的第三方库" /></p>
-
+<p><img src="/images/post/Code-Blocks%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B1%BB%E5%BA%93/20150413230733748.png" alt="编译后的第三方库"></p>
 <p>第二步：创建全局变量，菜单：Settings &gt; Global variables, New 一个新的，选名字，例如 MYLIB</p>
-
 <blockquote>
 <p>base: D:\MyLib</p>
-
 <p>lib: $(base)\lib</p>
-
 <p>include: $(base)\include</p>
 </blockquote>
-
 <figure class="center">
     <img src="/images/post/Code-Blocks%e6%b7%bb%e5%8a%a0%e7%ac%ac%e4%b8%89%e6%96%b9%e7%b1%bb%e5%ba%93/20150413225928478.png"/> 
 </figure>
 
-
 <p>第三步：设置工程搜索路径，菜单：Project &gt; build options &gt; Search directories</p>
-
 <blockquote>
 <p>Compiler: $(#MYLIB.include)</p>
-
 <p>Linker: $(#MYLIB.lib)</p>
 </blockquote>
-
 <p>这样第三方库即可使用。</p>
-
 <p>如果不想添加全局变量，则可以直接进行第三步，使用绝对路径，来分别设置头文件和库文件的查找路径（我的配置完后使用时还出现个问题，编译报错显示 <code>undefined reference to 'dgesv_'</code>，解决办法是在 Project &gt; build options &gt;Linker settings 中添加库文件，比较懒就全扔进去了~_~）。</p>
-
-<p><img src="/images/post/Code-Blocks添加第三方类库/20150413233612827.png" alt="" /></p>
+<p><img src="/images/post/Code-Blocks%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B1%BB%E5%BA%93/20150413233612827.png" alt=""></p>
     </div>
 
     <div class="post-copyright">
@@ -292,7 +267,7 @@ D:\MyLib\lib
   <span class="copyright-year">
     &copy; 
     2015 - 
-    2019
+    2020
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
@@ -309,7 +284,10 @@ D:\MyLib\lib
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
 
 
 <script type="application/javascript">

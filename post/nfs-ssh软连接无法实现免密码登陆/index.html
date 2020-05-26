@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.59.1 with theme even" />
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
 
 
 <link rel="canonical" href="http://blog.meoop.me/post/nfs-ssh%E8%BD%AF%E8%BF%9E%E6%8E%A5%E6%97%A0%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E9%99%86/" />
@@ -36,19 +36,17 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:title" content="nfs&#43;ssh 软连接无法实现免密码登陆" />
 <meta property="og:description" content="
 一次 Hadoop 集群安装过程中 nfs&#43;ssh 软连接无法实现免密码登陆的问题解决过程
-
 原文在 CSDN，现在迁移到这里。
 
-
 nfs&#43;ssh 软连接无法实现免密码登陆
-
 
 开始以为自己文件名写错，仔细检查未发现文件名有错。
 检查文件的权限，发现 authorized_keys 文件的权限是 600，修改成 644 后，问题依旧，无法实现免密码登陆。
@@ -62,37 +60,28 @@ nfs&#43;ssh 软连接无法实现免密码登陆
 <meta itemprop="name" content="nfs&#43;ssh 软连接无法实现免密码登陆">
 <meta itemprop="description" content="
 一次 Hadoop 集群安装过程中 nfs&#43;ssh 软连接无法实现免密码登陆的问题解决过程
-
 原文在 CSDN，现在迁移到这里。
 
-
 nfs&#43;ssh 软连接无法实现免密码登陆
-
 
 开始以为自己文件名写错，仔细检查未发现文件名有错。
 检查文件的权限，发现 authorized_keys 文件的权限是 600，修改成 644 后，问题依旧，无法实现免密码登陆。
 以为是 nfs_share 目录的权限问题。因为当时建立时使用的是 root 用户，查看后发现 nfs_share 目录权限无问题。
 查看建立的软连接，软连接建立之后所生成的文件权限为 777，尝试各种修改后，完全没有什么用处，依旧无法免密码连接。
 ">
-
-
 <meta itemprop="datePublished" content="2016-03-14T10:17:26&#43;08:00" />
 <meta itemprop="dateModified" content="2016-03-14T10:17:26&#43;08:00" />
 <meta itemprop="wordCount" content="499">
 
 
 
-<meta itemprop="keywords" content="Linux,Hadoop,nfs,ssh," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Linux,Hadoop,nfs,ssh," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="nfs&#43;ssh 软连接无法实现免密码登陆"/>
 <meta name="twitter:description" content="
 一次 Hadoop 集群安装过程中 nfs&#43;ssh 软连接无法实现免密码登陆的问题解决过程
-
 原文在 CSDN，现在迁移到这里。
 
-
 nfs&#43;ssh 软连接无法实现免密码登陆
-
 
 开始以为自己文件名写错，仔细检查未发现文件名有错。
 检查文件的权限，发现 authorized_keys 文件的权限是 600，修改成 644 后，问题依旧，无法实现免密码登陆。
@@ -176,68 +165,58 @@ nfs&#43;ssh 软连接无法实现免密码登陆
   <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#nfs-ssh-软连接无法实现免密码登陆">nfs+ssh 软连接无法实现免密码登陆</a></li>
-<li><a href="#关闭方法">关闭方法</a>
-<ul>
-<li><a href="#关闭selinux">关闭SELinux</a></li>
-<li><a href="#关闭防火墙">关闭防火墙</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#nfsssh-软连接无法实现免密码登陆">nfs+ssh 软连接无法实现免密码登陆</a></li>
+    <li><a href="#关闭方法">关闭方法</a>
+      <ul>
+        <li><a href="#关闭selinux">关闭SELinux</a></li>
+        <li><a href="#关闭防火墙">关闭防火墙</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <blockquote>
 <p>一次 Hadoop 集群安装过程中 nfs+ssh 软连接无法实现免密码登陆的问题解决过程</p>
-
 <p>原文在 <a href="https://blog.csdn.net/Meoop/article/details/50886535">CSDN</a>，现在迁移到这里。</p>
 </blockquote>
-
-<h2 id="nfs-ssh-软连接无法实现免密码登陆">nfs+ssh 软连接无法实现免密码登陆</h2>
-
+<h2 id="nfsssh-软连接无法实现免密码登陆">nfs+ssh 软连接无法实现免密码登陆</h2>
 <ol>
 <li>开始以为自己文件名写错，仔细检查未发现文件名有错。</li>
 <li>检查文件的权限，发现 authorized_keys 文件的权限是 600，修改成 644 后，问题依旧，无法实现免密码登陆。</li>
 <li>以为是 nfs_share 目录的权限问题。因为当时建立时使用的是 root 用户，查看后发现 nfs_share 目录权限无问题。</li>
 <li>查看建立的软连接，软连接建立之后所生成的文件权限为 777，尝试各种修改后，完全没有什么用处，依旧无法免密码连接。</li>
 </ol>
-
 <p>各种谷歌百度，最后找到原因：自己没有关闭 SELinux。
 在配置 hadoop 集群时应当提前关闭<strong>防火墙</strong>和<strong>SELinux</strong>（水平比较渣，大神可以配置防火墙及 SELinux）。</p>
-
 <h2 id="关闭方法">关闭方法</h2>
-
 <h3 id="关闭selinux">关闭SELinux</h3>
-
-<p>1）、永久有效：修改 <code>/etc/selinux/config</code> 文件中的 <code>SELINUX=&quot;&quot;</code> 为 <code>disabled</code>，然后重启。<br />
+<p>1）、永久有效：修改 <code>/etc/selinux/config</code> 文件中的 <code>SELINUX=&quot;&quot;</code> 为 <code>disabled</code>，然后重启。<br>
 2）、即时生效：<code>setenforce 0</code></p>
-
 <h3 id="关闭防火墙">关闭防火墙</h3>
-
 <p>在 CentOS 6.x 中，可以通过如下命令关闭防火墙：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-shell" data-lang="shell">$ sudo service iptables stop   <span class="c1"># 关闭防火墙服务</span>
-$ sudo chkconfig iptables off  <span class="c1"># 禁止防火墙开机自启，就不用手动关闭了</span></code></pre></td></tr></table>
+$ sudo chkconfig iptables off  <span class="c1"># 禁止防火墙开机自启，就不用手动关闭了</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>若用是 CentOS 7，需通过如下命令关闭（防火墙服务改成了 firewall）：</p>
+</div><p>若用是 CentOS 7，需通过如下命令关闭（防火墙服务改成了 firewall）：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-shell" data-lang="shell">$ sudo systemctl stop firewalld.service    <span class="c1"># 关闭firewall</span>
-$ sudo systemctl disable firewalld.service <span class="c1"># 禁止firewall开机启动</span></code></pre></td></tr></table>
+$ sudo systemctl disable firewalld.service <span class="c1"># 禁止firewall开机启动</span>
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -332,7 +311,7 @@ $ sudo systemctl disable firewalld.service <span class="c1"># 禁止firewall开�
   <span class="copyright-year">
     &copy; 
     2015 - 
-    2019
+    2020
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
@@ -349,7 +328,10 @@ $ sudo systemctl disable firewalld.service <span class="c1"># 禁止firewall开�
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
 
 
 <script type="application/javascript">

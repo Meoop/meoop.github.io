@@ -19,14 +19,11 @@
       <guid>http://blog.meoop.me/post/code-blocks%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B1%BB%E5%BA%93/</guid>
       <description>&lt;p&gt;第一步：编译第三方库，得到头文件和库，例如路径关系：
 在 include 中放头文件，在 lib 中放置库文件。&lt;/p&gt;
-
 &lt;blockquote&gt;
 &lt;p&gt;D:\MyLib\include&lt;/p&gt;
-
 &lt;p&gt;D:\MyLib\lib&lt;/p&gt;
 &lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://blog.meoop.me/images/post/Code-Blocks添加第三方类库/20150413230733748.png&#34; alt=&#34;编译后的第三方库&#34; /&gt;&lt;/p&gt;</description>
+&lt;p&gt;&lt;img src=&#34;http://blog.meoop.me/images/post/Code-Blocks%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B1%BB%E5%BA%93/20150413230733748.png&#34; alt=&#34;编译后的第三方库&#34;&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.59.1 with theme even" />
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
 
 
 <link rel="canonical" href="http://blog.meoop.me/" />
@@ -36,7 +36,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -44,12 +45,9 @@
 <meta property="og:description" content="Meoop&#39;s Blog" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="http://blog.meoop.me/" />
-
 <meta property="og:updated_time" content="2019-01-24T17:08:04+08:00" />
 <meta itemprop="name" content="享受编程 - Coding Your Ambition.">
-<meta itemprop="description" content="Meoop&#39;s Blog">
-
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="description" content="Meoop&#39;s Blog"><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="享受编程 - Coding Your Ambition."/>
 <meta name="twitter:description" content="Meoop&#39;s Blog"/>
 
@@ -128,20 +126,20 @@
       <p><strong>注意，应使用非 root 用户进行 rpm 包构建。</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># add user</span>
 useradd -m -r koji
-su koji</code></pre></td></tr></table>
+su koji
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>下载源码包，安装源码包，解压源码。</p>
+</div><p>下载源码包，安装源码包，解压源码。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -162,7 +160,8 @@ yum-builddep kernel
 rpm -i kernel-*.src.rpm
 <span class="nb">cd</span> ~/rpmbuild
 <span class="c1"># unpacking the sources and applying any patches.</span>
-rpmbuild -bp SPECS/kernel.spec</code></pre></td></tr></table>
+rpmbuild -bp SPECS/kernel.spec
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -186,20 +185,68 @@ rpmbuild -bp SPECS/kernel.spec</code></pre></td></tr></table>
   <div class="post-content">
     <div class="post-summary">
       <p><strong>Feature gates:</strong></p>
-
 <ul>
-<li>enable <code>ExpandPersistentVolumes</code> feature gate (1.11⬆ default:ture).</li>
-<li>enable <code>PersistentVolumeClaimResize</code> admission controller (1.11⬆ default:ture).</li>
+<li>enable <code>ExpandPersistentVolumes</code> feature gate (1.11⬆️ default:ture).</li>
+<li>enable <code>PersistentVolumeClaimResize</code> admission controller (1.11⬆️ default:ture).</li>
 </ul>
-
 <p><strong>StorageClass:</strong></p>
-
 <ul>
 <li>Storage class’s <code>allowVolumeExpansion</code> field should set to true.</li>
 </ul>
     </div>
     <div class="read-more">
       <a href="/post/resizing-persistent-volumes-using-kubernetes/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/running-containers-with-ovs-dpdk/">Running Containers With OVS-DPDK</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2018-07-31 </span>
+      <div class="post-category">
+          <a href="/categories/container/"> container </a>
+          <a href="/categories/network/"> network </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <ul>
+<li><a href="#ovs-dpdk-%E6%98%AF%E4%BB%80%E4%B9%88">OVS-DPDK 是什么</a></li>
+<li><a href="#ovs-dpdk-%E4%B8%BA%E5%AE%B9%E5%99%A8%E6%8F%90%E4%BE%9B%E7%BD%91%E7%BB%9C%E6%94%AF%E6%8C%81">OVS-DPDK 为容器提供网络支持</a>
+<ul>
+<li><a href="#%E5%9F%BA%E4%BA%8E-dpdk-%E7%9A%84%E5%BA%94%E7%94%A8">基于 DPDK 的应用</a></li>
+<li><a href="#%E5%9F%BA%E4%BA%8E%E5%86%85%E6%A0%B8%E5%8D%8F%E8%AE%AE%E6%A0%88%E7%9A%84%E5%BA%94%E7%94%A8">基于内核协议栈的应用</a></li>
+</ul>
+</li>
+<li><a href="#ovs-dpdk-%E5%AE%B9%E5%99%A8%E7%BD%91%E7%BB%9C%E6%96%B9%E6%A1%88%E9%AA%8C%E8%AF%81">OVS-DPDK 容器网络方案验证</a>
+<ul>
+<li><a href="#%E6%90%AD%E5%BB%BA-dpdk-%E7%8E%AF%E5%A2%83">搭建 DPDK 环境</a></li>
+<li><a href="#%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C-ovs-dpdk">编译运行 OVS-DPDK</a></li>
+<li><a href="#dpdk-%E5%BA%94%E7%94%A8%E7%9A%84%E5%AE%B9%E5%99%A8">DPDK 应用的容器</a></li>
+<li><a href="#%E5%9F%BA%E4%BA%8E%E5%86%85%E6%A0%B8%E5%8D%8F%E8%AE%AE%E6%A0%88%E7%9A%84%E5%BA%94%E7%94%A8%E4%BD%BF%E7%94%A8-veth-pair-%E8%BF%9E%E6%8E%A5-ovs-dpdk">基于内核协议栈的应用（使用 veth pair 连接 ovs-dpdk）</a></li>
+<li><a href="#%E5%9F%BA%E4%BA%8E%E5%86%85%E6%A0%B8%E5%8D%8F%E8%AE%AE%E6%A0%88%E7%9A%84%E5%BA%94%E7%94%A8%E4%BD%BF%E7%94%A8-tap-%E8%BF%9E%E6%8E%A5-ovs-dpdk-%E7%9A%84-virtio-user-%E6%8E%A5%E5%8F%A3">基于内核协议栈的应用（使用 tap 连接 ovs-dpdk 的 virtio-user 接口）</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8E%82%E5%95%86%E6%96%B9%E6%A1%88">厂商方案</a>
+<ul>
+<li><a href="#%E7%BE%8E%E5%9B%A2%E7%82%B9%E8%AF%84%E5%AE%B9%E5%99%A8%E5%B9%B3%E5%8F%B0%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84">美团点评容器平台网络架构</a></li>
+<li><a href="#%E7%BD%91%E6%98%93">网易</a></li>
+<li><a href="#intel">Intel</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0">参考文章</a></li>
+</ul>
+<blockquote>
+<p>DPDK(Data Plane Development Kit)，即数据平面开发工具包，是一组用于快速数据包处理的数据平面库和网络接口控制器驱动程序，DPDK 为 x86，ARM 和 PowerPC 处理器提供编程框架，可以更快地开发高速数据包网络应用程序。该平台采用 BSD 许可证发布，目前作为 Linux Foundation 下的开源项目进行管理。</p>
+</blockquote>
+<p>在 X86 架构中，处理数据包的传统方式是 CPU 中断方式，即网卡驱动接收到数据包后通过中断通知 CPU 处理，然后由 CPU 拷贝数据并交给协议栈。在数据量大时，这种方式会产生大量 CPU 中断，导致 CPU 无法运行其他程序。而 DPDK 则采用轮询方式实现数据包处理过程：DPDK 重载了网卡驱动，在收到数据包后不中断通知 CPU，而是将数据包通过零拷贝技术存入内存，这时应用层程序就可以通过 DPDK 提供的接口，直接从内存读取数据包。这种处理方式节省了 CPU 中断时间、内存拷贝时间，并向应用层提供了简单易行且高效的数据包处理方式，使得网络应用的开发更加方便。但同时，由于需要重载网卡驱动，因此该开发包目前只能用在部分网络处理芯片的网卡中。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/running-containers-with-ovs-dpdk/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
@@ -218,11 +265,34 @@ rpmbuild -bp SPECS/kernel.spec</code></pre></td></tr></table>
   <div class="post-content">
     <div class="post-summary">
       <p>在 Linux 下选中东西后，按住鼠标的滚轮中键进行粘贴，是 Linux 下非常好用的功能。但是不巧，鼠标的滚轮中键太灵敏，在滚动滚轮时候非常容易按下中键，这时候编辑好的文档突然就插入了不知道从哪复制来的东西。</p>
-
 <p>xmodmap 是用于修改X中键盘映射和指针按钮映射的实用程序，我们可以用 xmodmap 修改鼠标中键的映射，进而关掉鼠标中键的复制功能，解决误触鼠标中键问题。</p>
     </div>
     <div class="read-more">
       <a href="/post/%E4%BD%BF%E7%94%A8xmodmap%E5%8F%96%E6%B6%88linux%E4%B8%8B%E9%BC%A0%E6%A0%87%E4%B8%AD%E9%94%AE%E7%B2%98%E8%B4%B4%E5%8A%9F%E8%83%BD/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E5%AE%B9%E5%99%A8%E5%AE%9E%E7%8E%B0%E6%8A%80%E6%9C%AF%E6%8A%80%E6%9C%AF%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86namespace/">容器实现技术技术及其原理：Namespace</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2017-12-24 </span>
+      <div class="post-category">
+          <a href="/categories/linux/"> Linux </a>
+          <a href="/categories/container/"> container </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>容器是当前的热门技术，容器使用到 Linux 的 <code>namespace</code> 和 <code>cgroup</code> 功能，<code>namespace</code> 用于资源隔离，<code>cgroup</code> 用于资源限制。除了这两个外，容器还使用到了 selinux/apparmor 增强容器安全，veth pair/bridge/ovs 等技术提供容器网络，aufs/overlayfs/lvm 等技术构建容器的 rootfs。这篇文章主要对 namespace 进行介绍，了解它功能已经使用方式，后续文章再对其他技术进行介绍。</p>
+<h2 id="linux-namespace">Linux Namespace</h2>
+<p><code>Namespace</code> 是 Linux 内核的一项功能，用于对资源进行隔离，<code>namespace</code> 以一种抽象的方式包装特定的资源，使得在这个 <code>namespace</code> 中的进程实例看起来它们具有自己的受到隔离的全局资源，不同 <code>namespace</code> 的进程能看到的资源是不同的。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E5%AE%B9%E5%99%A8%E5%AE%9E%E7%8E%B0%E6%8A%80%E6%9C%AF%E6%8A%80%E6%9C%AF%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86namespace/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
@@ -332,54 +402,6 @@ rpmbuild -bp SPECS/kernel.spec</code></pre></td></tr></table>
   </div>
 </article>
 
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%90%AD%E5%BB%BA/">NTP 服务器的搭建</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-08-08 </span>
-      <div class="post-category">
-          <a href="/categories/linux/"> Linux </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>由于制造工艺多种多样，所有的(非原子)时钟并不按照完全一致的速度行走。有一些时钟走的比较快而有一些走的比较慢。因此经过很长一段时间以后，一个时钟的时间慢慢的和其它的发生偏移，这就是常说的 “时钟漂移” 或 “时间漂移”。时钟的一致对一些应用有着至关重要的作用，为了将时钟漂移的影响降低到最小，需要将时钟进行同步，这就需要 ntp 服务。
-网络时间协议 (NTP) 用来同步网络上不同主机的系统时间。你管理的所有主机都可以和一个指定的被称为 ntp 服务器的时间服务器同步它们的时间。而另一方面，一个 ntp 服务器会将它的时间和任意公共 ntp 服务器，或者你选定的服务器同步。由 ntp 管理的所有系统时钟都会同步精确到毫秒级。</p>
-    </div>
-    <div class="read-more">
-      <a href="/post/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%90%AD%E5%BB%BA/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/gnome%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%A1%B6%E6%A0%8F%E6%97%A5%E6%9C%9F%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%85%A8%E9%97%AE%E9%A2%98/">Gnome 桌面环境顶栏日期显示不全问题</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-07-23 </span>
-      <div class="post-category">
-          <a href="/categories/linux/"> Linux </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <blockquote>
-<p>2016.08.01 日更新
-该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。</p>
-</blockquote>
-
-<p>Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。</p>
-    </div>
-    <div class="read-more">
-      <a href="/post/gnome%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%A1%B6%E6%A0%8F%E6%97%A5%E6%9C%9F%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%85%A8%E9%97%AE%E9%A2%98/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
     </section>
   
   <nav class="pagination">
@@ -423,7 +445,7 @@ rpmbuild -bp SPECS/kernel.spec</code></pre></td></tr></table>
   <span class="copyright-year">
     &copy; 
     2015 - 
-    2019
+    2020
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
@@ -440,7 +462,10 @@ rpmbuild -bp SPECS/kernel.spec</code></pre></td></tr></table>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

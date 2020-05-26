@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.59.1 with theme even" />
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
 
 
 <link rel="canonical" href="http://blog.meoop.me/" />
@@ -36,7 +36,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -44,12 +45,9 @@
 <meta property="og:description" content="Meoop&#39;s Blog" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="http://blog.meoop.me/" />
-
 <meta property="og:updated_time" content="2019-01-24T17:08:04+08:00" />
 <meta itemprop="name" content="享受编程 - Coding Your Ambition.">
-<meta itemprop="description" content="Meoop&#39;s Blog">
-
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="description" content="Meoop&#39;s Blog"><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="享受编程 - Coding Your Ambition."/>
 <meta name="twitter:description" content="Meoop&#39;s Blog"/>
 
@@ -114,6 +112,53 @@
           <section id="posts" class="posts">
     <article class="post">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%90%AD%E5%BB%BA/">NTP 服务器的搭建</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2016-08-08 </span>
+      <div class="post-category">
+          <a href="/categories/linux/"> Linux </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>由于制造工艺多种多样，所有的(非原子)时钟并不按照完全一致的速度行走。有一些时钟走的比较快而有一些走的比较慢。因此经过很长一段时间以后，一个时钟的时间慢慢的和其它的发生偏移，这就是常说的 “时钟漂移” 或 “时间漂移”。时钟的一致对一些应用有着至关重要的作用，为了将时钟漂移的影响降低到最小，需要将时钟进行同步，这就需要 ntp 服务。
+网络时间协议 (NTP) 用来同步网络上不同主机的系统时间。你管理的所有主机都可以和一个指定的被称为 ntp 服务器的时间服务器同步它们的时间。而另一方面，一个 ntp 服务器会将它的时间和任意公共 ntp 服务器，或者你选定的服务器同步。由 ntp 管理的所有系统时钟都会同步精确到毫秒级。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%90%AD%E5%BB%BA/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/gnome%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%A1%B6%E6%A0%8F%E6%97%A5%E6%9C%9F%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%85%A8%E9%97%AE%E9%A2%98/">Gnome 桌面环境顶栏日期显示不全问题</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2016-07-23 </span>
+      <div class="post-category">
+          <a href="/categories/linux/"> Linux </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <blockquote>
+<p>2016.08.01 日更新
+该问题不止在 Fedora 中出现，在 ubuntu GNOME 桌面版版也出现这个问题，是 GNOME 桌面环境的问题。修改方法与 Fedora 相同。</p>
+</blockquote>
+<p>Fedora 23，Fedora 24，ububtu GNOME 桌面版顶栏中文日期及星期显示不全的问题，Fedora 23 时找到修改的办法，未做记录，更新到 Fedora 24 时又遇到这个问题，于是又翻找资料解决问题，为避免下次麻烦，将该问题以及问题解决办法记录下来，以备后用。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/gnome%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%A1%B6%E6%A0%8F%E6%97%A5%E6%9C%9F%E6%98%BE%E7%A4%BA%E4%B8%8D%E5%85%A8%E9%97%AE%E9%A2%98/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/nfs-ssh%E8%BD%AF%E8%BF%9E%E6%8E%A5%E6%97%A0%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E9%99%86/">nfs&#43;ssh 软连接无法实现免密码登陆</a></h1>
     <div class="post-meta">
       <span class="post-time"> 2016-03-14 </span>
@@ -127,12 +172,9 @@
     <div class="post-summary">
       <blockquote>
 <p>一次 Hadoop 集群安装过程中 nfs+ssh 软连接无法实现免密码登陆的问题解决过程</p>
-
 <p>原文在 <a href="https://blog.csdn.net/Meoop/article/details/50886535">CSDN</a>，现在迁移到这里。</p>
 </blockquote>
-
-<h2 id="nfs-ssh-软连接无法实现免密码登陆">nfs+ssh 软连接无法实现免密码登陆</h2>
-
+<h2 id="nfsssh-软连接无法实现免密码登陆">nfs+ssh 软连接无法实现免密码登陆</h2>
 <ol>
 <li>开始以为自己文件名写错，仔细检查未发现文件名有错。</li>
 <li>检查文件的权限，发现 authorized_keys 文件的权限是 600，修改成 644 后，问题依旧，无法实现免密码登陆。</li>
@@ -161,15 +203,11 @@
     <div class="post-summary">
       <blockquote>
 <p>一次 Hadoop 集群启动成功但 live node 为 0 的问题解决过程。</p>
-
 <p>原文在 <a href="https://blog.csdn.net/Meoop/article/details/50806724">CSDN</a>，现在迁移到这里。</p>
 </blockquote>
-
 <h2 id="问题描述">问题描述</h2>
-
 <p>这两天用虚拟机搭建了 hadoop 集群环境，创建了三台虚拟机 hadoop01，hadoop02，hadoop03，hadoop01 代表 Master，hadoop02 以及 hadoop03 作为 Slave 节点。三台虚拟机都是 centos7 最小化安装。hadoop 版本用的最新的版本 2.7.2。
 开始一切都很顺利，启动 hadoop 集群也成功启动，运行 jps，三个节点对应的进程都成功启动，但是检查集群状态时发现 live node 为 0（如图）。</p>
-
 <figure class="center">
     <img src="/images/post/hadoop%e9%9b%86%e7%be%a4%e5%90%af%e5%8a%a8%e6%88%90%e5%8a%9f%e4%bd%86live-node%e4%b8%ba0/20160304233347273.png"
          alt="集群状态"/> <figcaption>
@@ -199,9 +237,7 @@
       <blockquote>
 <p>原文在 <a href="https://blog.csdn.net/Meoop/article/details/50804308">CSDN</a>，作部分更新整理后迁移到这里。</p>
 </blockquote>
-
 <p>在 CentOS 或 RHEL 中，有三种定义的主机名:</p>
-
 <ol>
 <li>静态的（static），<strong>静态</strong>主机名也称为内核主机名，是系统在启动时从<code>/etc/hostname</code>自动初始化的主机名。</li>
 <li>瞬态的（transient），<strong>瞬态</strong>主机名是在系统运行时临时分配的主机名，例如，通过 DHCP 或 mDNS 服务器分配。静态主机名和瞬态主机名都遵从作为互联网域名同样的字符限制规则。</li>
@@ -230,10 +266,8 @@
       <blockquote>
 <p>原文在<a href="https://blog.csdn.net/Meoop/article/details/50505609">CSDN</a>，现在迁移到这里。</p>
 </blockquote>
-
 <p>刚刚装了 win10 和 fedora23 双系统，启动时黑框只占屏幕左上角的 1/4，感觉十分的难看，于是就寻思这怎么让其好看点，于是翻了翻资料，看见很多地方都可以换 GRUB2 的主题，就试着动了下手，美化了下。</p>
-
-<p><strong>效果图</strong>（主题作者给的效果图），下载地址：<a href="https://pan.baidu.com/s/1c2mgBCG">https://pan.baidu.com/s/1c2mgBCG</a>
+<p><strong>效果图</strong>（主题作者给的效果图），下载地址：https://pan.baidu.com/s/1c2mgBCG
 <figure class="center">
     <img src="/images/post/fedora23-GRUB2%e6%9b%b4%e6%8d%a2%e4%b8%bb%e9%a2%98/20160112180610905.png"/> <figcaption>
             <h4>主题样式</h4>
@@ -263,9 +297,7 @@
       <blockquote>
 <p><strong>聚类</strong>是在给定的数据集合中寻找同类的数据子集合，每一个子集合形成一个类簇，同类簇中的数据具有更大的相似性。聚类算法大体上可分为<strong>基于划分</strong>的方法、<strong>基于层次</strong>的方法、<strong>基于密度</strong>的方法、<strong>基于网格</strong>的方法以及<strong>基于模型</strong>的方法。</p>
 </blockquote>
-
 <h2 id="基本概念">基本概念</h2>
-
 <p>术语 <strong>k-means</strong> 最早是由 James MacQueen 在 1967 年提出的，这一观点可以追溯到 1957 年 Hugo Steinhaus 所提出的想法。1957 年，斯图亚特·劳埃德最先提出这一标准算法，当初是作为一门应用于脉码调制的技术,直到 1982 年，这一算法才在贝尔实验室被正式提出。1965 年，E.W.Forgy 发表了一个本质上是相同的方法，1975 年和 1979 年，Hartigan 和 Wong 分别提出了一个更高效的版本。</p>
     </div>
     <div class="read-more">
@@ -289,14 +321,11 @@
     <div class="post-summary">
       <p>第一步：编译第三方库，得到头文件和库，例如路径关系：
 在 include 中放头文件，在 lib 中放置库文件。</p>
-
 <blockquote>
 <p>D:\MyLib\include</p>
-
 <p>D:\MyLib\lib</p>
 </blockquote>
-
-<p><img src="/images/post/Code-Blocks添加第三方类库/20150413230733748.png" alt="编译后的第三方库" /></p>
+<p><img src="/images/post/Code-Blocks%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B1%BB%E5%BA%93/20150413230733748.png" alt="编译后的第三方库"></p>
     </div>
     <div class="read-more">
       <a href="/post/code-blocks%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B1%BB%E5%BA%93/" class="read-more-link">Read more...</a>
@@ -347,7 +376,7 @@
   <span class="copyright-year">
     &copy; 
     2015 - 
-    2019
+    2020
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
@@ -364,7 +393,10 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
