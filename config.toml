@@ -209,3 +209,6 @@ copyright = ""                          # default: author.name ↓        # 默�
 #  section = ["HTML", "RSS"]
 #  taxonomy = ["HTML", "RSS"]
 #  taxonomyTerm = ["HTML"]
+
+[frontmatter]
+lastmod = ["lastmod", ":default"]
