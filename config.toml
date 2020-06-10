@@ -62,7 +62,7 @@ copyright = ""                          # default: author.name ↓        # 默�
   description = "Meoop's Blog"
 
   # paginate of archives, tags and categories
-  archivePaginate = 10
+  archivePaginate = 50
 
   # show 'xx Posts In Total' in archive page ?
   showArchiveCount = false
