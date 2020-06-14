@@ -6,10 +6,33 @@
     <description>Recent content in container on 享受编程 - Coding Your Ambition.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 31 Jul 2018 12:56:20 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 22 Aug 2019 21:58:32 +0800</lastBuildDate>
     
 	<atom:link href="http://blog.meoop.me/tags/container/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>LXCFS Part 2 - Implementation Details</title>
+      <link>http://blog.meoop.me/post/lxcfs-part-2-implementation/</link>
+      <pubDate>Thu, 22 Aug 2019 21:58:32 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/lxcfs-part-2-implementation/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://blog.meoop.me/post/lxcfs-part-1-introduction/&#34;&gt;上一篇文章我们主要了解了 LXCFS 的使用场景以及在 docker/kubernetes 中如何使用 LXCFS&lt;/a&gt;，这篇文章我们从源码入手，了解下 LXCFS 是如何实现上面功能的。LXCFS 是基于 fuse 实现的虚拟文件系统，理解 LXCFS，我们需要先了解 fuse，然后再对 LXCFS 的源码进行解读。下面代码解读是在 lxcfs-3.1.2 的代码基础上进行分析的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>LXCFS Part 1 - Intro to LXCFS</title>
+      <link>http://blog.meoop.me/post/lxcfs-part-1-introduction/</link>
+      <pubDate>Wed, 14 Aug 2019 21:29:44 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/lxcfs-part-1-introduction/</guid>
+      <description>&lt;p&gt;在使用容器部署应用时，我们经常会遇到下面场景：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在对 Java 应用容器化部署的过程中，自己设置了容器的资源限制，但是 Java 应用容器在运行中还是会莫名奇妙地被 OOM Killer 干掉。&lt;/li&gt;
+&lt;li&gt;在设置了容器的资源限制的容器中通过 top，uptime，free 等查看信息，读到的是 host 上的信息，不是资源限制后的结果。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这是由于 Linux 容器的资源限制是通过 cgroup 实现的，但在容器内部依旧共享宿主机内核的 &lt;code&gt;procfs&lt;/code&gt;，其中包含了如：&lt;code&gt;meminfo&lt;/code&gt;，&lt;code&gt;cpuinfo&lt;/code&gt;，&lt;code&gt;stat&lt;/code&gt;，&lt;code&gt;uptime&lt;/code&gt; 等包含宿主机资源信息的 proc 文件。一些应用或者监控工具如 free/top 还依赖 proc 下的文件内容获取资源配置和使用情况。当它们在容器中运行时，就会把宿主机的资源状态读取出来，引起了错误和不便。LXCFS 就是用来解决这类问题的。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Running Containers With OVS-DPDK</title>

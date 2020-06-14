@@ -6,10 +6,37 @@
     <description>Recent content in Categories on 享受编程 - Coding Your Ambition.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 24 Jan 2019 17:08:04 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 22 Aug 2019 21:58:32 +0800</lastBuildDate>
     
 	<atom:link href="http://blog.meoop.me/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>container</title>
+      <link>http://blog.meoop.me/categories/container/</link>
+      <pubDate>Thu, 22 Aug 2019 21:58:32 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/categories/container/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>lxcfs</title>
+      <link>http://blog.meoop.me/categories/lxcfs/</link>
+      <pubDate>Thu, 22 Aug 2019 21:58:32 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/categories/lxcfs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>glusterfs</title>
+      <link>http://blog.meoop.me/categories/glusterfs/</link>
+      <pubDate>Wed, 24 Jul 2019 20:40:12 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/categories/glusterfs/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Linux</title>
@@ -26,15 +53,6 @@
       <pubDate>Mon, 21 Jan 2019 17:38:53 +0800</pubDate>
       
       <guid>http://blog.meoop.me/categories/kubernetes/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>container</title>
-      <link>http://blog.meoop.me/categories/container/</link>
-      <pubDate>Tue, 31 Jul 2018 12:56:20 +0800</pubDate>
-      
-      <guid>http://blog.meoop.me/categories/container/</guid>
       <description></description>
     </item>
     

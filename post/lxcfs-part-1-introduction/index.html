@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>LXCFS Part 1 - Intro to LXCFS - 享受编程 - Coding Your Ambition.</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Meoop" /><meta name="description" content="在使用容器部署应用时，我们经常会遇到下面场景：
+ 在对 Java 应用容器化部署的过程中，自己设置了容器的资源限制，但是 Java 应用容器在运行中还是会莫名奇妙地被 OOM Killer 干掉。 在设置了容器的资源限制的容器中通过 top，uptime，free 等查看信息，读到的是 host 上的信息，不是资源限制后的结果。  这是由于 Linux 容器的资源限制是通过 cgroup 实现的，但在容器内部依旧共享宿主机内核的 procfs，其中包含了如：meminfo，cpuinfo，stat，uptime 等包含宿主机资源信息的 proc 文件。一些应用或者监控工具如 free/top 还依赖 proc 下的文件内容获取资源配置和使用情况。当它们在容器中运行时，就会把宿主机的资源状态读取出来，引起了错误和不便。LXCFS 就是用来解决这类问题的。
+" /><meta name="keywords" content="lxcfs, container" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
+
+
+<link rel="canonical" href="http://blog.meoop.me/post/lxcfs-part-1-introduction/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="LXCFS Part 1 - Intro to LXCFS" />
+<meta property="og:description" content="在使用容器部署应用时，我们经常会遇到下面场景：
+
+在对 Java 应用容器化部署的过程中，自己设置了容器的资源限制，但是 Java 应用容器在运行中还是会莫名奇妙地被 OOM Killer 干掉。
+在设置了容器的资源限制的容器中通过 top，uptime，free 等查看信息，读到的是 host 上的信息，不是资源限制后的结果。
+
+这是由于 Linux 容器的资源限制是通过 cgroup 实现的，但在容器内部依旧共享宿主机内核的 procfs，其中包含了如：meminfo，cpuinfo，stat，uptime 等包含宿主机资源信息的 proc 文件。一些应用或者监控工具如 free/top 还依赖 proc 下的文件内容获取资源配置和使用情况。当它们在容器中运行时，就会把宿主机的资源状态读取出来，引起了错误和不便。LXCFS 就是用来解决这类问题的。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://blog.meoop.me/post/lxcfs-part-1-introduction/" />
+<meta property="article:published_time" content="2019-08-14T21:29:44+08:00" />
+<meta property="article:modified_time" content="2019-08-06T21:29:44+08:00" />
+<meta itemprop="name" content="LXCFS Part 1 - Intro to LXCFS">
+<meta itemprop="description" content="在使用容器部署应用时，我们经常会遇到下面场景：
+
+在对 Java 应用容器化部署的过程中，自己设置了容器的资源限制，但是 Java 应用容器在运行中还是会莫名奇妙地被 OOM Killer 干掉。
+在设置了容器的资源限制的容器中通过 top，uptime，free 等查看信息，读到的是 host 上的信息，不是资源限制后的结果。
+
+这是由于 Linux 容器的资源限制是通过 cgroup 实现的，但在容器内部依旧共享宿主机内核的 procfs，其中包含了如：meminfo，cpuinfo，stat，uptime 等包含宿主机资源信息的 proc 文件。一些应用或者监控工具如 free/top 还依赖 proc 下的文件内容获取资源配置和使用情况。当它们在容器中运行时，就会把宿主机的资源状态读取出来，引起了错误和不便。LXCFS 就是用来解决这类问题的。">
+<meta itemprop="datePublished" content="2019-08-14T21:29:44&#43;08:00" />
+<meta itemprop="dateModified" content="2019-08-06T21:29:44&#43;08:00" />
+<meta itemprop="wordCount" content="2412">
+
+
+
+<meta itemprop="keywords" content="lxcfs,container," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="LXCFS Part 1 - Intro to LXCFS"/>
+<meta name="twitter:description" content="在使用容器部署应用时，我们经常会遇到下面场景：
+
+在对 Java 应用容器化部署的过程中，自己设置了容器的资源限制，但是 Java 应用容器在运行中还是会莫名奇妙地被 OOM Killer 干掉。
+在设置了容器的资源限制的容器中通过 top，uptime，free 等查看信息，读到的是 host 上的信息，不是资源限制后的结果。
+
+这是由于 Linux 容器的资源限制是通过 cgroup 实现的，但在容器内部依旧共享宿主机内核的 procfs，其中包含了如：meminfo，cpuinfo，stat，uptime 等包含宿主机资源信息的 proc 文件。一些应用或者监控工具如 free/top 还依赖 proc 下的文件内容获取资源配置和使用情况。当它们在容器中运行时，就会把宿主机的资源状态读取出来，引起了错误和不便。LXCFS 就是用来解决这类问题的。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Ambition</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Ambition</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">LXCFS Part 1 - Intro to LXCFS</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-08-14 </span>
+        <div class="post-category">
+            <a href="/categories/lxcfs/"> lxcfs </a>
+            <a href="/categories/container/"> container </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#lxcfs">LXCFS</a>
+      <ul>
+        <li><a href="#什么是-lxcfs">什么是 LXCFS</a></li>
+        <li><a href="#如何安装-lxcfs">如何安装 LXCFS</a></li>
+        <li><a href="#如何使用-lxcfs">如何使用 LXCFS</a></li>
+      </ul>
+    </li>
+    <li><a href="#应用场景及性能分析">应用场景及性能分析</a>
+      <ul>
+        <li><a href="#应用场景">应用场景</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考文档">参考文档</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>在使用容器部署应用时，我们经常会遇到下面场景：</p>
+<ul>
+<li>在对 Java 应用容器化部署的过程中，自己设置了容器的资源限制，但是 Java 应用容器在运行中还是会莫名奇妙地被 OOM Killer 干掉。</li>
+<li>在设置了容器的资源限制的容器中通过 top，uptime，free 等查看信息，读到的是 host 上的信息，不是资源限制后的结果。</li>
+</ul>
+<p>这是由于 Linux 容器的资源限制是通过 cgroup 实现的，但在容器内部依旧共享宿主机内核的 <code>procfs</code>，其中包含了如：<code>meminfo</code>，<code>cpuinfo</code>，<code>stat</code>，<code>uptime</code> 等包含宿主机资源信息的 proc 文件。一些应用或者监控工具如 free/top 还依赖 proc 下的文件内容获取资源配置和使用情况。当它们在容器中运行时，就会把宿主机的资源状态读取出来，引起了错误和不便。LXCFS 就是用来解决这类问题的。</p>
+<h2 id="lxcfs">LXCFS</h2>
+<h3 id="什么是-lxcfs">什么是 LXCFS</h3>
+<p>为解决容器内资源状态不正确问题，社区中常见的做法是利用 LXCFS 来提供容器中的资源可见性。LXCFS 是一个小型的 FUSE 文件系统，其目的是为了使 Linux 容器更加像虚拟机。它最初是 LXC 的一个子项目，但是可以被其他任何运行时使用。</p>
+<p>LXCFS 通过 FUSE 文件系统，为容器提供虚拟的 procfs 文件，通过这几个映射的文件，容器内应用看到的将是容器真正能够使用的资源，不再是 host 系统的全部资源。例如，通过 /proc/uptime 获取到的时间将是应用启动的真正时间，不再是系统启动的时间。LXCFS 可以提供下面几个 procfs 的文件：</p>
+<ul>
+<li><code>/proc/cpuinfo</code></li>
+<li><code>/proc/diskstats</code></li>
+<li><code>/proc/meminfo</code></li>
+<li><code>/proc/stat</code></li>
+<li><code>/proc/swaps</code></li>
+<li><code>/proc/uptime</code></li>
+<li><code>/sys/devices/system/cpu/online</code></li>
+</ul>
+<p>LXCFS 的使用流程大致如下，把宿主机的 LXCFS 虚拟出的 procfs 文件挂载到容器对应的位置，容器中进程读取相应文件内容时，LXCFS 的 FUSE 实现会从容器对应的 cgroup 以及容器 PID 1 的进程文件中读取正确的信息，返回给容器内进程，从而使得应用获得正确的资源约束设定。</p>
+<h3 id="如何安装-lxcfs">如何安装 LXCFS</h3>
+<p>LXCFS 提供了 ubuntu 上的 deb 包，但未提供 centos 上的 rpm 包，我们可以使用二进制部署或者使用容器部署。</p>
+<h4 id="容器部署">容器部署</h4>
+<p>参考项目 <a href="https://github.com/denverdino/lxcfs-initializer">lxcfs-initializer</a> 使用 daemonset 方式部署 lxcfs：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">kubectl apply -f https://raw.githubusercontent.com/denverdino/lxcfs-initializer/master/lxcfs-daemonset.yaml
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="二进制部署">二进制部署</h4>
+<p>从 <a href="https://linuxcontainers.org/lxcfs/downloads/">linux containers 网站</a>下载最新版本的源码包，编译并安装：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">wget https://linuxcontainers.org/downloads/lxcfs/lxcfs-3.1.2.tar.gz
+tar -xvf lxcfs-3.1.2.tar.gz
+<span class="nb">cd</span> lxcfs-3.1.2
+./configure
+make <span class="o">&amp;&amp;</span> make install
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 systemd 启动 lxcfs：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">systemctl <span class="nb">enable</span> lxcfs
+systemctl start lxcfs
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="如何使用-lxcfs">如何使用 LXCFS</h3>
+<h4 id="docker">Docker</h4>
+<p>启动一个容器，用 lxcfs 维护的 /proc 文件替换容器中的 /proc 文件，容器内存设置为 512M，CPU 设置为 1 核：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">docker run -it --rm -m 512m --cpus <span class="m">1</span> <span class="se">\
+</span><span class="se"></span>    -v /var/lib/lxcfs/proc/cpuinfo:/proc/cpuinfo  <span class="se">\
+</span><span class="se"></span>    -v /var/lib/lxcfs/proc/diskstats:/proc/diskstats <span class="se">\
+</span><span class="se"></span>    -v /var/lib/lxcfs/proc/loadavg:/proc/loadavg <span class="se">\
+</span><span class="se"></span>    -v /var/lib/lxcfs/proc/meminfo:/proc/meminfo <span class="se">\
+</span><span class="se"></span>    -v /var/lib/lxcfs/proc/stat:/proc/stat <span class="se">\
+</span><span class="se"></span>    -v /var/lib/lxcfs/proc/swaps:/proc/swaps <span class="se">\
+</span><span class="se"></span>    -v /var/lib/lxcfs/proc/uptime:/proc/uptime <span class="se">\
+</span><span class="se"></span>    -v /var/lib/lxcfs/sys/devices/system/cpu/online:/sys/devices/system/cpu/online <span class="se">\
+</span><span class="se"></span>    ubuntu:16.04 /bin/bash
+</code></pre></td></tr></table>
+</div>
+</div><p>从容器中观察 Memory、CPU、启动时间等信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">root@8fc32bd1cf47:/# free -h
+              total        used        free      shared  buff/cache   available
+Mem:           512M        3.6M        503M          0B        5.2M        508M
+Swap:            0B          0B          0B
+
+root@8fc32bd1cf47:/# uptime 
+ 08:14:13 up <span class="m">0</span> min,  <span class="m">0</span> users,  load average: 0.64, 0.54, 0.58
+
+root@8fc32bd1cf47:/# top
+top - 08:29:56 up <span class="m">3</span> min,  <span class="m">0</span> users,  load average: 0.97, 1.06, 0.93
+Tasks:   <span class="m">2</span> total,   <span class="m">1</span> running,   <span class="m">1</span> sleeping,   <span class="m">0</span> stopped,   <span class="m">0</span> zombie
+%Cpu0  :  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+KiB Mem :   <span class="m">524288</span> total,   <span class="m">520268</span> free,     <span class="m">4020</span> used,        <span class="m">0</span> buff/cache
+KiB Swap:        <span class="m">0</span> total,        <span class="m">0</span> free,        <span class="m">0</span> used.   <span class="m">520268</span> avail Mem 
+
+  PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND      
+   <span class="m">17</span> root      <span class="m">20</span>   <span class="m">0</span>   <span class="m">36672</span>   <span class="m">3080</span>   <span class="m">2616</span> R  0.3  0.6   0:00.01 top         
+    <span class="m">1</span> root      <span class="m">20</span>   <span class="m">0</span>   <span class="m">18232</span>   <span class="m">3292</span>   <span class="m">2820</span> S  0.0  0.6   0:00.16 bash
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到容器内显示的资源信息与设置的资源相同，容器内只能看到自己可以使用的资源，以及自己使用了的资源。</p>
+<h4 id="kubernetes">Kubernetes</h4>
+<p>对于 Kubernetes 来说，需要将对应的文件 mount 到容器中，有下面几种方式挂载文件：</p>
+<p><strong>方式一</strong>：将 lxcfs 维护的 /proc 文件挂载信息写在 Pod 模板中，要使用 lxcfs 的每个 Pod 都需要写，like:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>lxcfs-pod<span class="w">
+</span><span class="w">  </span><span class="k">namespace</span><span class="p">:</span><span class="w"> </span>default<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="k">command</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- sh<span class="w">
+</span><span class="w">    </span>- -c<span class="w">
+</span><span class="w">    </span>- echo<span class="w"> </span>Hello<span class="w"> </span>Kubernetes!<span class="w"> </span><span class="cp">&amp;&amp;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">86400</span><span class="w">
+</span><span class="w">    </span><span class="k">image</span><span class="p">:</span><span class="w"> </span>test.caicloudprivatetest.com/library/centos-debug<span class="p">:</span>v1<span class="m">.0</span><span class="w">
+</span><span class="w">    </span><span class="k">imagePullPolicy</span><span class="p">:</span><span class="w"> </span>IfNotPresent<span class="w">
+</span><span class="w">    </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>lxcfs-pod<span class="w">
+</span><span class="w">    </span><span class="k">resources</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">limits</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">cpu</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;1&#34;</span><span class="w">
+</span><span class="w">        </span><span class="k">memory</span><span class="p">:</span><span class="w"> </span>1Gi<span class="w">
+</span><span class="w">      </span><span class="k">requests</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">cpu</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;0.5&#34;</span><span class="w">
+</span><span class="w">        </span><span class="k">memory</span><span class="p">:</span><span class="w"> </span>512Mi<span class="w">
+</span><span class="w">    </span><span class="k">volumeMounts</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="k">mountPath</span><span class="p">:</span><span class="w"> </span>/proc/cpuinfo<span class="w">
+</span><span class="w">        </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>cpuinfo<span class="w">
+</span><span class="w">      </span>- <span class="k">mountPath</span><span class="p">:</span><span class="w"> </span>/sys/devices/system/cpu/online<span class="w">
+</span><span class="w">        </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>onlinecpu<span class="w">
+</span><span class="w">      </span>- <span class="k">mountPath</span><span class="p">:</span><span class="w"> </span>/proc/meminfo<span class="w">
+</span><span class="w">        </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>meminfo<span class="w">
+</span><span class="w">      </span>- <span class="k">mountPath</span><span class="p">:</span><span class="w"> </span>/proc/diskstats<span class="w">
+</span><span class="w">        </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>diskstats<span class="w">
+</span><span class="w">      </span>- <span class="k">mountPath</span><span class="p">:</span><span class="w"> </span>/proc/stat<span class="w">
+</span><span class="w">        </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>stat<span class="w">
+</span><span class="w">      </span>- <span class="k">mountPath</span><span class="p">:</span><span class="w"> </span>/proc/swaps<span class="w">
+</span><span class="w">        </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>swaps<span class="w">
+</span><span class="w">      </span>- <span class="k">mountPath</span><span class="p">:</span><span class="w"> </span>/proc/uptime<span class="w">
+</span><span class="w">        </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>uptime<span class="w">
+</span><span class="w">  </span><span class="k">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>cpuinfo<span class="w">
+</span><span class="w">      </span><span class="k">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">path</span><span class="p">:</span><span class="w"> </span>/var/lib/lxcfs/proc/cpuinfo<span class="w">
+</span><span class="w">    </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>onlinecpu<span class="w">
+</span><span class="w">      </span><span class="k">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">path</span><span class="p">:</span><span class="w"> </span>/var/lib/lxcfs/sys/devices/system/cpu/online<span class="w">
+</span><span class="w">    </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>meminfo<span class="w">
+</span><span class="w">      </span><span class="k">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">path</span><span class="p">:</span><span class="w"> </span>/var/lib/lxcfs/proc/meminfo<span class="w">
+</span><span class="w">    </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>diskstats<span class="w">
+</span><span class="w">      </span><span class="k">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">path</span><span class="p">:</span><span class="w"> </span>/var/lib/lxcfs/proc/diskstats<span class="w">
+</span><span class="w">    </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>stat<span class="w">
+</span><span class="w">      </span><span class="k">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">path</span><span class="p">:</span><span class="w"> </span>/var/lib/lxcfs/proc/stat<span class="w">
+</span><span class="w">    </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>swaps<span class="w">
+</span><span class="w">      </span><span class="k">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">path</span><span class="p">:</span><span class="w"> </span>/var/lib/lxcfs/proc/swaps<span class="w">
+</span><span class="w">    </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>uptime<span class="w">
+</span><span class="w">      </span><span class="k">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">path</span><span class="p">:</span><span class="w"> </span>/var/lib/lxcfs/proc/uptime<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>方式二</strong>：通过 <a href="https://github.com/Meoop/lxcfs-admission-webhook">Admission Controller</a> 将需要挂载的文件自动注入需要使用 lxcfs 的 Pod 。</p>
+<p><del><strong>方法三</strong>：通过 Pod Preset 将需要挂载的文件自动注入需要使用 lxcfs 的 Pod 。</del></p>
+<p><del><strong>方式四</strong>：借鉴阿里云用 Initializers 实现的做法，将 lxcfs 维护的 /proc 文件挂载到每个容器中。</del></p>
+<h2 id="应用场景及性能分析">应用场景及性能分析</h2>
+<p>已经在生产环境中使用的厂商：</p>
+<ul>
+<li>阿里</li>
+<li>腾讯</li>
+<li>字节跳动</li>
+<li>蘑菇街</li>
+<li>…</li>
+</ul>
+<h3 id="应用场景">应用场景</h3>
+<h4 id="java">Java</h4>
+<p>在 JDK 8u191 和 JDK 10 之后，Java 社区对 JVM 在容器中运行做了优化和增强，JVM 可以自动感知容器内部的 CPU 和内存资源限制，Java 进程可用 CPU 核数由 cpu sets, cpu shares 和 cpu quotas 等参数计算而来，默认情况下该功能已经开启。在这种情况下无需使用 lxcfs。</p>
+<p>在 JDK 8u131 时 Java 添加了对 Cgroup 的实验性支持，在这几个版本中，需要添加下面参数开启对 Cgroup 的感知，开启后也无需使用 lxcfs。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">java -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
+</code></pre></td></tr></table>
+</div>
+</div><p>如果使用的是老版本的 JDK，JVM 缺省的 GC、JIT 编译线程数量来自于宿主机 CPU 核数，内存分配也基于宿主机，如果我们在一个节点上运行多个 Java 应用，即使我们设置了 CPU、Memory 的限制，应用之间依然有可能因为 GC 线程抢占切换，导致应用性能收到影响，甚至由于内存计算错误导致 OOM。JVM 获取 CPU、Memeory 信息是通过 procfs 获取的，在这种场景中 lxcfs 非常有用，通过 lxcfs 虚拟的 procfs 文件，可以正确获取受限的 CPU、Memory 资源，从而提高 Java 应用的性能，避免由于内存计算错误导致的 OOM。</p>
+<p>案例：所有使用较低版本的 Java 应用，例如跑在在旧版本的 Java 中的 Tomcat、Hadoop 等。</p>
+<h4 id="nodejs">Node.js</h4>
+<p>Node.js 获取 CPU 信息是通过 procfs 文件系统获取到的，对于 node.js 应用，要获取受限的 CPU 数量信息可以使用 lxcfs。在 nodejs 12.3.1 之前的版本，获取 Memory 信息是通过 sysinfo() 系统调用完成，获取到的是 host 系统的内存系统，无法使用 lxcfs。在之后的版本中获取内存系统的函数会先尝试从 /proc/meminfo 中获取，在这几个版本中可以使用 lxcfs，使 js 获取到分配的实际内存。</p>
+<p>案例：流水线编译 nodejs 应用。流水线编译时设置了编译线程数，使用 os.cpus() 获取，这个函数从 procfs 读取 cpu 信息，在不使用 lxcfs 时，获取到宿主机的 cpu 数量，会启动与宿主机 CPU 核数相同的的 node 进程。</p>
+<h4 id="topfreeuptime">top/free/uptime</h4>
+<p>top/free/uptime 是通过 procfs 获取信息的，使用 lxcfs，可以让这些命令在容器中获取到真实的信息。</p>
+<h4 id="nginx">Nginx</h4>
+<p>Nginx 默认线程数与 cpu 数量相同，从 /proc/cpuinfo 中获取 cpu 数量，可以通过 lxcfs 修正 cpu 数量。</p>
+<h4 id="golang">Golang</h4>
+<p>Golang 调度器默认的线程数以及 GC 机制等跟系统 CPU 数量有关，获取 CPU 信息是直接使用系统调用进行读取，跳过了 procfs 文件，读取到的直接是 host 系统的 CPU 数量，所以使用 lxcfs 没有意义，无法缓解由于设置了 cpu quota 导致的线程竞争问题，无法提高性能。获取系统内存信息的 api 并不在标准库中，对于内存信息的获取方式主要看库如何实现，例如 <a href="https://github.com/pbnjay/memory">pbnjay/memory</a> 库使用的是 sysinfo() 系统调用，获取到的信息也不通过 procfs，也不需要 lxcfs。<strong>对于 golang 应用，需不需要 lxcfs 还是要看情况。</strong></p>
+<p>对于容器内的 golang 应用，可以借助 <a href="https://github.com/uber-go/automaxprocs">uber-go/automaxprocs</a> 项目，自动设置 <code>GOMAXPROCS</code> 环境变量来避免由于设置了 CPU quota 导致的性能问题。</p>
+<h2 id="参考文档">参考文档</h2>
+<ol>
+<li><a href="https://linuxcontainers.org/lxcfs/introduction/">https://linuxcontainers.org/lxcfs/introduction/</a></li>
+<li><a href="https://github.com/lxc/lxcfs">https://github.com/lxc/lxcfs</a></li>
+<li><a href="https://yq.aliyun.com/articles/566208">https://yq.aliyun.com/articles/566208</a></li>
+<li><a href="https://golang.org/pkg/runtime/">https://golang.org/pkg/runtime/</a></li>
+</ol>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Meoop</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2019-08-06
+        <a href="https://github.com/Meoop/meoop.github.io.git/commit/cddfbb68f6e51d5cbbd21f8afa26249b992ce1d5" title="post: LXCFS part 1: Intro to LXCFS">(cddfbb6)</a>
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/lxcfs/">lxcfs</a>
+          <a href="/tags/container/">container</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/lxcfs-part-2-implementation/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">LXCFS Part 2 - Implementation Details</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/upgrade-glusterfs/">
+            <span class="next-text nav-default">Upgrade Glusterfs</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'meoop';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="yilei108@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.stackoverflow.com/users/12249756/" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.facebook.com/lei.yi.908" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://www.linkedin.com/in/yilei/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/Meoop" class="iconfont icon-github" title="github"></a>
+      <a href="http://weibo.com/18722081826" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://www.zhihu.com/people/lei.yi" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="http://blog.meoop.me/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2015 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Meoop</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-101122173-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

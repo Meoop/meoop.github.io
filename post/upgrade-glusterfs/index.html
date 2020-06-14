@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Upgrade Glusterfs - 享受编程 - Coding Your Ambition.</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Meoop" /><meta name="description" content="支持 3.10.x，3.12.x，4.1.x，5.x 升级到 6.x 版本。
+升级前注意事项  只有复制卷和分布式复制卷可以联机升级 分布式卷和条纹卷不支持联机升级 升级过程中不得修改任何配置 如果使用 geo-replication ，先升级 slave 节点，再升级 master 节点 建议先升级服务端再升级客户端 建议使用相同版本的客户端和服务端 升级前建议阅读版本的 release note，熟悉新版本删除和添加的功能 " /><meta name="keywords" content="glusterfs" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
+
+
+<link rel="canonical" href="http://blog.meoop.me/post/upgrade-glusterfs/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Upgrade Glusterfs" />
+<meta property="og:description" content="支持 3.10.x，3.12.x，4.1.x，5.x 升级到 6.x 版本。
+升级前注意事项
+
+只有复制卷和分布式复制卷可以联机升级
+分布式卷和条纹卷不支持联机升级
+升级过程中不得修改任何配置
+如果使用 geo-replication ，先升级 slave 节点，再升级 master 节点
+建议先升级服务端再升级客户端
+建议使用相同版本的客户端和服务端
+升级前建议阅读版本的 release note，熟悉新版本删除和添加的功能
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://blog.meoop.me/post/upgrade-glusterfs/" />
+<meta property="article:published_time" content="2019-07-24T20:40:12+08:00" />
+<meta property="article:modified_time" content="2019-07-24T20:40:12+08:00" />
+<meta itemprop="name" content="Upgrade Glusterfs">
+<meta itemprop="description" content="支持 3.10.x，3.12.x，4.1.x，5.x 升级到 6.x 版本。
+升级前注意事项
+
+只有复制卷和分布式复制卷可以联机升级
+分布式卷和条纹卷不支持联机升级
+升级过程中不得修改任何配置
+如果使用 geo-replication ，先升级 slave 节点，再升级 master 节点
+建议先升级服务端再升级客户端
+建议使用相同版本的客户端和服务端
+升级前建议阅读版本的 release note，熟悉新版本删除和添加的功能
+">
+<meta itemprop="datePublished" content="2019-07-24T20:40:12&#43;08:00" />
+<meta itemprop="dateModified" content="2019-07-24T20:40:12&#43;08:00" />
+<meta itemprop="wordCount" content="1268">
+
+
+
+<meta itemprop="keywords" content="glusterfs," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Upgrade Glusterfs"/>
+<meta name="twitter:description" content="支持 3.10.x，3.12.x，4.1.x，5.x 升级到 6.x 版本。
+升级前注意事项
+
+只有复制卷和分布式复制卷可以联机升级
+分布式卷和条纹卷不支持联机升级
+升级过程中不得修改任何配置
+如果使用 geo-replication ，先升级 slave 节点，再升级 master 节点
+建议先升级服务端再升级客户端
+建议使用相同版本的客户端和服务端
+升级前建议阅读版本的 release note，熟悉新版本删除和添加的功能
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Ambition</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Ambition</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Upgrade Glusterfs</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-07-24 </span>
+        <div class="post-category">
+            <a href="/categories/glusterfs/"> glusterfs </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#升级前注意事项">升级前注意事项</a></li>
+    <li><a href="#服务端升级">服务端升级</a>
+      <ul>
+        <li><a href="#在线升级">在线升级</a></li>
+        <li><a href="#离线升级">离线升级</a></li>
+        <li><a href="#服务端升级后操作">服务端升级后操作</a></li>
+      </ul>
+    </li>
+    <li><a href="#客户端升级">客户端升级</a></li>
+    <li><a href="#troubleshooting">Troubleshooting</a></li>
+    <li><a href="#参考文档">参考文档</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>支持 3.10.x，3.12.x，4.1.x，5.x 升级到 6.x 版本。</p>
+<h2 id="升级前注意事项">升级前注意事项</h2>
+<ul>
+<li>只有复制卷和分布式复制卷可以联机升级</li>
+<li>分布式卷和条纹卷不支持联机升级</li>
+<li>升级过程中不得修改任何配置</li>
+<li>如果使用 geo-replication ，先升级 slave 节点，再升级 master 节点</li>
+<li>建议先升级服务端再升级客户端</li>
+<li>建议使用相同版本的客户端和服务端</li>
+<li>升级前建议阅读版本的 release note，熟悉新版本删除和添加的功能</li>
+</ul>
+<h2 id="服务端升级">服务端升级</h2>
+<p>如果对卷进行单独设置过参数，建议阅读新版本 release note，查看功能删减，如果功能被删除，建议将参数设置为默认值，防止升级失败。</p>
+<p>检查额外的配置参数，单独设置过的参数可以在 info 信息的 <code>Options Reconfigured</code> 部分看到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">gluster volume info
+</code></pre></td></tr></table>
+</div>
+</div><p>重置配置可以通过下面方式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">gluster volume reset &lt;volname&gt; &lt;option&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="在线升级">在线升级</h3>
+<p>在线升级每次升级一台电脑，在升级过程中，卷保持 Online 状态，不影响客户端 IO 读写。在线升级假设副本集分散在不同的主机上，若副本都在同一台主机，则无法在线升级。</p>
+<p>依次在每个节点需要执行下面的升级过程：</p>
+<p>1、关闭所有 gluster 进程，包括正在使用 gfapi 的应用，例如：qemu，NFS-Ganesha，Samba 等。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 停止 glusterd 服务</span>
+systemctl stop glusterd.service
+<span class="c1"># 杀死所有 gluster 相关进程，例如 fuse 客户端，brick 进程等</span>
+killall glusterfs glusterfsd glusterd
+</code></pre></td></tr></table>
+</div>
+</div><p>2、升级 gluster，下面以升级到 gluster6 为例</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">yum install centos-release-gluster6
+yum upgrade 
+</code></pre></td></tr></table>
+</div>
+</div><p>3、确保 gluster 版本都升级到指定版本</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">rpm -qa <span class="p">|</span>grep gluster
+</code></pre></td></tr></table>
+</div>
+</div><p>4、重新启动 glusterd 进程，brick 进程，确保所有 brick 在线</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 重新启动 glusterd 服务</span>
+systemctl start glusterd
+systemctl status glusterd
+<span class="c1"># 查看 brick 状态</span>
+gluster volume status
+</code></pre></td></tr></table>
+</div>
+</div><p>5、对卷进行修复</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 修复卷</span>
+<span class="k">for</span> i in <span class="sb">`</span>gluster volume list<span class="sb">`</span><span class="p">;</span> <span class="k">do</span> gluster volume heal <span class="nv">$i</span><span class="p">;</span> <span class="k">done</span>
+<span class="c1"># 查看修复状态</span>
+<span class="k">for</span> i in <span class="sb">`</span>gluster volume list<span class="sb">`</span><span class="p">;</span> <span class="k">do</span> gluster volume heal <span class="nv">$i</span> info<span class="p">;</span> <span class="k">done</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>6、确认卷修复都完成后，重启 1 中关闭的所有 gfapi 程序，然后对下一个节点进行升级</p>
+<h3 id="离线升级">离线升级</h3>
+<p>离线升级集群停止服务，在升级过程在，不允许任何客户端访问卷。</p>
+<p>在 gluster 所有节点执行下面操作：</p>
+<p>1、关闭所有 gluster 进程，包括正在使用 gfapi 的应用，例如：qemu，NFS-Ganesha，Samba 等。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 停止 glusterd 服务</span>
+systemctl stop glusterd.service
+<span class="c1"># 杀死所有 gluster 相关进程，例如 fuse 客户端，brick 进程等</span>
+killall glusterfs glusterfsd glusterd
+</code></pre></td></tr></table>
+</div>
+</div><p>2、升级 gluster，下面以升级到 gluster6 为例</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">yum install centos-release-gluster6
+yum upgrade 
+</code></pre></td></tr></table>
+</div>
+</div><p>3、确保 gluster 版本都升级到指定版本</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">rpm -qa <span class="p">|</span>grep gluster
+</code></pre></td></tr></table>
+</div>
+</div><p>4、重新启动 glusterd 进程，brick 进程，确保所有 brick 在线</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 重新启动 glusterd 服务</span>
+systemctl start glusterd
+systemctl status glusterd
+<span class="c1"># 查看 brick 状态</span>
+gluster volume status
+</code></pre></td></tr></table>
+</div>
+</div><p>5、对卷进行修复</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 修复卷</span>
+<span class="k">for</span> i in <span class="sb">`</span>gluster volume list<span class="sb">`</span><span class="p">;</span> <span class="k">do</span> gluster volume heal <span class="nv">$i</span><span class="p">;</span> <span class="k">done</span>
+<span class="c1"># 查看修复状态</span>
+<span class="k">for</span> i in <span class="sb">`</span>gluster volume list<span class="sb">`</span><span class="p">;</span> <span class="k">do</span> gluster volume heal <span class="nv">$i</span> info<span class="p">;</span> <span class="k">done</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="服务端升级后操作">服务端升级后操作</h3>
+<h4 id="升级-op-version">升级 op-version</h4>
+<p>op-version 是正在运行的 Gluster 的操作版本。引入 op-version 的目的是为了确保不同版本的 gluster 运行不会出现问题，解决 gluster 向后兼容性问题。Gluster 升级后，建议更新 op-version。</p>
+<p>获取当前使用的 op-version：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">gluster volume get all cluster.op-version
+</code></pre></td></tr></table>
+</div>
+</div><p>获取当前可以使用的最高版本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">gluster volume get all cluster.max-op-version
+</code></pre></td></tr></table>
+</div>
+</div><p>例如升级到 gluster6 后，要使用 gluster6 的新特性，可以更新到最新 op-version ：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">gluster volume <span class="nb">set</span> all cluster.op-version <span class="m">60000</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="客户端升级">客户端升级</h2>
+<ol>
+<li>卸载客户端上的所有 glusterfs 挂载点</li>
+<li>停止通过 gfapi（qemu等）访问卷的所有应用程序</li>
+<li>安装 Gluster 6.x</li>
+<li>重新挂载所有 gluster 卷</li>
+<li>启动之前在步骤 2 中停止的所有应用程序</li>
+</ol>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>Glusterd 启动后，brick 未启动</p>
+<ol>
+<li>查看 glusterd 日志，看是否有相关错误日志，查找失败原因；</li>
+<li>如果曾经有修改过 glusterd.vol 文件，升级后需要更新 glusterd.vol 文件，部分配置不存在会导致 brick 启动失败；</li>
+</ol>
+<h2 id="参考文档">参考文档</h2>
+<ol>
+<li><a href="https://docs.gluster.org/en/latest/Upgrade-Guide/">https://docs.gluster.org/en/latest/Upgrade-Guide/</a></li>
+<li><a href="https://docs.gluster.org/en/latest/Upgrade-Guide/op_version/">https://docs.gluster.org/en/latest/Upgrade-Guide/op_version/</a></li>
+</ol>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Meoop</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2019-07-24
+        <a href="https://github.com/Meoop/meoop.github.io.git/commit/7d07722109c757bc584881674df2daf4edc49e15" title="post: upgrade glusterfs">(7d07722)</a>
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/glusterfs/">glusterfs</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/lxcfs-part-1-introduction/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">LXCFS Part 1 - Intro to LXCFS</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/rebuild-kernel-with-src.rpm/">
+            <span class="next-text nav-default">Rebuild kernel package with src.rpm (Centos7)</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'meoop';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="yilei108@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.stackoverflow.com/users/12249756/" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.facebook.com/lei.yi.908" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://www.linkedin.com/in/yilei/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/Meoop" class="iconfont icon-github" title="github"></a>
+      <a href="http://weibo.com/18722081826" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://www.zhihu.com/people/lei.yi" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="http://blog.meoop.me/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2015 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Meoop</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-101122173-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

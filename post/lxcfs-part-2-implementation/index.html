@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>LXCFS Part 2 - Implementation Details - 享受编程 - Coding Your Ambition.</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Meoop" /><meta name="description" content="上一篇文章我们主要了解了 LXCFS 的使用场景以及在 docker/kubernetes 中如何使用 LXCFS，这篇文章我们从源码入手，了解下 LXCFS 是如何实现上面功能的。LXCFS 是基于 fuse 实现的虚拟文件系统，理解 LXCFS，我们需要先了解 fuse，然后再对 LXCFS 的源码进行解读。下面代码解读是在 lxcfs-3.1.2 的代码基础上进行分析的。
+" /><meta name="keywords" content="lxcfs, container" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
+
+
+<link rel="canonical" href="http://blog.meoop.me/post/lxcfs-part-2-implementation/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="LXCFS Part 2 - Implementation Details" />
+<meta property="og:description" content="上一篇文章我们主要了解了 LXCFS 的使用场景以及在 docker/kubernetes 中如何使用 LXCFS，这篇文章我们从源码入手，了解下 LXCFS 是如何实现上面功能的。LXCFS 是基于 fuse 实现的虚拟文件系统，理解 LXCFS，我们需要先了解 fuse，然后再对 LXCFS 的源码进行解读。下面代码解读是在 lxcfs-3.1.2 的代码基础上进行分析的。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://blog.meoop.me/post/lxcfs-part-2-implementation/" />
+<meta property="article:published_time" content="2019-08-22T21:58:32+08:00" />
+<meta property="article:modified_time" content="2019-08-22T21:58:32+08:00" />
+<meta itemprop="name" content="LXCFS Part 2 - Implementation Details">
+<meta itemprop="description" content="上一篇文章我们主要了解了 LXCFS 的使用场景以及在 docker/kubernetes 中如何使用 LXCFS，这篇文章我们从源码入手，了解下 LXCFS 是如何实现上面功能的。LXCFS 是基于 fuse 实现的虚拟文件系统，理解 LXCFS，我们需要先了解 fuse，然后再对 LXCFS 的源码进行解读。下面代码解读是在 lxcfs-3.1.2 的代码基础上进行分析的。">
+<meta itemprop="datePublished" content="2019-08-22T21:58:32&#43;08:00" />
+<meta itemprop="dateModified" content="2019-08-22T21:58:32&#43;08:00" />
+<meta itemprop="wordCount" content="5441">
+
+
+
+<meta itemprop="keywords" content="lxcfs,container," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="LXCFS Part 2 - Implementation Details"/>
+<meta name="twitter:description" content="上一篇文章我们主要了解了 LXCFS 的使用场景以及在 docker/kubernetes 中如何使用 LXCFS，这篇文章我们从源码入手，了解下 LXCFS 是如何实现上面功能的。LXCFS 是基于 fuse 实现的虚拟文件系统，理解 LXCFS，我们需要先了解 fuse，然后再对 LXCFS 的源码进行解读。下面代码解读是在 lxcfs-3.1.2 的代码基础上进行分析的。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Ambition</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Ambition</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">LXCFS Part 2 - Implementation Details</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-08-22 </span>
+        <div class="post-category">
+            <a href="/categories/lxcfs/"> lxcfs </a>
+            <a href="/categories/container/"> container </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#fuse">FUSE</a></li>
+    <li><a href="#lxcfs">LXCFS</a>
+      <ul>
+        <li><a href="#open">open</a></li>
+        <li><a href="#read">read</a></li>
+        <li><a href="#procuptime">/proc/uptime</a></li>
+        <li><a href="#procmeminfo">/proc/meminfo</a></li>
+        <li><a href="#proccpuinfo">/proc/cpuinfo</a></li>
+        <li><a href="#procswaps">/proc/swaps</a></li>
+        <li><a href="#procloadavg">/proc/loadavg</a></li>
+        <li><a href="#procstat">/proc/stat</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><a href="https://blog.meoop.me/post/lxcfs-part-1-introduction/">上一篇文章我们主要了解了 LXCFS 的使用场景以及在 docker/kubernetes 中如何使用 LXCFS</a>，这篇文章我们从源码入手，了解下 LXCFS 是如何实现上面功能的。LXCFS 是基于 fuse 实现的虚拟文件系统，理解 LXCFS，我们需要先了解 fuse，然后再对 LXCFS 的源码进行解读。下面代码解读是在 lxcfs-3.1.2 的代码基础上进行分析的。</p>
+<h2 id="fuse">FUSE</h2>
+<p>FUSE（filesystem in userspace)，用户空间文件系统，是将文件系统实现在用户空间的一套框架。Linux 的文件系统都工作在内核态，要写一个完整的文件系统就需要在内核中添加代码，内核代码是比较复杂的，这给新文件系统的实现和调试带了极大的困难。FUSE 正是解决该问题的，它将内核态的文件系统实现放在用户空间去实现。FUSE 有很多应用，例如 glusterfs client 端的实现，<a href="https://github.com/libfuse/sshfs">sshfs</a> 系统实现等。</p>
+<p>FUSE 主要分为两部分：FUSE 内核模块（在内核代码中维护）和 libfuse 用户空间库。libfuse 提供了与 FUSE 内核模块通信的参考实现。FUSE 文件系统为基于 libfuse 的用户空间程序实现，libfuse 提供了文件系统的 mount/unmount，从内核读取请求以及发送响应的函数。FUSE 文件系统的流程非常简单，如下图所示，内核截获到文件调用，交给对应的用户空间函数去执行，然后返回对应结果。实现 FUSE 文件系统主要工作是要实现对应的文件接口（<a href="https://github.com/libfuse/libfuse/blob/82e10e576e6c11eeaa13ad45421578401b14f180/include/fuse.h#L277-L779">fuse_operations</a>）。</p>
+<figure class="center">
+    <img src="/images/post/LXCFS-Part-1-Implementation/FUSE_structure.png"/> 
+</figure>
+
+<h2 id="lxcfs">LXCFS</h2>
+<p>熟悉了 FUSE，接下来我们再来看 lxcfs。从 procfs 文件系统中获取信息，归结到文件调用就两个：<code>open</code> 和 <code>read</code>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">// lxcfs.c: 919
+</span><span class="c1"></span><span class="k">const</span> <span class="k">struct</span> <span class="n">fuse_operations</span> <span class="n">lxcfs_ops</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="c1">// ...code...
+</span><span class="c1"></span>	<span class="p">.</span><span class="n">open</span> <span class="o">=</span> <span class="n">lxcfs_open</span><span class="p">,</span>
+	<span class="p">.</span><span class="n">read</span> <span class="o">=</span> <span class="n">lxcfs_read</span><span class="p">,</span>
+	<span class="c1">// ..code....
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="open">open</h3>
+<p>我们先来看 <code>open</code>，<code>open</code> 指向的是 <code>lxcfs_open()</code> 函数，<code>lxcfs_open()</code> 函数根据路径执行不同的函数，参数 <code>path</code> 表示访问的文件路径，<code>fuse_file_info</code> 结构体保存了文件信息。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">// lxcfs.c: 742
+</span><span class="c1"></span><span class="k">static</span> <span class="kt">int</span> <span class="nf">lxcfs_open</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="k">struct</span> <span class="n">fuse_file_info</span> <span class="o">*</span><span class="n">fi</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">ret</span><span class="p">;</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#34;/cgroup&#34;</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">up_users</span><span class="p">();</span>
+		<span class="n">ret</span> <span class="o">=</span> <span class="n">do_cg_open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">fi</span><span class="p">);</span>
+		<span class="n">down_users</span><span class="p">();</span>
+		<span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#34;/proc&#34;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">up_users</span><span class="p">();</span>
+		<span class="n">ret</span> <span class="o">=</span> <span class="n">do_proc_open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">fi</span><span class="p">);</span>
+		<span class="n">down_users</span><span class="p">();</span>
+		<span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#34;/sys&#34;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">up_users</span><span class="p">();</span>
+		<span class="n">ret</span> <span class="o">=</span> <span class="n">do_sys_open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">fi</span><span class="p">);</span>
+		<span class="n">down_users</span><span class="p">();</span>
+		<span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="o">-</span><span class="n">EACCES</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>路径为 <code>/proc</code> 调用的函数是 <code>do_proc_open()</code>，<code>do_proc_open()</code> 最终调用的函数是 <code>proc_open()</code>，<code>proc_open()</code> 根据访问路径，分配对应的内存，这段内存在 <code>read</code> 时用来保存文件内容，到这里 <code>open</code> 函数就结束了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">// bindings.c: 5877
+</span><span class="c1"></span><span class="kt">int</span> <span class="nf">proc_open</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="k">struct</span> <span class="n">fuse_file_info</span> <span class="o">*</span><span class="n">fi</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">type</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+	<span class="k">struct</span> <span class="n">file_info</span> <span class="o">*</span><span class="n">info</span><span class="p">;</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#34;/proc/meminfo&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+		<span class="n">type</span> <span class="o">=</span> <span class="n">LXC_TYPE_PROC_MEMINFO</span><span class="p">;</span>
+	<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#34;/proc/cpuinfo&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+		<span class="n">type</span> <span class="o">=</span> <span class="n">LXC_TYPE_PROC_CPUINFO</span><span class="p">;</span>
+	<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#34;/proc/uptime&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+		<span class="n">type</span> <span class="o">=</span> <span class="n">LXC_TYPE_PROC_UPTIME</span><span class="p">;</span>
+	<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#34;/proc/stat&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+		<span class="n">type</span> <span class="o">=</span> <span class="n">LXC_TYPE_PROC_STAT</span><span class="p">;</span>
+	<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#34;/proc/diskstats&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+		<span class="n">type</span> <span class="o">=</span> <span class="n">LXC_TYPE_PROC_DISKSTATS</span><span class="p">;</span>
+	<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#34;/proc/swaps&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+		<span class="n">type</span> <span class="o">=</span> <span class="n">LXC_TYPE_PROC_SWAPS</span><span class="p">;</span>
+	<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#34;/proc/loadavg&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+		<span class="n">type</span> <span class="o">=</span> <span class="n">LXC_TYPE_PROC_LOADAVG</span><span class="p">;</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">return</span> <span class="o">-</span><span class="n">ENOENT</span><span class="p">;</span>
+
+	<span class="n">info</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">info</span><span class="p">));</span>
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">info</span><span class="p">)</span>
+		<span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+
+	<span class="n">memset</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">info</span><span class="p">));</span>
+	<span class="n">info</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">=</span> <span class="n">type</span><span class="p">;</span>
+
+	<span class="n">info</span><span class="o">-&gt;</span><span class="n">buflen</span> <span class="o">=</span> <span class="n">get_procfile_size</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="n">BUF_RESERVE_SIZE</span><span class="p">;</span>
+	<span class="k">do</span> <span class="p">{</span>
+		<span class="n">info</span><span class="o">-&gt;</span><span class="n">buf</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">info</span><span class="o">-&gt;</span><span class="n">buflen</span><span class="p">);</span>
+	<span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">info</span><span class="o">-&gt;</span><span class="n">buf</span><span class="p">);</span>
+	<span class="n">memset</span><span class="p">(</span><span class="n">info</span><span class="o">-&gt;</span><span class="n">buf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">info</span><span class="o">-&gt;</span><span class="n">buflen</span><span class="p">);</span>
+	<span class="cm">/* set actual size to buffer size */</span>
+	<span class="n">info</span><span class="o">-&gt;</span><span class="n">size</span> <span class="o">=</span> <span class="n">info</span><span class="o">-&gt;</span><span class="n">buflen</span><span class="p">;</span>
+
+	<span class="n">fi</span><span class="o">-&gt;</span><span class="n">fh</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">info</span><span class="p">;</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="read">read</h3>
+<p><code>read</code> 调用 <code>lxcfs_read()</code>，根据对应路径执行不同的函数，相对于 <code>open</code> 函数多了 <code>buf</code> 相关的信息，这个 <code>buf</code> 是用来保存文件内容的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">// lxcfs.c: 768
+</span><span class="c1"></span><span class="k">static</span> <span class="kt">int</span> <span class="nf">lxcfs_read</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="n">off_t</span> <span class="n">offset</span><span class="p">,</span> <span class="k">struct</span> <span class="n">fuse_file_info</span> <span class="o">*</span><span class="n">fi</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">ret</span><span class="p">;</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#34;/cgroup&#34;</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">up_users</span><span class="p">();</span>
+		<span class="n">ret</span> <span class="o">=</span> <span class="n">do_cg_read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">fi</span><span class="p">);</span>
+		<span class="n">down_users</span><span class="p">();</span>
+		<span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#34;/proc&#34;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">up_users</span><span class="p">();</span>
+		<span class="n">ret</span> <span class="o">=</span> <span class="n">do_proc_read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">fi</span><span class="p">);</span>
+		<span class="n">down_users</span><span class="p">();</span>
+		<span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#34;/sys&#34;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">up_users</span><span class="p">();</span>
+		<span class="n">ret</span> <span class="o">=</span> <span class="n">do_sys_read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">fi</span><span class="p">);</span>
+		<span class="n">down_users</span><span class="p">();</span>
+		<span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="o">-</span><span class="n">EINVAL</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>同样我们关注 <code>/proc</code> 下的文件，<code>do_proc_read()</code> 最终调用的函数是 <code>proc_read()</code>，<code>proc_read()</code> 根据访问路径，分别执行不同的函数，用来填充 <code>buf</code>，各个文件获取信息的方式不同。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">// bindings.c: 5935
+</span><span class="c1"></span><span class="kt">int</span> <span class="nf">proc_read</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="n">off_t</span> <span class="n">offset</span><span class="p">,</span>
+		<span class="k">struct</span> <span class="n">fuse_file_info</span> <span class="o">*</span><span class="n">fi</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">struct</span> <span class="n">file_info</span> <span class="o">*</span><span class="n">f</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">file_info</span> <span class="o">*</span><span class="p">)</span> <span class="n">fi</span><span class="o">-&gt;</span><span class="n">fh</span><span class="p">;</span>
+
+	<span class="k">switch</span> <span class="p">(</span><span class="n">f</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">case</span> <span class="nl">LXC_TYPE_PROC_MEMINFO</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">proc_meminfo_read</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">fi</span><span class="p">);</span>
+	<span class="k">case</span> <span class="nl">LXC_TYPE_PROC_CPUINFO</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">proc_cpuinfo_read</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">fi</span><span class="p">);</span>
+	<span class="k">case</span> <span class="nl">LXC_TYPE_PROC_UPTIME</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">proc_uptime_read</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">fi</span><span class="p">);</span>
+	<span class="k">case</span> <span class="nl">LXC_TYPE_PROC_STAT</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">proc_stat_read</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">fi</span><span class="p">);</span>
+	<span class="k">case</span> <span class="nl">LXC_TYPE_PROC_DISKSTATS</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">proc_diskstats_read</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">fi</span><span class="p">);</span>
+	<span class="k">case</span> <span class="nl">LXC_TYPE_PROC_SWAPS</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">proc_swaps_read</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">fi</span><span class="p">);</span>
+	<span class="k">case</span> <span class="nl">LXC_TYPE_PROC_LOADAVG</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">proc_loadavg_read</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">fi</span><span class="p">);</span>
+	<span class="k">default</span><span class="o">:</span>
+		<span class="k">return</span> <span class="o">-</span><span class="n">EINVAL</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>要获取启动信息等信息时无法避免需要知道容器内进程对应到 host 上对应的 PID，lxcfs 使用了一个巧妙的办法获取到容器内 PID 为 1 的进程对应到 host 上的进程 PID：</p>
+<ul>
+<li>调用 <code>fuse_get_context()</code> 获得正在发起读请求的进程的 <code>current_pid</code>，<code>current_pid</code> 是 lxcfs 所在 namespace 中的进程号，不是容器中看到的进程号。</li>
+<li>调用 <code>lookup_initpid_in_store()</code>，根据上面获取到的进程号查询容器内进程 PID=1 的进程的 PID，如果缓存中没有，则通过下面方式获取：
+<ul>
+<li>创建一个 <code>socketpair</code>（一对 <code>socket</code>），<code>sock[0]</code> 和 <code>sock[1]</code>；</li>
+<li>fork 一个子进程，父进程准备从 <code>sock[1]</code> 中读数据，子进程准备向 <code>sock[0]</code> 写数据；</li>
+<li>子进程通过发起请求进程的 <code>/proc/%d/ns/pid</code> 查询到 pid namespaces（即容器的 pid namespaces），<code>clone()</code> 一个新进程并将其放到容器的 pid namespaces 中；</li>
+<li>孙子进程使用指定的 <code>socket</code> 控制头（控制头中发送者的进程 pid=1）发送发送信息到 <code>sock[0]</code> 中；</li>
+<li>父进程读取 <code>sock[1]</code> 的控制头，父进程在容器空间之外，所以读到的是容器内 PID=1 的进程在容器外的 PID。</li>
+</ul>
+</li>
+</ul>
+<h3 id="procuptime">/proc/uptime</h3>
+<p><code>/proc/uptime</code> 文件中包含两个数值标识系统启动时间信息，使用单位为秒，第一个数字表示系统运行了多长时间，第二个数字表示系统空闲了多长时间，例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">root@f3e726b2ff83:/# cat /proc/uptime 
+177685.78 177650.54
+</code></pre></td></tr></table>
+</div>
+</div><p>计算 <code>/proc/uptime</code> 的值涉及到 cgroup 和 <code>/proc/$PID/</code> 下的文件，计算方式如下：</p>
+<ul>
+<li>通过容器外的进程号获取到  cpuacct cgroup 子系统，读取 cpuacct.usage 文件（实际使用到的 CPU 时间，时间 ns），计算 cpu 使用时间（busytime）；</li>
+<li>通过容器 PID=1 的进程 <code>/proc/$PID/stat</code> 文件，获取到进程启动时间，作为为系统启动运行的时间（reaperage），作为 <code>/proc/uptime</code> 的第一个数字；</li>
+<li><code>idletime = reaperage - busytime</code>，idletime 作为 <code>/proc/uptime</code> 的第二个数字；</li>
+</ul>
+<h3 id="procmeminfo">/proc/meminfo</h3>
+<p><code>/proc/meminfo</code> 包含了有关系统内存使用情况的所有统计信息，结构如下所示。具体字段的含义参考 <a href="https://man7.org/linux/man-pages/man5/proc.5.html">PROC(5)</a>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">root@2fa248c8b660:/# cat /proc/meminfo 
+MemTotal:         <span class="m">524288</span> kB    &lt;-- 总内存
+MemFree:          <span class="m">519848</span> kB    &lt;-- LowFree+HighFree
+MemAvailable:     <span class="m">521300</span> kB    &lt;-- 可以用于新程序启动的内存，不包含 swap
+Buffers:               <span class="m">0</span> kB    
+Cached:             <span class="m">1452</span> kB    
+SwapCached:            <span class="m">0</span> kB
+Active:              <span class="m">528</span> kB
+Inactive:           <span class="m">1452</span> kB
+Active<span class="o">(</span>anon<span class="o">)</span>:        <span class="m">528</span> kB
+Inactive<span class="o">(</span>anon<span class="o">)</span>:        <span class="m">0</span> kB
+Active<span class="o">(</span>file<span class="o">)</span>:          <span class="m">0</span> kB
+Inactive<span class="o">(</span>file<span class="o">)</span>:     <span class="m">1452</span> kB
+Unevictable:           <span class="m">0</span> kB
+Mlocked:              <span class="m">48</span> kB
+SwapTotal:             <span class="m">0</span> kB
+SwapFree:              <span class="m">0</span> kB
+Dirty:               <span class="m">580</span> kB
+Writeback:             <span class="m">0</span> kB
+AnonPages:       <span class="m">3879568</span> kB
+Mapped:          <span class="m">1282988</span> kB
+Shmem:                 <span class="m">0</span> kB
+KReclaimable:     <span class="m">178736</span> kB
+Slab:               <span class="m">0</span> kB
+SReclaimable:          <span class="m">0</span> kB
+SUnreclaim:            <span class="m">0</span> kB
+KernelStack:       <span class="m">16128</span> kB
+PageTables:        <span class="m">54060</span> kB
+NFS_Unstable:          <span class="m">0</span> kB
+Bounce:                <span class="m">0</span> kB
+WritebackTmp:          <span class="m">0</span> kB
+CommitLimit:     <span class="m">8044584</span> kB
+Committed_AS:   <span class="m">15352260</span> kB
+VmallocTotal:   <span class="m">34359738367</span> kB
+VmallocUsed:           <span class="m">0</span> kB
+VmallocChunk:          <span class="m">0</span> kB
+Percpu:             <span class="m">3584</span> kB
+HardwareCorrupted:     <span class="m">0</span> kB
+AnonHugePages:         <span class="m">0</span> kB
+ShmemHugePages:        <span class="m">0</span> kB
+ShmemPmdMapped:        <span class="m">0</span> kB
+CmaTotal:              <span class="m">0</span> kB
+CmaFree:               <span class="m">0</span> kB
+HugePages_Total:       <span class="m">0</span>
+HugePages_Free:        <span class="m">0</span>
+HugePages_Rsvd:        <span class="m">0</span>
+HugePages_Surp:        <span class="m">0</span>
+Hugepagesize:       <span class="m">2048</span> kB
+Hugetlb:               <span class="m">0</span> kB
+DirectMap4k:      <span class="m">338852</span> kB
+DirectMap2M:    <span class="m">10860544</span> kB
+DirectMap1G:     <span class="m">5242880</span> kB
+</code></pre></td></tr></table>
+</div>
+</div><p><code>/proc/meminfo </code>的信息主要从 <a href="https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt">memory cgroup</a> 中获取，主要读取下面几个文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">memory.limit_in_bytes        --&gt; 容器可用内存
+memory.usage_in_bytes        --&gt; 容器已使用内存
+memory.stat                  --&gt; 容器内存状态信息
+memory.memsw.limit_in_bytes  --&gt; 容器可以使用的缓存
+memory.memsw.usage_in_bytes  --&gt; 容器已经使用的缓存
+</code></pre></td></tr></table>
+</div>
+</div><p>从这几个文件读取到信息后填充虚拟的 <code>/proc/meminfo</code>，例如：</p>
+<ul>
+<li>从 memory.limit_in_bytes 获取到容器内存，作为 MemTotal</li>
+<li>从 memory.usage_in_bytes 获取到已使用内存，<code>MemFree = MemTotal - memory.usage_in_bytes</code></li>
+<li>其他字段通过 stat 文件等信息进行对应计算</li>
+</ul>
+<h3 id="proccpuinfo">/proc/cpuinfo</h3>
+<p><code>/proc/cpuinfo</code> 文件包含了 cpu 相关的信息，结构如下所示。具体字段的含义参考 <a href="https://man7.org/linux/man-pages/man5/proc.5.html">PROC(5)</a>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">root@2fa248c8b660:/# cat /proc/cpuinfo 
+processor	: <span class="m">0</span>
+vendor_id	: GenuineIntel
+cpu family	: <span class="m">6</span>
+model		: <span class="m">142</span>
+model name	: Intel<span class="o">(</span>R<span class="o">)</span> Core<span class="o">(</span>TM<span class="o">)</span> i7-8565U CPU @ 1.80GHz
+stepping	: <span class="m">11</span>
+microcode	: 0xb8
+cpu MHz		: 800.028
+cache size	: <span class="m">8192</span> KB
+physical id	: <span class="m">0</span>
+siblings	: <span class="m">4</span>
+core id		: <span class="m">0</span>
+cpu cores	: <span class="m">4</span>
+apicid		: <span class="m">0</span>
+initial apicid	: <span class="m">0</span>
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: <span class="m">22</span>
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d arch_capabilities
+bugs		: spectre_v1 spectre_v2 spec_store_bypass mds swapgs
+bogomips	: 3984.00
+clflush size	: <span class="m">64</span>
+cache_alignment	: <span class="m">64</span>
+address sizes	: <span class="m">39</span> bits physical, <span class="m">48</span> bits virtual
+power management:
+</code></pre></td></tr></table>
+</div>
+</div><p>lxcfs 实现的 <code>/proc/cpuinfo</code> 与 host 上的极为相似，主要区别在于 cpu 的数量，其他的内容由 host 上的 <code>/proc/cpuinfo</code> 填充，这里也主要关注 cpu 核数的计算：</p>
+<ul>
+<li>读取 cpuset cgroup 子系统的 cpuset.cpus 文件，表示可以使用的 cpu</li>
+<li>如果 cpu,cpuacct cgroup 子系统存在，则应用 cpu 视图，根据 cpu quota 计算 cpu 数量</li>
+<li>获取 cpu.cfs_quota_us</li>
+<li>获取 cpu.cfs_period_us</li>
+<li>cpu num 为 <code>cfs_quota/cfs_period</code> 向上取整</li>
+</ul>
+<h3 id="procswaps">/proc/swaps</h3>
+<p><code>/proc/swaps</code> 文件包含了交换分区相关的信息，文件格式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">root@2fa248c8b660:/# cat /proc/swaps 
+Filename				Type		Size	Used	Priority
+none                          virtual	524288	0	<span class="m">0</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 lxcfs 中，写死了 Filename 为 none，Type 为 virtual，Priority 为 0。其他的信息主要从 <a href="https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt">memory cgroup</a> 中获取，主要读取下面几个文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">memory.limit_in_bytes 
+memory.usage_in_bytes 
+memory.memsw.limit_in_bytes
+memory.memsw.usage_in_bytes
+</code></pre></td></tr></table>
+</div>
+</div><p>计算方式为：</p>
+<ul>
+<li>swap_total = (memswlimit - memlimit) / 1024;</li>
+<li>swap_free = (memswusage - memusage) / 1024;</li>
+</ul>
+<h3 id="procloadavg">/proc/loadavg</h3>
+<p><code>/proc/loadavg</code> 包含了系统的负载信息，结构如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">root@2fa248c8b660:/# cat /proc/loadavg 
+0.29 0.36 0.40 2/1001 <span class="m">24713</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>该文件中的前三个字段是 CPU 或者 I/O 的负载平均数，分别取平均时间为 1 分钟，5 分钟和 15 分钟的值。 第四个字段由两个用斜杠（/）分隔的数字组成，第一个是当前可运行的内核调度实体（进程，线程）的数量，斜杠后面的值是系统上当前存在的内核调度实体的数量。 第五个字段是最近在系统上创建的进程的 PID 。</p>
+<p>loadavg 的修正有两种方式，一种时后台启动 load_daemon 线程，定时计算负载信息，再通过修正函数修正，另外一种时直接通过固定函数计算。load 信息会保存在 hash 表中，如果第一次读取需要初始化 hash（bindings.c: 5719） 表，后续读取时会从 hash 表中读取上一次的信息，修正下一次的结果。</p>
+<p>修正函数：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#define FSHIFT		11		</span><span class="cm">/* nr of bits of precision */</span><span class="cp">
+</span><span class="cp">#define FIXED_1		(1&lt;&lt;FSHIFT)	</span><span class="cm">/* 1.0 as fixed-point */</span><span class="cp">
+</span><span class="cp">#define LOAD_INT(x) ((x) &gt;&gt; FSHIFT)
+</span><span class="cp">#define LOAD_FRAC(x) LOAD_INT(((x) &amp; (FIXED_1-1)) * 100)
+</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">// bingdings.c: 5746
+</span><span class="c1">// n-&gt;avenrun[0]: former load (1min)
+</span><span class="c1">// n-&gt;avenrun[1]: former load (5min)
+</span><span class="c1">// n-&gt;avenrun[2]: former load (15min)
+</span><span class="c1"></span>	<span class="n">a</span> <span class="o">=</span> <span class="n">n</span><span class="o">-&gt;</span><span class="n">avenrun</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">FIXED_1</span><span class="o">/</span><span class="mi">200</span><span class="p">);</span>  
+	<span class="n">b</span> <span class="o">=</span> <span class="n">n</span><span class="o">-&gt;</span><span class="n">avenrun</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">FIXED_1</span><span class="o">/</span><span class="mi">200</span><span class="p">);</span>
+	<span class="n">c</span> <span class="o">=</span> <span class="n">n</span><span class="o">-&gt;</span><span class="n">avenrun</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">FIXED_1</span><span class="o">/</span><span class="mi">200</span><span class="p">);</span>
+	<span class="n">total_len</span> <span class="o">=</span> <span class="n">snprintf</span><span class="p">(</span><span class="n">d</span><span class="o">-&gt;</span><span class="n">buf</span><span class="p">,</span> <span class="n">d</span><span class="o">-&gt;</span><span class="n">buflen</span><span class="p">,</span> <span class="s">&#34;%lu.%02lu %lu.%02lu %lu.%02lu %d/%d %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span>
+		<span class="n">LOAD_INT</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">LOAD_FRAC</span><span class="p">(</span><span class="n">a</span><span class="p">),</span>
+		<span class="n">LOAD_INT</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">LOAD_FRAC</span><span class="p">(</span><span class="n">b</span><span class="p">),</span>
+		<span class="n">LOAD_INT</span><span class="p">(</span><span class="n">c</span><span class="p">),</span> <span class="n">LOAD_FRAC</span><span class="p">(</span><span class="n">c</span><span class="p">),</span>
+		<span class="n">n</span><span class="o">-&gt;</span><span class="n">run_pid</span><span class="p">,</span> <span class="n">n</span><span class="o">-&gt;</span><span class="n">total_pid</span><span class="p">,</span> <span class="n">n</span><span class="o">-&gt;</span><span class="n">last_pid</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果启动时添加 -l 参数，则会运行单独的 <code>load_daemon()</code> 线程定时去计算 load，计算方式如下：</p>
+<ul>
+<li>根据 cpu cgroups 的 cgroup.procs 文件统计容器内的进程，统计该 cgroups 下的子结点的进程</li>
+<li>根据上面统计到的进程 PID，到 <code>/proc/$PID/task</code> 下找到所有的 task</li>
+<li>所有的任务数，作为 total_pid</li>
+<li>统计 “S” 和 “D” 状态 task 数，为 run_pid</li>
+<li>找到 PID 最大的进程，作为 last_pid</li>
+<li>修正 1 分钟，5 分钟，15 分钟的负载值</li>
+<li>修正公式： <code>load1 = load0 * exp + active * (1 - exp)</code></li>
+</ul>
+<h3 id="procstat">/proc/stat</h3>
+<p><code>/proc/stat</code> 文件的内容表示的是内核和系统的状态信息，文件格式如下所示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="o">[</span>root@localhost cpu<span class="o">]</span><span class="c1"># cat /proc/stat</span>
+cpu  <span class="m">328886</span> <span class="m">1000</span> <span class="m">91078</span> <span class="m">3348444</span> <span class="m">21129</span> <span class="m">31272</span> <span class="m">7488</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span>
+cpu0 <span class="m">78248</span> <span class="m">237</span> <span class="m">19859</span> <span class="m">835397</span> <span class="m">5186</span> <span class="m">16737</span> <span class="m">1278</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span>
+cpu1 <span class="m">73197</span> <span class="m">240</span> <span class="m">22745</span> <span class="m">848707</span> <span class="m">5181</span> <span class="m">5810</span> <span class="m">1105</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span>
+cpu2 <span class="m">85215</span> <span class="m">276</span> <span class="m">23129</span> <span class="m">836216</span> <span class="m">5126</span> <span class="m">3942</span> <span class="m">3754</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span>
+cpu3 <span class="m">92225</span> <span class="m">245</span> <span class="m">25345</span> <span class="m">828122</span> <span class="m">5634</span> <span class="m">4782</span> <span class="m">1350</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span>
+intr <span class="m">33888944</span> <span class="m">23</span> <span class="m">8115</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">119423</span> <span class="m">0</span> <span class="m">0</span> <span class="m">224</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">556</span> <span class="m">13735274</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">371</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">287540</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">878998</span> <span class="m">0</span> <span class="m">20</span> <span class="m">22</span> <span class="m">1822499</span> <span class="m">43624</span> <span class="m">39378</span> <span class="m">50873</span> <span class="m">38019</span> <span class="m">37</span> <span class="m">407</span> <span class="m">407</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">279782</span> <span class="m">911</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span>
+ctxt <span class="m">27699895</span>
+btime <span class="m">1566523572</span>
+processes <span class="m">11349</span>
+procs_running <span class="m">1</span>
+procs_blocked <span class="m">0</span>
+softirq <span class="m">20884042</span> <span class="m">1371835</span> <span class="m">12001595</span> <span class="m">13</span> <span class="m">377657</span> <span class="m">27</span> <span class="m">0</span> <span class="m">11088</span> <span class="m">3466661</span> <span class="m">388</span> <span class="m">3654778</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>/proc/stat</code> 文件的具体每个字段的含义参考 <a href="https://man7.org/linux/man-pages/man5/proc.5.html">PROC(5)</a> 文档，lxcfs 修正时只关心 cpu 相关的行，根据 cpu 视图信息，重新矫正各个字段。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">cpu  <span class="m">328886</span> <span class="m">1000</span> <span class="m">91078</span> <span class="m">3348444</span> <span class="m">21129</span> <span class="m">31272</span> <span class="m">7488</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span>
+cpu0 <span class="m">78248</span> <span class="m">237</span> <span class="m">19859</span> <span class="m">835397</span> <span class="m">5186</span> <span class="m">16737</span> <span class="m">1278</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span>
+cpu1 <span class="m">73197</span> <span class="m">240</span> <span class="m">22745</span> <span class="m">848707</span> <span class="m">5181</span> <span class="m">5810</span> <span class="m">1105</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span>
+cpu2 <span class="m">85215</span> <span class="m">276</span> <span class="m">23129</span> <span class="m">836216</span> <span class="m">5126</span> <span class="m">3942</span> <span class="m">3754</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span>
+cpu3 <span class="m">92225</span> <span class="m">245</span> <span class="m">25345</span> <span class="m">828122</span> <span class="m">5634</span> <span class="m">4782</span> <span class="m">1350</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>cpu 后面每个字段的含义为：</p>
+<ul>
+<li><code>user</code> &ndash; Time spent in user mode.</li>
+<li><code>nice</code> &ndash; Time spent in user mode with low priority (nice)</li>
+<li><code>system</code> &ndash; Time spent in system mode.</li>
+<li><code>idle</code> &ndash; Time spent in the idle task.  This value  should be USER_HZ times the second entry in the /proc/uptime pseudo-file.</li>
+<li><code>iowait</code> &ndash; Time waiting for I/O to complete.</li>
+<li><code>irq</code> &ndash;Time servicing interrupts.</li>
+<li><code>softirq</code> &ndash; Time servicing softirqs.</li>
+<li><code>steal</code> &ndash; Stolen time, which is the time spent in other operating systems when running in a virtualized environment</li>
+<li><code>guest</code> &ndash; Time spent running a virtual CPU for guest operating systems under the control of the Linux  kernel.</li>
+<li><code>guest_nice</code> &ndash;Time spent running a niced guest (virtual CPU for guest operating systems under the control of the Linux kernel).</li>
+</ul>
+<p>修正方式为：</p>
+<ul>
+<li>修正 cpu 数量，与 <code>/proc/cpuinfo</code> 修正方式一样</li>
+<li>读取 cpu cgroup controller 中的文件，修正各个字段
+<ul>
+<li>读取 cpuacct.usage_all，获取在各个 cpu 上执行的 <code>system/user</code> 时间</li>
+<li>读取 cpu.stat，获取 cpu 使用状态信息</li>
+<li>只呈现 <code>user</code>、<code>system</code>、<code>idle</code> 时间，其它都为 0</li>
+<li>只设置 cpu quota 没有设置 cpuset，需要将其他 cpu 上的时间重新分到可用 cpu 上，调用方法 <code>cpuview_proc_stat()</code></li>
+<li>计算 idle 时间
+<ul>
+<li>从系统 <code>/proc/stat</code> 获取总使用时间</li>
+<li><code>all_used = user + nice + system + iowait + irq + softirq + steal + guest + guest_nice</code></li>
+<li>从 cpuacct.usage_all 获取在各个 cpu 的使用时间</li>
+<li><code>cg_used = cg_cpu_usage[curcpu].user + cg_cpu_usage[curcpu].system</code>;</li>
+<li><code>cg_cpu_usage[curcpu].idle = idle + (all_used - cg_used)</code>;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="参考资料">参考资料</h2>
+<ol>
+<li><a href="https://linuxcontainers.org/lxcfs/introduction/">https://linuxcontainers.org/lxcfs/introduction/</a></li>
+<li><a href="https://github.com/lxc/lxcfs">https://github.com/lxc/lxcfs</a></li>
+<li><a href="https://github.com/libfuse/libfuse">https://github.com/libfuse/libfuse</a></li>
+<li><a href="https://www.lijiaocn.com/%E6%8A%80%E5%B7%A7/2019/02/11/lxcfs-support-cpu-share-and-cpu-quota-1.html">Lxcfs根据cpu-share、cpu-quota等cgroup信息生成容器内的/proc文件（上）</a></li>
+<li><a href="https://www.lijiaocn.com/%E6%8A%80%E5%B7%A7/2019/02/11/lxcfs-support-cpu-share-and-cpu-quota-2.html">Lxcfs根据cpu-share、cpu-quota等cgroup信息生成容器内的/proc文件（中）</a></li>
+<li><a href="https://www.lijiaocn.com/%E6%8A%80%E5%B7%A7/2019/02/11/lxcfs-support-cpu-share-and-cpu-quota-3.html">Lxcfs根据cpu-share、cpu-quota等cgroup信息生成容器内的/proc文件（下）</a></li>
+</ol>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Meoop</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2019-08-22
+        <a href="https://github.com/Meoop/meoop.github.io.git/commit/20e15d8fe78de5b7dfd3151a6ecd7423b383db30" title="post: LXCFS part 2: Implementation Detail">(20e15d8)</a>
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/lxcfs/">lxcfs</a>
+          <a href="/tags/container/">container</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/lxcfs-part-1-introduction/">
+            <span class="next-text nav-default">LXCFS Part 1 - Intro to LXCFS</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'meoop';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="yilei108@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.stackoverflow.com/users/12249756/" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.facebook.com/lei.yi.908" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://www.linkedin.com/in/yilei/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/Meoop" class="iconfont icon-github" title="github"></a>
+      <a href="http://weibo.com/18722081826" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://www.zhihu.com/people/lei.yi" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="http://blog.meoop.me/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2015 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Meoop</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-101122173-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

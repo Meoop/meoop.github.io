@@ -9,6 +9,90 @@
   </url>
   
   <url>
+    <loc>http://blog.meoop.me/tags/container/</loc>
+    <lastmod>2019-08-22T21:58:32+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/categories/container/</loc>
+    <lastmod>2019-08-22T21:58:32+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/tags/lxcfs/</loc>
+    <lastmod>2019-08-22T21:58:32+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/categories/lxcfs/</loc>
+    <lastmod>2019-08-22T21:58:32+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/post/lxcfs-part-2-implementation/</loc>
+    <lastmod>2019-08-22T21:58:32+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/post/</loc>
+    <lastmod>2019-08-23T17:38:53+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/tags/</loc>
+    <lastmod>2019-08-23T17:38:53+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/</loc>
+    <lastmod>2019-08-23T17:38:53+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/post/lxcfs-part-1-introduction/</loc>
+    <lastmod>2019-08-06T21:29:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/tags/glusterfs/</loc>
+    <lastmod>2019-07-24T20:40:12+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/categories/glusterfs/</loc>
+    <lastmod>2019-07-24T20:40:12+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/post/upgrade-glusterfs/</loc>
+    <lastmod>2019-07-24T20:40:12+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>http://blog.meoop.me/tags/centos7/</loc>
     <lastmod>2019-01-24T17:08:04+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -37,29 +121,8 @@
   </url>
   
   <url>
-    <loc>http://blog.meoop.me/post/</loc>
-    <lastmod>2019-08-23T17:38:53+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>http://blog.meoop.me/post/rebuild-kernel-with-src.rpm/</loc>
     <lastmod>2019-01-24T17:08:04+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.meoop.me/tags/</loc>
-    <lastmod>2019-08-23T17:38:53+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.meoop.me/</loc>
-    <lastmod>2019-08-23T17:38:53+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -95,20 +158,6 @@
   <url>
     <loc>http://blog.meoop.me/post/resizing-persistent-volumes-using-kubernetes/</loc>
     <lastmod>2019-08-23T17:38:53+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.meoop.me/tags/container/</loc>
-    <lastmod>2018-09-24T12:56:20+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.meoop.me/categories/container/</loc>
-    <lastmod>2018-09-24T12:56:20+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

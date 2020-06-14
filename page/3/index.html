@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>container · 享受编程 - Coding Your Ambition.</title>
+  <title>享受编程 - Coding Your Ambition.</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -26,9 +26,9 @@
 <meta name="generator" content="Hugo 0.69.0 with theme even" />
 
 
-<link rel="canonical" href="http://blog.meoop.me/categories/container/" />
-  <link href="http://blog.meoop.me/categories/container/index.xml" rel="alternate" type="application/rss+xml" title="享受编程 - Coding Your Ambition." />
-  <link href="http://blog.meoop.me/categories/container/index.xml" rel="feed" type="application/rss+xml" title="享受编程 - Coding Your Ambition." />
+<link rel="canonical" href="http://blog.meoop.me/" />
+  <link href="http://blog.meoop.me/index.xml" rel="alternate" type="application/rss+xml" title="享受编程 - Coding Your Ambition." />
+  <link href="http://blog.meoop.me/index.xml" rel="feed" type="application/rss+xml" title="享受编程 - Coding Your Ambition." />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -41,14 +41,14 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:title" content="container" />
+<meta property="og:title" content="享受编程 - Coding Your Ambition." />
 <meta property="og:description" content="Meoop&#39;s Blog" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="http://blog.meoop.me/categories/container/" />
+<meta property="og:url" content="http://blog.meoop.me/" />
 <meta property="og:updated_time" content="2019-08-22T21:58:32+08:00" />
-<meta itemprop="name" content="container">
+<meta itemprop="name" content="享受编程 - Coding Your Ambition.">
 <meta itemprop="description" content="Meoop&#39;s Blog"><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="container"/>
+<meta name="twitter:title" content="享受编程 - Coding Your Ambition."/>
 <meta name="twitter:description" content="Meoop&#39;s Blog"/>
 
 <!--[if lte IE 9]>
@@ -109,54 +109,43 @@
     <main id="main" class="main">
       <div class="content-wrapper">
         <div id="content" class="content">
-          <section id="archive" class="archive">
-  <div class="archive-title category">
-        <h2 class="archive-name">container</h2>
-      </div>
-
-  <div class="archive-post">
-      <span class="archive-post-time">
-        2019-08-22
-      </span>
-      <span class="archive-post-title">
-        <a href="/post/lxcfs-part-2-implementation/" class="archive-post-link">
-          LXCFS Part 2 - Implementation Details
-        </a>
-      </span>
-    </div><div class="archive-post">
-      <span class="archive-post-time">
-        2019-08-14
-      </span>
-      <span class="archive-post-title">
-        <a href="/post/lxcfs-part-1-introduction/" class="archive-post-link">
-          LXCFS Part 1 - Intro to LXCFS
-        </a>
-      </span>
-    </div><div class="archive-post">
-      <span class="archive-post-time">
-        2018-07-31
-      </span>
-      <span class="archive-post-title">
-        <a href="/post/running-containers-with-ovs-dpdk/" class="archive-post-link">
-          Running Containers With OVS-DPDK
-        </a>
-      </span>
-    </div><div class="archive-post">
-      <span class="archive-post-time">
-        2017-12-24
-      </span>
-      <span class="archive-post-title">
-        <a href="/post/%E5%AE%B9%E5%99%A8%E5%AE%9E%E7%8E%B0%E6%8A%80%E6%9C%AF%E6%8A%80%E6%9C%AF%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86namespace/" class="archive-post-link">
-          容器实现技术技术及其原理：Namespace
-        </a>
-      </span>
+          <section id="posts" class="posts">
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/code-blocks%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B1%BB%E5%BA%93/">Code Blocks 添加第三方类库</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2015-04-13 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%B1%BB%E5%BA%93/"> 类库 </a>
+          </div>
     </div>
-</section>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>第一步：编译第三方库，得到头文件和库，例如路径关系：
+在 include 中放头文件，在 lib 中放置库文件。</p>
+<blockquote>
+<p>D:\MyLib\include</p>
+<p>D:\MyLib\lib</p>
+</blockquote>
+<p><img src="/images/post/Code-Blocks%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B1%BB%E5%BA%93/20150413230733748.png" alt="编译后的第三方库"></p>
+    </div>
+    <div class="read-more">
+      <a href="/post/code-blocks%E6%B7%BB%E5%8A%A0%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B1%BB%E5%BA%93/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
 
-<nav class="pagination">
+    </section>
   
-  
-</nav>
+  <nav class="pagination">
+    <a class="prev" href="/page/2/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text">Prev</span>
+      </a>
+    
+  </nav>
         </div>
         
 
@@ -212,6 +201,14 @@
 
 
 <script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 
 
 <script type="application/javascript">

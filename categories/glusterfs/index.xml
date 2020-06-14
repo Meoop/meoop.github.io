@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>glusterfs on 享受编程 - Coding Your Ambition.</title>
+    <link>http://blog.meoop.me/categories/glusterfs/</link>
+    <description>Recent content in glusterfs on 享受编程 - Coding Your Ambition.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 24 Jul 2019 20:40:12 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.meoop.me/categories/glusterfs/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Upgrade Glusterfs</title>
+      <link>http://blog.meoop.me/post/upgrade-glusterfs/</link>
+      <pubDate>Wed, 24 Jul 2019 20:40:12 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/upgrade-glusterfs/</guid>
+      <description>&lt;p&gt;支持 3.10.x，3.12.x，4.1.x，5.x 升级到 6.x 版本。&lt;/p&gt;
+&lt;h2 id=&#34;升级前注意事项&#34;&gt;升级前注意事项&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;只有复制卷和分布式复制卷可以联机升级&lt;/li&gt;
+&lt;li&gt;分布式卷和条纹卷不支持联机升级&lt;/li&gt;
+&lt;li&gt;升级过程中不得修改任何配置&lt;/li&gt;
+&lt;li&gt;如果使用 geo-replication ，先升级 slave 节点，再升级 master 节点&lt;/li&gt;
+&lt;li&gt;建议先升级服务端再升级客户端&lt;/li&gt;
+&lt;li&gt;建议使用相同版本的客户端和服务端&lt;/li&gt;
+&lt;li&gt;升级前建议阅读版本的 release note，熟悉新版本删除和添加的功能&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
