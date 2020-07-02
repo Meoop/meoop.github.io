@@ -71,7 +71,7 @@ copyright = ""                          # default: author.name ↓        # 默�
   dateFormatToUse = "2006-01-02"
 
   # show word count and read time ?
-  moreMeta = false
+  moreMeta = true
 
   # Syntax highlighting by highlight.js
   highlightInClient = false
