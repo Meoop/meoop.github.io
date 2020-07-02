@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>在 Kubernetes 上使用 KubeVirt 管理虚拟机负载 - 享受编程 - Coding Your Ambition.</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Meoop" /><meta name="description" content="近几年的时间里，kubernetes 不断发展壮大，各个功能也逐渐完善，越来越多的项目开始基于 kubernetes 构建，企业内部也大多搭建了自己的 kubernetes 平台。同时企业也存在大量的旧的项目，大多都是基于虚拟机构建，迁移到 kubernetes 存在着较高的成本，风险也比较大。随着 kubernetes 的功能完善，很多新业务已经上了 kubernetes，企业内部需要同时维护着 k8s 和虚拟机两套平台，同时维护两套平台给运维带来了巨大的负担，因此急切的需求一种方案解决该问题。在 kubernetes 可以通过 KubeVirt 管理虚拟机，正好用于解决上述管理难题。
+" /><meta name="keywords" content="kubernetes, kubevirt" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.69.0 with theme even" />
+
+
+<link rel="canonical" href="http://blog.meoop.me/post/use-kubevirt-to-manage-virtualization-workloads-on-kubernetes/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.bcd489339cac29b395f315f2a2e16bf29afa8cdf7b20ca5b348385d0971a5db7.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="在 Kubernetes 上使用 KubeVirt 管理虚拟机负载" />
+<meta property="og:description" content="近几年的时间里，kubernetes 不断发展壮大，各个功能也逐渐完善，越来越多的项目开始基于 kubernetes 构建，企业内部也大多搭建了自己的 kubernetes 平台。同时企业也存在大量的旧的项目，大多都是基于虚拟机构建，迁移到 kubernetes 存在着较高的成本，风险也比较大。随着 kubernetes 的功能完善，很多新业务已经上了 kubernetes，企业内部需要同时维护着 k8s 和虚拟机两套平台，同时维护两套平台给运维带来了巨大的负担，因此急切的需求一种方案解决该问题。在 kubernetes 可以通过 KubeVirt 管理虚拟机，正好用于解决上述管理难题。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://blog.meoop.me/post/use-kubevirt-to-manage-virtualization-workloads-on-kubernetes/" />
+<meta property="article:published_time" content="2019-11-04T21:29:18+08:00" />
+<meta property="article:modified_time" content="2019-11-21T21:29:18+08:00" />
+<meta itemprop="name" content="在 Kubernetes 上使用 KubeVirt 管理虚拟机负载">
+<meta itemprop="description" content="近几年的时间里，kubernetes 不断发展壮大，各个功能也逐渐完善，越来越多的项目开始基于 kubernetes 构建，企业内部也大多搭建了自己的 kubernetes 平台。同时企业也存在大量的旧的项目，大多都是基于虚拟机构建，迁移到 kubernetes 存在着较高的成本，风险也比较大。随着 kubernetes 的功能完善，很多新业务已经上了 kubernetes，企业内部需要同时维护着 k8s 和虚拟机两套平台，同时维护两套平台给运维带来了巨大的负担，因此急切的需求一种方案解决该问题。在 kubernetes 可以通过 KubeVirt 管理虚拟机，正好用于解决上述管理难题。">
+<meta itemprop="datePublished" content="2019-11-04T21:29:18&#43;08:00" />
+<meta itemprop="dateModified" content="2019-11-21T21:29:18&#43;08:00" />
+<meta itemprop="wordCount" content="4827">
+
+
+
+<meta itemprop="keywords" content="kubernetes,kubevirt," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="在 Kubernetes 上使用 KubeVirt 管理虚拟机负载"/>
+<meta name="twitter:description" content="近几年的时间里，kubernetes 不断发展壮大，各个功能也逐渐完善，越来越多的项目开始基于 kubernetes 构建，企业内部也大多搭建了自己的 kubernetes 平台。同时企业也存在大量的旧的项目，大多都是基于虚拟机构建，迁移到 kubernetes 存在着较高的成本，风险也比较大。随着 kubernetes 的功能完善，很多新业务已经上了 kubernetes，企业内部需要同时维护着 k8s 和虚拟机两套平台，同时维护两套平台给运维带来了巨大的负担，因此急切的需求一种方案解决该问题。在 kubernetes 可以通过 KubeVirt 管理虚拟机，正好用于解决上述管理难题。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Ambition</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Ambition</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">在 Kubernetes 上使用 KubeVirt 管理虚拟机负载</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-11-04 </span>
+        <div class="post-category">
+            <a href="/categories/kubernetes/"> kubernetes </a>
+            <a href="/categories/kubevirt/"> kubevirt </a>
+            </div>
+          <span class="more-meta"> 4827 words </span>
+          <span class="more-meta"> 10 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#kubevirt-架构设计">KubeVirt 架构设计</a></li>
+    <li><a href="#虚拟机实例">虚拟机实例</a>
+      <ul>
+        <li><a href="#vmi-创建流程">VMI 创建流程</a></li>
+        <li><a href="#磁盘和卷">磁盘和卷</a></li>
+        <li><a href="#网络">网络</a></li>
+      </ul>
+    </li>
+    <li><a href="#in-kubernetes">In Kubernetes</a>
+      <ul>
+        <li><a href="#virtual-machine">Virtual Machine</a></li>
+        <li><a href="#virtual-machine-replica-set">Virtual Machine Replica Set</a></li>
+        <li><a href="#node-placement">Node Placement</a></li>
+        <li><a href="#service">Service</a></li>
+      </ul>
+    </li>
+    <li><a href="#部署及管理">部署及管理</a>
+      <ul>
+        <li><a href="#kubevirt-的部署">KubeVirt 的部署</a></li>
+        <li><a href="#虚拟机镜像准备">虚拟机镜像准备</a></li>
+        <li><a href="#连接到虚拟机">连接到虚拟机</a></li>
+      </ul>
+    </li>
+    <li><a href="#use-cases">Use Cases</a>
+      <ul>
+        <li><a href="#multiple-workloads">Multiple Workloads</a></li>
+        <li><a href="#kubernetes-on-kubernetes">Kubernetes on Kubernetes</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>近几年的时间里，kubernetes 不断发展壮大，各个功能也逐渐完善，越来越多的项目开始基于 kubernetes 构建，企业内部也大多搭建了自己的 kubernetes 平台。同时企业也存在大量的旧的项目，大多都是基于虚拟机构建，迁移到 kubernetes 存在着较高的成本，风险也比较大。随着 kubernetes 的功能完善，很多新业务已经上了 kubernetes，企业内部需要同时维护着 k8s 和虚拟机两套平台，同时维护两套平台给运维带来了巨大的负担，因此急切的需求一种方案解决该问题。在 kubernetes 可以通过 KubeVirt 管理虚拟机，正好用于解决上述管理难题。</p>
+<h2 id="kubevirt-架构设计">KubeVirt 架构设计</h2>
+<p>kubevirt 是 Redhat 开源的以容器方式运行虚拟机的项目，利用 kubernetes CRD 机制增加了新的资源类型 <code>VirtualMachineInstance（VMI）</code>， VMI 是对虚拟机实例的抽象，一个 VMI 对象在其生命周期内始终与某个 Pod 关联。 CRD 的方式使得 kubevirt 对虚拟机的管理不再局限于 Pod 管理接口，但是也无法使用现有的 Pod 的 ReplicaSet，StatefulSet，Deployment 等的管理能力，也意味着 kubevirt 如果想要这些管理能力，就要自己去实现，目前 kubevirt 实现了类似 RS 的功能。</p>
+<p>Kubevirt 主要实现了下面几种资源，实现了对虚拟机的管理：</p>
+<ul>
+<li><code>VirtualMachineInstance（VMI）</code>：类似于 kubernetes Pod，是虚拟机管理的最小资源。一个 <code>VirtualMachineInstance</code> 对象即表示一台正在运行的虚拟机实例，包含一个虚拟机所需要的各种配置。</li>
+<li><code>VirtualMachine</code>：为群集内的 <code>VirtualMachineInstance</code> 提供管理功能，例如开机/关机/重启虚拟机，确保虚拟机实例的启动状态，与虚拟机实例是 1:1 的关系，类似与 spec.replica 为 1 的 StatefulSet。</li>
+<li><code>VirtualMachineInstanceReplicaSet</code>：类似 <code>ReplicaSet</code>，可以启动指定数量的 <code>VirtualMachineInstance</code>，并且保证指定数量的 <code>VirtualMachineInstance</code> 运行，可以配置 HPA。</li>
+<li><code>DataVolume</code>： 在 CDI 中实现，<code>DataVolume</code> 是对 PVC 之上的抽象，用于自动创建和填充带有数据的 PVC，提供了在虚拟机启动流程中自动将虚拟机磁盘导入 PVC 的方法。</li>
+</ul>
+<figure class="center">
+    <img src="/images/post/Use-KubeVirt-to-manage-virtualization-workloads-on-Kubernetes/kubevirt-components.png"/> <figcaption>
+            <h4>KubeVirt Architecture</h4>
+        </figcaption>
+</figure>
+
+<p>上图描述了 KubeVirt 的整体架构，其中包含了主要的四个组件：</p>
+<ul>
+<li><code>virt-api-server</code>，HTTP API 服务器，是所有虚拟化相关流程的入口点。</li>
+<li><code>virt-controller</code>，管理和监控 VMI 对象及其关联的 Pod，对其状态进行更新。</li>
+<li><code>virt-hander</code>，以 DaemonSet 运行在每一个节点上，监听 VMI 的状态向上汇报，管理 VMI 的生命周期。</li>
+<li><code>virt-launcher</code>，以 Pod 方式运行，每个 VMI Object 都会对应一个 virt-launcher Pod，容器内有单独的 libvirtd，用于启动和管理虚拟机。</li>
+</ul>
+<h2 id="虚拟机实例">虚拟机实例</h2>
+<h3 id="vmi-创建流程">VMI 创建流程</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">Client                     K8s API     VMI CRD  Virt Controller         VMI Handler
+-------------------------- ----------- ------- ----------------------- ----------
+
+                           listen &lt;----------- WATCH /virtualmachines
+                           listen &lt;----------------------------------- WATCH /virtualmachines
+                                                  |                       |
+POST /virtualmachines ---&gt; validate               |                       |
+                           create ---&gt; VMI ---&gt; observe --------------&gt; observe
+                             |          |         v                       v
+                           validate &lt;--------- POST /pods              defineVMI
+                           create       |         |                       |
+                             |          |         |                       |
+                           schedPod ---------&gt; observe                    |
+                             |          |         v                       |
+                           validate &lt;--------- PUT /virtualmachines       |
+                           update ---&gt; VMI ---------------------------&gt; observe
+                             |          |         |                    launchVMI
+                             |          |         |                       |
+                             :          :         :                       :
+                             |          |         |                       |
+DELETE /virtualmachines -&gt; validate     |         |                       |
+                           delete ----&gt; * ---------------------------&gt; observe
+                             |                    |                    shutdownVMI
+                             |                    |                       |
+                             :                    :                       :
+</code></pre></td></tr></table>
+</div>
+</div><p>上面的通信图大致描述了一个 VMI 通信流程，要启动一个 VMI，其大致步骤为：</p>
+<ol>
+<li>client 发送 VMI Spec 给 k8s api server</li>
+<li>k8s api server 验证 VMI Spec 并且创建自定义资源</li>
+<li>virt-controller watch 到新 VMI Object 的创建，创建对应的 Pod</li>
+<li>kubernetes 调度 Pod</li>
+<li>virt-controller 监测到 Pod 的启动，更新 VMI Obeject 的 nodeName，然后对应节点上的 virt-handler 做进一步的处理</li>
+<li>virt-handler 将 VMI Object 发送给 Pod 中的 virt-launcher，通知其启动对应的 VM</li>
+</ol>
+<h3 id="磁盘和卷">磁盘和卷</h3>
+<p>虚拟机镜像（磁盘）是启动虚拟机必不可少的部分，KubeVirt 中提供多种方式的虚拟机磁盘，虚拟机镜像（磁盘）使用方式非常灵活。</p>
+<ul>
+<li><code>cloudInitNoCloud/cloudInitConfigDrive</code>，用于提供 cloud-init 初始化所需要的 user-data，可以使用 k8s secret/configmap 作为数据源。</li>
+<li><code>PersistentVolumeClaim</code>，使用 PVC 做为后端存储，适用于数据持久化，即在虚拟机重启或者重建后数据依旧存在。使用的 PV 类型可以是 block 和 filesystem，使用 filesystem 时，会使用 PVC 上的 /disk.img，格式为 RAW 格式的文件作为硬盘。block 模式时，使用 block volume 直接作为原始块设备提供给虚拟机。</li>
+<li><code>ephemeral</code>，基于后端存储在本地做一个写时复制（COW）镜像层，所有的写入都在本地存储的镜像中，VM 实例停止时写入层就被删除，后端存储上的镜像不变化。</li>
+<li><code>containerDisk</code>，基于 scratch 构建的一个 docker image，镜像中包含虚拟机启动所需要的虚拟机镜像，可以将该 docker image push 到 registry，使用时从 registry 拉取镜像，直接使用 containerDisk 作为 VMI 磁盘，数据是无法持久化的。</li>
+<li><code>hostDisk</code>，使用节点上磁盘镜像，类似于 hostpath，也可以在初始化时创建空的镜像。</li>
+<li><code>dataVolume</code>，提供在虚拟机启动流程中自动将虚拟机磁盘导入 pvc 的功能，在不使用 DataVolume 的情况下，用户必须先准备带有磁盘映像的 pvc，然后再将其分配给 VM 或 VMI。dataVolume 拉取镜像的来源可以时 http，对象存储，另一块 PVC 等。</li>
+</ul>
+<h3 id="网络">网络</h3>
+<p>KubeVirt 是建立在 kubernetes 之上的，提供了容器和虚拟机的混部方案，其网络应该与 kubernetes 集成的，与 Pod 网络是互通的，KubeVirt 的 VMI 使用的应当是 Pod 的网络。为了实现该目标，KubeVirt 的对网络做了特殊实现。虚拟机具体的网络如下图所示， virt-launcher Pod 网络的网卡不再挂有 Pod IP，而是作为虚拟机的虚拟网卡的与外部网络通信的交接物理网卡。</p>
+<figure class="center">
+    <img src="/images/post/Use-KubeVirt-to-manage-virtualization-workloads-on-Kubernetes/vm-networking.png"/> 
+</figure>
+
+<p>虚拟机网络的启动需要以下几个步骤：</p>
+<ol>
+<li>通过 CNI 插件配置 libvirt 所在的 Pod 的网络</li>
+<li>virt-launcher 记录 CNI 插件配置的接口信息（IP，routes，gateway，MAC），用于后续 DHCP 的配置</li>
+<li>将 Pod 的 eth0 网卡 ip 删除，设置接口状态为 down，修改 eth0 的 MAC 地址后重新启动 eth0</li>
+<li>创建后端为 bridge 的 libvirt 网络:
+<ul>
+<li>eth0 直接加入 bridge</li>
+<li>虚拟机网卡对应的 tap 口 也加入 bridge</li>
+<li>bridge 配置 xx.xx.xx.xx 作为 DHCP server IP</li>
+<li>virt-laucher ，启用 DHCP 功能，设置虚拟机网卡 MAC 地址和上面记录的 IP 地址的映射，使得虚拟机在启动时通过 DHCP 获取到 IP 地址</li>
+</ul>
+</li>
+<li>虚拟机需要启用 dhclient，以自动获取 IP 地址</li>
+</ol>
+<h2 id="in-kubernetes">In Kubernetes</h2>
+<h3 id="virtual-machine">Virtual Machine</h3>
+<p>KubeVirt 实现了 <code>VirtualMachine</code> 类型资源，与 VMI 的是一对一的关系，类似于 replica 为 1 的 StatefulSet。VirtualMachine 相对于 VMI 提供了更多的管理功能，其中包括：</p>
+<ul>
+<li>ABI 稳定性</li>
+<li>在控制层面提供开机/关机/重启功能</li>
+<li>离线更新 VMI 配置功能</li>
+<li>确保 VMI 在应该运行的时候运行</li>
+</ul>
+<p>当需要上述 <code>VirtualMachine</code> 扩展的功能时，应当使用 <code>VirtualMachine</code> 类型管理 VMI，例如下面两种应用场景：</p>
+<ul>
+<li>绑定硬件 licenses 的应用，虚拟机重启后需要保证硬件信息不变动</li>
+<li>需要更新虚拟机的硬件资源</li>
+</ul>
+<p>下面是一个 <code>VirtualMachine</code> 的例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>kubevirt.io/v1alpha3<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>VirtualMachine<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">kubevirt.io/vm</span><span class="p">:</span><span class="w"> </span>vm-cirros<span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>vm-cirros<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">running</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">  </span><span class="k">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">kubevirt.io/vm</span><span class="p">:</span><span class="w"> </span>vm-cirros<span class="w">
+</span><span class="w">    </span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">domain</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">devices</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="k">disks</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- <span class="k">disk</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="k">bus</span><span class="p">:</span><span class="w"> </span>virtio<span class="w">
+</span><span class="w">            </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>containerdisk<span class="w">
+</span><span class="w">          </span>- <span class="k">disk</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="k">bus</span><span class="p">:</span><span class="w"> </span>virtio<span class="w">
+</span><span class="w">            </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>cloudinitdisk<span class="w">
+</span><span class="w">        </span><span class="k">machine</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="k">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span><span class="w">        </span><span class="k">resources</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="k">requests</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="k">memory</span><span class="p">:</span><span class="w"> </span>64M<span class="w">
+</span><span class="w">      </span><span class="k">terminationGracePeriodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span><span class="w">      </span><span class="k">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>containerdisk<span class="w">
+</span><span class="w">        </span><span class="k">containerDisk</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="k">image</span><span class="p">:</span><span class="w"> </span>kubevirt/cirros-container-disk-demo<span class="p">:</span>latest<span class="w">
+</span><span class="w">      </span>- <span class="k">cloudInitNoCloud</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="k">userDataBase64</span><span class="p">:</span><span class="w"> </span>IyEvYmluL3NoCgplY2hvICdwcmludGVkIGZyb20gY2xvdWQtaW5pdCB1c2VyZGF0YScK<span class="w">
+</span><span class="w">        </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>cloudinitdisk<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="virtual-machine-replica-set">Virtual Machine Replica Set</h3>
+<p>KubeVirt 实现了 <code>VirtualMachineInstanceReplicaSet</code> 控制器，类似于 kubernetes ReplicaSet，可以保证集群中指定数量的 VMI 运行。为保证多副本的一致性，使用多副本方式运行的虚拟机内部不应该有持久化的数据，可以使用只读文件系统，数据保存在 tmpfs 中或者使用相同的后端存储。</p>
+<p>下面例子创建了一个 3 副本的 VMI，使用的 <code>ContainerDisks</code> 这种类型的临时存储：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>kubevirt.io/v1alpha3<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>VirtualMachineInstanceReplicaSet<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>testreplicaset<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w">  </span><span class="k">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">matchLabels</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">myvmi</span><span class="p">:</span><span class="w"> </span>myvmi<span class="w">
+</span><span class="w">  </span><span class="k">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>test<span class="w">
+</span><span class="w">      </span><span class="k">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">myvmi</span><span class="p">:</span><span class="w"> </span>myvmi<span class="w">
+</span><span class="w">    </span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">domain</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">devices</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="k">disks</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- <span class="k">disk</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>containerdisk<span class="w">
+</span><span class="w">        </span><span class="k">resources</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="k">requests</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="k">memory</span><span class="p">:</span><span class="w"> </span>64M<span class="w">
+</span><span class="w">      </span><span class="k">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>containerdisk<span class="w">
+</span><span class="w">        </span><span class="k">containerDisk</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="k">image</span><span class="p">:</span><span class="w"> </span>kubevirt/cirros-container-disk-demo<span class="p">:</span>latest<span class="w">
+</span><span class="w">
+</span><span class="w"></span>VirtualMachineInstanceReplicaSet<span class="w"> </span>同样支持<span class="w"> </span>Service，与<span class="w"> </span>VMI<span class="w"> </span>的<span class="w"> </span>Service<span class="w"> </span>创建方式一样。此外，VirtualMachineInstanceReplicaSet<span class="w"> </span>也支持<span class="w"> </span>HPA，例如：<span class="w">
+</span><span class="w"></span><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>autoscaling/v1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>HorizontalPodAutoscaler<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>myhpa<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">scaleTargetRef</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>VirtualMachineInstanceReplicaSet<span class="w">
+</span><span class="w">    </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>vmi-replicaset-cirros<span class="w">
+</span><span class="w">    </span><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>kubevirt.io/v1alpha3<span class="w">
+</span><span class="w">  </span><span class="k">minReplicas</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w">  </span><span class="k">maxReplicas</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span><span class="w">  </span><span class="k">targetCPUUtilizationPercentage</span><span class="p">:</span><span class="w"> </span><span class="m">50</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="node-placement">Node Placement</h3>
+<p>KubeVirt 的虚拟机是建立在 Pod 内的，这个 Pod 是被 kubernetes 调度的，也就是可以直接使用 kubernetes 的机制进行节点选择，VMI 支持下面三种设置方式，设置的内容都会透传到 VMI 所在的 Pod 上：</p>
+<ul>
+<li>nodeSelector</li>
+<li>affinity and anti-affinity</li>
+<li>taints and tolerations</li>
+</ul>
+<p>例如，设置 <code>spec.nodeSelector</code> 来指定运行的节点：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>kubevirt.io/v1alpha3<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>VirtualMachineInstance<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>testvmi-ephemeral<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">nodeSelector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">cpu</span><span class="p">:</span><span class="w"> </span>slow<span class="w">
+</span><span class="w">    </span><span class="k">storage</span><span class="p">:</span><span class="w"> </span>fast<span class="w">
+</span><span class="w">  </span><span class="k">domain</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">resources</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">requests</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">memory</span><span class="p">:</span><span class="w"> </span>64M<span class="w">
+</span><span class="w">    </span><span class="k">devices</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">disks</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>mypvcdisk<span class="w">
+</span><span class="w">        </span><span class="k">lun</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">  </span><span class="k">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>mypvcdisk<span class="w">
+</span><span class="w">      </span><span class="k">persistentVolumeClaim</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">claimName</span><span class="p">:</span><span class="w"> </span>mypvc<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="service">Service</h3>
+<p>在 kubernetes 中，一般通过 service 访问 Pod 提供的服务，同样，VMI 启动后，需要连接到虚拟机，也可以通过 service 进行访问。KubeVirt 的虚拟机是建立在 Pod 内的，可以直接使用 kubernetes 原生地 service 暴露服务。 在创建 VirtualMachineInstance Object 时，可以指定 metadata.label，配置会透传到 VMI 所在的 Pod 上的，创建服务只需要指定这个特殊的 label 即可。当前 VMI 支持 <code>ClusterIP</code>，<code>NodePort</code> 和 <code>LoadBalancer</code> 三种类型的服务。</p>
+<p>例如，下面配置可以创建 <code>ClusterIP</code> 类型的服务来暴露虚拟机的 22（ssh）端口，VMI Object需要指定 <code>testvmi-special: test</code> 标签。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Service<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>testvmiservice<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="k">port</span><span class="p">:</span><span class="w"> </span><span class="m">27017</span><span class="w">
+</span><span class="w">    </span><span class="k">protocol</span><span class="p">:</span><span class="w"> </span>TCP<span class="w">
+</span><span class="w">    </span><span class="k">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">22</span><span class="w">
+</span><span class="w">  </span><span class="k">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">testvmi-special</span><span class="p">:</span><span class="w"> </span>test<span class="w">
+</span><span class="w">  </span><span class="k">type</span><span class="p">:</span><span class="w"> </span>ClusterIP<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="部署及管理">部署及管理</h2>
+<h3 id="kubevirt-的部署">KubeVirt 的部署</h3>
+<p>KubeVirt 部署在 k8s 之上，这里假设已经存在处于 Ready 状态的 k8s 集群（部署好 CNI 插件），再此基础上部署 KubeVirt。</p>
+<p>1、部署最新版本的 KubeVirt</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># The last version of KubeVirt</span>
+<span class="nb">export</span> <span class="nv">KUBEVIRT_VERSION</span><span class="o">=</span><span class="k">$(</span>curl -s https://api.github.com/repos/kubevirt/kubevirt/releases/latest <span class="p">|</span> jq -r .tag_name<span class="k">)</span>
+
+<span class="c1"># kubevirt</span>
+kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/<span class="si">${</span><span class="nv">KUBEVIRT_VERSION</span><span class="si">}</span>/kubevirt-operator.yaml
+kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/<span class="si">${</span><span class="nv">KUBEVIRT_VERSION</span><span class="si">}</span>/kubevirt-cr.yaml
+
+cat <span class="s">&lt;&lt;EOF | kubectl create -f -
+</span><span class="s">apiVersion: v1
+</span><span class="s">kind: ConfigMap
+</span><span class="s">metadata:
+</span><span class="s">  name: kubevirt-config
+</span><span class="s">  namespace: kubevirt
+</span><span class="s">  labels:
+</span><span class="s">    kubevirt.io: &#34;&#34;
+</span><span class="s">data:
+</span><span class="s">  feature-gates: &#34;DataVolumes&#34;
+</span><span class="s">EOF</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>2、Containerized Data Importer（CDI）项目提供了用于使 PVC 作为 KubeVirt VM 磁盘的功能。建议同时部署 CDI</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># cdi</span>
+<span class="nb">export</span> <span class="nv">CDI_VERSION</span><span class="o">=</span><span class="k">$(</span>curl -s https://github.com/kubevirt/containerized-data-importer/releases/latest <span class="p">|</span> grep -o <span class="s2">&#34;v[0-9]\.[0-9]*\.[0-9]*&#34;</span><span class="k">)</span>
+kubectl create -f https://github.com/kubevirt/containerized-data-importer/releases/download/<span class="nv">$CDI_VERSION</span>/cdi-operator.yaml
+kubectl create -f https://github.com/kubevirt/containerized-data-importer/releases/download/<span class="nv">$CDI_VERSION</span>/cdi-cr.yaml
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="虚拟机镜像准备">虚拟机镜像准备</h3>
+<h4 id="手动上传到-pvc">手动上传到 PVC</h4>
+<p>KubeVirt 可以使用 PVC 作为后端磁盘，使用 <code>filesystem</code> 类型的 PVC 时，默认使用的时 <code>/disk.img</code> 这个镜像，用户可以将镜像上传到 PVC，在创建 VMI 时使用此 PVC。使用这种方式需要注意下面几点：</p>
+<ul>
+<li>一个 PVC 只允许存在一个镜像，只允许一个 VMI 使用，要创建多个 VMI，需要上传多次</li>
+<li><code>/disk.img</code> 的格式必须是 RAW 格式</li>
+</ul>
+<h4 id="通过-cdi-准备虚拟机镜像">通过 CDI 准备虚拟机镜像</h4>
+<p>CDI 提供了使用使用 PVC 作为虚拟机磁盘的方案，在虚拟机启动前通过下面方式填充 PVC：</p>
+<ul>
+<li>通过 URL 倒入虚拟机镜像到 PVC，URL 可以是 http 链接，s3 链接</li>
+<li>Clone 一个已经存在的 PVC</li>
+<li>通过 container registry 倒入虚拟机磁盘到 PVC，需要结合 ContainerDisk 使用</li>
+<li>通过客户端上传本地镜像到 PVC</li>
+</ul>
+<p>KubeVirt 提供了一个命令行 virtctl，结合 CDI 项目，可以上传本地镜像到 PVC 上，支持的镜像格式有：</p>
+<ul>
+<li>.img</li>
+<li>.qcow2</li>
+<li>.iso</li>
+<li>压缩为 .tar，.gz，.xz 格式的上述镜像</li>
+</ul>
+<p>例如，上传本地 cirros 镜像到 cirros-vm-disk 中，指定的 PVC 会自动创建：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">./virtctl image-upload                          <span class="se">\
+</span><span class="se"></span>    --pvc-name<span class="o">=</span>cirros-vm-disk                   <span class="se">\
+</span><span class="se"></span>    --pvc-size<span class="o">=</span>500Mi                            <span class="se">\
+</span><span class="se"></span>    --storage-class<span class="o">=</span>heketi-storageclass         <span class="se">\
+</span><span class="se"></span>    --image-path<span class="o">=</span>cirros-0.4.0-x86_64-disk.img   <span class="se">\
+</span><span class="se"></span>    --uploadproxy-url<span class="o">=</span>https://cdi-uploadproxy:31001
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="containerdisk">ContainerDisk</h4>
+<p>KubeVirt 可以使用 <code>ContainerDisk</code> 类型的磁盘，<code>ContainerDisk</code> 提供了一种以 registry 存储和分发虚拟机镜像的方案，可以使用这种方式制作上传镜像。</p>
+<p>创建虚拟机镜像，dockerfile 如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="k">FROM</span><span class="s"> scratch</span><span class="err">
+</span><span class="err"></span><span class="k">ADD</span> fedora28.qcow2 /disk/<span class="err">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>使用 docker 命令构建容器镜像，上传容器镜像到 registry：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">docker build -t test.cargo.io/vmidisks/fedora28:latest .
+docker push test.cargo.io/vmidisks/fedora28:latest 
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 <code>containerDisk</code> 创建 VMI：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>kubevirt.io/v1alpha3<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>VirtualMachineInstance<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>testvmi-containerdisk<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">domain</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">resources</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">requests</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">memory</span><span class="p">:</span><span class="w"> </span>64M<span class="w">
+</span><span class="w">    </span><span class="k">devices</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">disks</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>containerdisk<span class="w">
+</span><span class="w">        </span><span class="k">disk</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">  </span><span class="k">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>containerdisk<span class="w">
+</span><span class="w">      </span><span class="k">containerDisk</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">image</span><span class="p">:</span><span class="w"> </span>test.cargo.io/vmidisks/fedora28<span class="p">:</span>latest<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><code>containerDisk</code> 作为 VMI 磁盘是一种临时存储，此外可以结合 CDI，自动将 <code>containerDisk</code> 中的镜像倒入到 PVC 中，作为持久存储，例如，创建源为 <code>containerDisk</code> 的 <code>DataVolume</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>cdi.kubevirt.io/v1alpha1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>DataVolume<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>registry-image-datavolume<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">source</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">registry</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">url</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;docker://test.cargo.io/vmidisks/fedora28:latest&#34;</span><span class="w">
+</span><span class="w">  </span><span class="k">pvc</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">accessModes</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- ReadWriteOnce<span class="w">
+</span><span class="w">    </span><span class="k">resources</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">requests</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">storage</span><span class="p">:</span><span class="w"> </span>5Gi<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>VMI 使用 DataVolume：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>kubevirt.io/v1alpha3<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>VirtualMachineInstance<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">special</span><span class="p">:</span><span class="w"> </span>vmi-alpine-datavolume<span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>vmi-alpine-datavolume<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">domain</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">devices</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">disks</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="k">disk</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="k">bus</span><span class="p">:</span><span class="w"> </span>virtio<span class="w">
+</span><span class="w">        </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>registry-image-datavolume<span class="w">
+</span><span class="w">    </span><span class="k">machine</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span><span class="w">    </span><span class="k">resources</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">requests</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">memory</span><span class="p">:</span><span class="w"> </span>64M<span class="w">
+</span><span class="w">  </span><span class="k">terminationGracePeriodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span><span class="w">  </span><span class="k">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>registry-image-datavolume<span class="w">
+</span><span class="w">    </span><span class="k">dataVolume</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>registry-image-datavolume<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="连接到虚拟机">连接到虚拟机</h3>
+<p>连接到虚拟机内部可以使用下面方式：</p>
+<p>1、使用 virtctl console 命令通过串口连接到虚拟机，虚拟机要允许串口登陆</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">./virtctl console vm-cirros
+</code></pre></td></tr></table>
+</div>
+</div><p>2、虚拟机开启 ssh 服务，通过 service 暴露 ssh 端口</p>
+<h2 id="use-cases">Use Cases</h2>
+<h3 id="multiple-workloads">Multiple Workloads</h3>
+<p>借助 KubeVirt ，旧的无法迁移的应用与新的容器化应用同时跑在 kubernetes 上，开发 VM 也可以建立在 kubernetes 上，减少同时维护 VM 和 kubernetes 两个平台的成本。同时 VM 生命周期和 Pod 生命周期一致，VM 同容器化应用一样编排，借助 kubernetes 灵活的网络，使用相同的工具（kubectl），可以更加高效的部署，高效测试。</p>
+<figure class="center">
+    <img src="/images/post/Use-KubeVirt-to-manage-virtualization-workloads-on-Kubernetes/multiple-workloads.png"/> <figcaption>
+            <h4>Multiple Workloads</h4>
+        </figcaption>
+</figure>
+
+<h3 id="kubernetes-on-kubernetes">Kubernetes on Kubernetes</h3>
+<p>当用户用管理多台服务器时，一般会部署 openstack 作私有云，新的 kubernetes 平台会部署在 openstack 集群上，openstack 十分复杂，管理 openstack 需要非常高技能要求。KubeVirt 提供了一个新的方案，Kubernetes + KubeVirt  部署在服务器上，作为基础设施，借助 KubeVirtcloud-provider 快速构建 kubernetes 集群。使用这种方式有下面优点：</p>
+<ul>
+<li>架构简单，平台统一，所有的全部运行在 kubernetes 上</li>
+<li>更少的技能需求，all k8s</li>
+<li>更少的资源占用</li>
+</ul>
+<figure class="center">
+    <img src="/images/post/Use-KubeVirt-to-manage-virtualization-workloads-on-Kubernetes/k8s-in-k8s.png"/> <figcaption>
+            <h4>Kubernetes on Kubernetes</h4>
+        </figcaption>
+</figure>
+
+<p>目前使用这种方式的多为多云厂商，例如：</p>
+<ul>
+<li><a href="https://www.kubermatic.com/">kubermatic</a></li>
+<li><a href="https://platform9.com/">platform9</a></li>
+<li><a href="https://github.com/gardener/gardener">SAP Gardener</a></li>
+</ul>
+<h2 id="参考">参考</h2>
+<ol>
+<li><a href="https://kubevirt.io/user-guide/docs/latest/welcome/index.html">https://kubevirt.io/user-guide/docs/latest/welcome/index.html</a></li>
+<li><a href="https://github.com/kubevirt/kubevirt/tree/master/docs">https://github.com/kubevirt/kubevirt/tree/master/docs</a></li>
+<li><a href="https://kubevirt.io/2019/How-To-Import-VM-into-Kubevirt.html">https://kubevirt.io/2019/How-To-Import-VM-into-Kubevirt.html</a></li>
+<li><a href="https://kubevirt.io/2018/KubeVirt-Network-Deep-Dive.html">https://kubevirt.io/2018/KubeVirt-Network-Deep-Dive.html</a></li>
+<li><a href="https://github.com/kubevirt/containerized-data-importer/tree/master/doc">https://github.com/kubevirt/containerized-data-importer/tree/master/doc</a></li>
+</ol>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Meoop</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2019-11-21
+        <a href="https://github.com/Meoop/meoop.github.io.git/commit/aa5b3743a44c4d8c9bca17be4321f3d2b451bb7e" title="post: Use KubeVirt to manage virtualization workloads on Kubernetes">(aa5b374)</a>
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/kubernetes/">kubernetes</a>
+          <a href="/tags/kubevirt/">kubevirt</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/lxcfs-part-2-implementation/">
+            <span class="next-text nav-default">LXCFS Part 2 - Implementation Details</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'meoop';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="yilei108@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://www.stackoverflow.com/users/12249756/" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://www.facebook.com/lei.yi.908" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="https://www.linkedin.com/in/yilei/" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="https://github.com/Meoop" class="iconfont icon-github" title="github"></a>
+      <a href="http://weibo.com/18722081826" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://www.zhihu.com/people/lei.yi" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="http://blog.meoop.me/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2015 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Meoop</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-101122173-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

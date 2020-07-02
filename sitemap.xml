@@ -3,7 +3,63 @@
   
   <url>
     <loc>http://blog.meoop.me/categories/</loc>
-    <lastmod>2019-08-23T17:38:53+08:00</lastmod>
+    <lastmod>2019-11-21T21:29:18+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/tags/kubernetes/</loc>
+    <lastmod>2019-11-21T21:29:18+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/categories/kubernetes/</loc>
+    <lastmod>2019-11-21T21:29:18+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/tags/kubevirt/</loc>
+    <lastmod>2019-11-21T21:29:18+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/categories/kubevirt/</loc>
+    <lastmod>2019-11-21T21:29:18+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/post/</loc>
+    <lastmod>2019-11-21T21:29:18+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/tags/</loc>
+    <lastmod>2019-11-21T21:29:18+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/</loc>
+    <lastmod>2019-11-21T21:29:18+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.meoop.me/post/use-kubevirt-to-manage-virtualization-workloads-on-kubernetes/</loc>
+    <lastmod>2019-11-21T21:29:18+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -39,27 +95,6 @@
   <url>
     <loc>http://blog.meoop.me/post/lxcfs-part-2-implementation/</loc>
     <lastmod>2019-08-22T21:58:32+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.meoop.me/post/</loc>
-    <lastmod>2019-08-23T17:38:53+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.meoop.me/tags/</loc>
-    <lastmod>2019-08-23T17:38:53+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.meoop.me/</loc>
-    <lastmod>2019-08-23T17:38:53+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -123,20 +158,6 @@
   <url>
     <loc>http://blog.meoop.me/post/rebuild-kernel-with-src.rpm/</loc>
     <lastmod>2019-01-24T17:08:04+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.meoop.me/tags/kubernetes/</loc>
-    <lastmod>2019-08-23T17:38:53+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.meoop.me/categories/kubernetes/</loc>
-    <lastmod>2019-08-23T17:38:53+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

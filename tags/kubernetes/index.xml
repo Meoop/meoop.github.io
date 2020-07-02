@@ -6,10 +6,19 @@
     <description>Recent content in Kubernetes on 享受编程 - Coding Your Ambition.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 21 Jan 2019 17:38:53 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 04 Nov 2019 21:29:18 +0800</lastBuildDate>
     
 	<atom:link href="http://blog.meoop.me/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>在 Kubernetes 上使用 KubeVirt 管理虚拟机负载</title>
+      <link>http://blog.meoop.me/post/use-kubevirt-to-manage-virtualization-workloads-on-kubernetes/</link>
+      <pubDate>Mon, 04 Nov 2019 21:29:18 +0800</pubDate>
+      
+      <guid>http://blog.meoop.me/post/use-kubevirt-to-manage-virtualization-workloads-on-kubernetes/</guid>
+      <description>&lt;p&gt;近几年的时间里，kubernetes 不断发展壮大，各个功能也逐渐完善，越来越多的项目开始基于 kubernetes 构建，企业内部也大多搭建了自己的 kubernetes 平台。同时企业也存在大量的旧的项目，大多都是基于虚拟机构建，迁移到 kubernetes 存在着较高的成本，风险也比较大。随着 kubernetes 的功能完善，很多新业务已经上了 kubernetes，企业内部需要同时维护着 k8s 和虚拟机两套平台，同时维护两套平台给运维带来了巨大的负担，因此急切的需求一种方案解决该问题。在 kubernetes 可以通过 KubeVirt 管理虚拟机，正好用于解决上述管理难题。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Resizing Persistent Volumes Using Kubernetes</title>
